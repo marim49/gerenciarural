@@ -15,7 +15,6 @@ class CreateFuncionarioTable extends Migration
     {
         Schema::create('funcionario', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_tipo_funcionario')->unsigned();
             $table->string('nome', 100);
             $table->integer('id_estado_civil')->unsigned();
             $table->string('endereco_rua', 45);
@@ -25,6 +24,7 @@ class CreateFuncionarioTable extends Migration
             $table->string('sexo', 45);
             $table->date('nascimento');
             $table->date('admissao');
+            $table->string('cargo');
             $table->string('rg', 45);
             $table->string('cpf', 45);
             $table->string('pis', 45);
@@ -33,7 +33,6 @@ class CreateFuncionarioTable extends Migration
             $table->string('cep', 45);          
             $table->foreign('id_cidade')->references('id')->on('cidade');
             $table->foreign('id_estado_civil')->references('id')->on('estado_civil');
-            $table->foreign('id_tipo_funcionario')->references('id')->on('grupo_tipo_funcionario');
             $table->timestamps();
         });
     }

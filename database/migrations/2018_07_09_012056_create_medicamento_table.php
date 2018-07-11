@@ -17,7 +17,7 @@ class CreateMedicamentoTable extends Migration
             $table->increments('id');
             $table->integer('id_fazenda')->unsigned(); 
             $table->integer('id_tipo_medicamento')->unsigned(); 
-            $table->integer('quantidade');            
+            $table->float('quantidade');            
             $table->string('nome', 45);  
             $table->string('obs', 45);  
             $table->foreign('id_fazenda')->references('id')->on('fazenda');

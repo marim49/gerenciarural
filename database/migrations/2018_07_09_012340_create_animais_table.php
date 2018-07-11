@@ -13,7 +13,7 @@ class CreateAnimaisTable extends Migration
      */
     public function up()
     {
-        Schema::create('animais', function (Blueprint $table) {
+        Schema::create('animal', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_grupo_animal')->unsigned();
             $table->string('nome', 45);

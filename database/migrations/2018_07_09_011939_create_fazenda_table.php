@@ -23,8 +23,8 @@ class CreateFazendaTable extends Migration
             $table->string('end_bairro', 45); 
             $table->string('end_rua', 50); 
             $table->string('end_numero', 15); 
-            $table->string('end_complemento', 20); 
-            $table->string('endereco', 100);  
+            $table->string('end_complemento', 20)->nullable(); 
+            $table->string('endereco', 100)->nullable();  
             $table->foreign('end_id_cidade')->references('id')->on('cidade');
             $table->foreign('id_produtor')->references('id')->on('users');
             $table->timestamps();
