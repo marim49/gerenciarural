@@ -75,6 +75,12 @@
                             <a href="{{ url('cadastro/fazenda') }}"> Fazenda</a>
                         </li>
                         <li>
+                            <a href="{{ url('cadastro/terra') }}"> Terra</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('cadastro/celeiro') }}"> Celeiro</a>
+                        </li>
+                        <li>
                             <a href="{{ url('cadastro/funcionario') }}"> Funcionários</a>
                         </li>
                         <li>
@@ -86,8 +92,16 @@
                                 Insumos</a>
                         </li>
                         <li role="presentation">
+                            <a href="{{ url('cadastro/tipoinsumo') }}">
+                                Tipo de insumo</a>
+                        </li>
+                        <li role="presentation">
                             <a href="{{ url('cadastro/farmacia') }}">
                                 Farmácia</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="{{ url('cadastro/tipomedicamento') }}">
+                                Tipo de medicamento</a>
                         </li>
                         <li role="presentation">
                             <a href="{{ url('cadastro/maquina') }}">
