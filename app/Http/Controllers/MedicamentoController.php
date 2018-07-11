@@ -5,26 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AnimalController extends Controller
+class MedicamentoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Fazenda', 'GrupoAnimal', 'HistoricoAnimal'
+        'Fazenda', 'TipoMedicamento', 'HistoricoCompra', 'Animais'
     ];
     
-    public function __construct(\App\Animal $model)
+    public function __construct(\App\Medicamento $model)
     {
         $this->model = $model;
     }
 
-    public function GetAnimais()
+    public function GetMedicamentos()
     {
         try
         {
             //resultados por página
             $limit = 20;
             
-            $animais = $this->model->orderBy('id', 'asc')
+            $medicamentos = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
                 ->where(function($query){
                     return $query
@@ -33,7 +33,7 @@ class AnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($animais);
+            return response()->json($medicamentos);
         }
         catch(\Exception $e) 
         {
@@ -45,20 +45,20 @@ class AnimalController extends Controller
         }
     }
     
-    public function PostAnimal(Request $request)
+    public function PostMedicamento(Request $request)
     {
         //É preciso fazer validações de dados para evitar campos que por exemplo:
         //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
         try 
         {
-            $animal = $request->all();
+            $medicamento = $request->all();
 
-            $novo_animal = $this->model->create($animal);
+            $novo_medicamento = $this->model->create($medicamento);
 
             //Alterar para retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $novo_animal
+                'item' => $novo_medicamento
             ]);
         } 
         catch(\Exception $e) 
@@ -71,15 +71,15 @@ class AnimalController extends Controller
         }
     } 
 
-    public function ShowAnimal($id)
+    public function ShowMedicamento($id)
     {
         try
         {
-            $animal = $this->model->with($this->relationships())
+            $medicamento = $this->model->with($this->relationships())
                                 ->findOrFail($id);       
 
             //retornar view
-            return response()->json($animal);
+            return response()->json($medicamento);
         }
         catch(\Exception $e)
         {
@@ -91,20 +91,20 @@ class AnimalController extends Controller
         }
     }   
 
-    public function UpdateAnimal(Request $request, $id)
+    public function UpdateMedicamento(Request $request, $id)
     {
         //tratar entrada
         try
         {
-            $update_animal = $this->model->findOrFail($id);            
+            $update_medicamento = $this->model->findOrFail($id);            
             $dados = $request->all();
 
-            $update_animal->update($dados);
+            $update_medicamento->update($dados);
             
             //retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $update_animal
+                'item' => $update_medicamento
             ]);
         }
         catch(\Exception $e) 
@@ -117,7 +117,7 @@ class AnimalController extends Controller
         }
     }
 
-    public function DeleteAnimal($id)
+    public function DeleteMedicamento($id)
     {
         try 
         {

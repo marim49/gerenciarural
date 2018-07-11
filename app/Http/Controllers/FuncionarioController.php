@@ -5,26 +5,28 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AnimalController extends Controller
+class FuncionarioController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Fazenda', 'GrupoAnimal', 'HistoricoAnimal'
+        'TipoFuncionario', 'EstadoCivil', 'HistoricoAbastecimentos', 'HistoricoCompras',
+        'FuncionarioFazendas', 'HistoricoTerras', 'HistoricoCompraInsumo', 'HistoricoCompraMedicamento',
+        'HistoricoAnimal'
     ];
     
-    public function __construct(\App\Animal $model)
+    public function __construct(\App\Funcionario $model)
     {
         $this->model = $model;
     }
 
-    public function GetAnimais()
+    public function GetFuncionarios()
     {
         try
         {
             //resultados por página
             $limit = 20;
             
-            $animais = $this->model->orderBy('id', 'asc')
+            $funcionarios = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
                 ->where(function($query){
                     return $query
@@ -33,7 +35,7 @@ class AnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($animais);
+            return response()->json($funcionarios);
         }
         catch(\Exception $e) 
         {
@@ -45,20 +47,20 @@ class AnimalController extends Controller
         }
     }
     
-    public function PostAnimal(Request $request)
+    public function PostFuncionario(Request $request)
     {
         //É preciso fazer validações de dados para evitar campos que por exemplo:
         //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
         try 
         {
-            $animal = $request->all();
+            $funcionario = $request->all();
 
-            $novo_animal = $this->model->create($animal);
+            $novo_funcionario = $this->model->create($funcionario);
 
             //Alterar para retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $novo_animal
+                'item' => $novo_funcionario
             ]);
         } 
         catch(\Exception $e) 
@@ -71,15 +73,15 @@ class AnimalController extends Controller
         }
     } 
 
-    public function ShowAnimal($id)
+    public function ShowFuncionario($id)
     {
         try
         {
-            $animal = $this->model->with($this->relationships())
+            $funcionario = $this->model->with($this->relationships())
                                 ->findOrFail($id);       
 
             //retornar view
-            return response()->json($animal);
+            return response()->json($funcionario);
         }
         catch(\Exception $e)
         {
@@ -91,20 +93,20 @@ class AnimalController extends Controller
         }
     }   
 
-    public function UpdateAnimal(Request $request, $id)
+    public function UpdateFuncionario(Request $request, $id)
     {
         //tratar entrada
         try
         {
-            $update_animal = $this->model->findOrFail($id);            
+            $update_funcionario = $this->model->findOrFail($id);            
             $dados = $request->all();
 
-            $update_animal->update($dados);
+            $update_funcionario->update($dados);
             
             //retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $update_animal
+                'item' => $update_funcionario
             ]);
         }
         catch(\Exception $e) 
@@ -117,7 +119,7 @@ class AnimalController extends Controller
         }
     }
 
-    public function DeleteAnimal($id)
+    public function DeleteFuncionario($id)
     {
         try 
         {

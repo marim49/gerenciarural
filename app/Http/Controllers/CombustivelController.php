@@ -5,26 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AnimalController extends Controller
+class CombustivelController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Fazenda', 'GrupoAnimal', 'HistoricoAnimal'
+        'TipoCombustivel', 'HistoricoAbastecimentos', 'Compras'
     ];
     
-    public function __construct(\App\Animal $model)
+    public function __construct(\App\Combustivel $model)
     {
         $this->model = $model;
     }
 
-    public function GetAnimais()
+    public function GetCombustiveis()
     {
         try
         {
             //resultados por página
             $limit = 20;
             
-            $animais = $this->model->orderBy('id', 'asc')
+            $combustiveis = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
                 ->where(function($query){
                     return $query
@@ -33,7 +33,7 @@ class AnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($animais);
+            return response()->json($combustiveis);
         }
         catch(\Exception $e) 
         {
@@ -45,20 +45,20 @@ class AnimalController extends Controller
         }
     }
     
-    public function PostAnimal(Request $request)
+    public function PostCombustivel(Request $request)
     {
         //É preciso fazer validações de dados para evitar campos que por exemplo:
         //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
         try 
         {
-            $animal = $request->all();
+            $combustivel = $request->all();
 
-            $novo_animal = $this->model->create($animal);
+            $novo_combustivel = $this->model->create($combustivel);
 
             //Alterar para retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $novo_animal
+                'item' => $novo_combustivel
             ]);
         } 
         catch(\Exception $e) 
@@ -71,15 +71,15 @@ class AnimalController extends Controller
         }
     } 
 
-    public function ShowAnimal($id)
+    public function ShowCombustivel($id)
     {
         try
         {
-            $animal = $this->model->with($this->relationships())
+            $combustivel = $this->model->with($this->relationships())
                                 ->findOrFail($id);       
 
             //retornar view
-            return response()->json($animal);
+            return response()->json($combustivel);
         }
         catch(\Exception $e)
         {
@@ -91,20 +91,20 @@ class AnimalController extends Controller
         }
     }   
 
-    public function UpdateAnimal(Request $request, $id)
+    public function UpdateCombustivel(Request $request, $id)
     {
         //tratar entrada
         try
         {
-            $update_animal = $this->model->findOrFail($id);            
+            $update_combustivel = $this->model->findOrFail($id);            
             $dados = $request->all();
 
-            $update_animal->update($dados);
+            $update_combustivel->update($dados);
             
             //retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $update_animal
+                'item' => $update_combustivel
             ]);
         }
         catch(\Exception $e) 
@@ -117,7 +117,7 @@ class AnimalController extends Controller
         }
     }
 
-    public function DeleteAnimal($id)
+    public function DeleteCombustivel($id)
     {
         try 
         {

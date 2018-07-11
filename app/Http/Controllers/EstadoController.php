@@ -5,26 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AnimalController extends Controller
+class EstadoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Fazenda', 'GrupoAnimal', 'HistoricoAnimal'
+        'Pais', 'Cidades'
     ];
     
-    public function __construct(\App\Animal $model)
+    public function __construct(\App\Estado $model)
     {
         $this->model = $model;
     }
 
-    public function GetAnimais()
+    public function GetEstados()
     {
         try
         {
             //resultados por página
             $limit = 20;
             
-            $animais = $this->model->orderBy('id', 'asc')
+            $estados = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
                 ->where(function($query){
                     return $query
@@ -33,7 +33,7 @@ class AnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($animais);
+            return response()->json($estados);
         }
         catch(\Exception $e) 
         {
@@ -45,20 +45,20 @@ class AnimalController extends Controller
         }
     }
     
-    public function PostAnimal(Request $request)
+    public function PostEstado(Request $request)
     {
         //É preciso fazer validações de dados para evitar campos que por exemplo:
         //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
         try 
         {
-            $animal = $request->all();
+            $estado = $request->all();
 
-            $novo_animal = $this->model->create($animal);
+            $novo_estado = $this->model->create($estado);
 
             //Alterar para retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $novo_animal
+                'item' => $novo_estado
             ]);
         } 
         catch(\Exception $e) 
@@ -71,15 +71,15 @@ class AnimalController extends Controller
         }
     } 
 
-    public function ShowAnimal($id)
+    public function ShowEstado($id)
     {
         try
         {
-            $animal = $this->model->with($this->relationships())
+            $estado = $this->model->with($this->relationships())
                                 ->findOrFail($id);       
 
             //retornar view
-            return response()->json($animal);
+            return response()->json($estado);
         }
         catch(\Exception $e)
         {
@@ -91,20 +91,20 @@ class AnimalController extends Controller
         }
     }   
 
-    public function UpdateAnimal(Request $request, $id)
+    public function UpdateEstado(Request $request, $id)
     {
         //tratar entrada
         try
         {
-            $update_animal = $this->model->findOrFail($id);            
+            $update_estado = $this->model->findOrFail($id);            
             $dados = $request->all();
 
-            $update_animal->update($dados);
+            $update_estado->update($dados);
             
             //retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $update_animal
+                'item' => $update_estado
             ]);
         }
         catch(\Exception $e) 
@@ -117,7 +117,7 @@ class AnimalController extends Controller
         }
     }
 
-    public function DeleteAnimal($id)
+    public function DeleteEstado($id)
     {
         try 
         {

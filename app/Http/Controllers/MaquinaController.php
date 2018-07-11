@@ -5,26 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AnimalController extends Controller
+class MaquinaController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Fazenda', 'GrupoAnimal', 'HistoricoAnimal'
+        'Fazenda', 'HistoricoAbastecimentos'
     ];
     
-    public function __construct(\App\Animal $model)
+    public function __construct(\App\Maquina $model)
     {
         $this->model = $model;
     }
 
-    public function GetAnimais()
+    public function GetMaquinas()
     {
         try
         {
             //resultados por página
             $limit = 20;
             
-            $animais = $this->model->orderBy('id', 'asc')
+            $maquinas = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
                 ->where(function($query){
                     return $query
@@ -33,7 +33,7 @@ class AnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($animais);
+            return response()->json($maquinas);
         }
         catch(\Exception $e) 
         {
@@ -45,20 +45,20 @@ class AnimalController extends Controller
         }
     }
     
-    public function PostAnimal(Request $request)
+    public function PostMaquina(Request $request)
     {
         //É preciso fazer validações de dados para evitar campos que por exemplo:
         //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
         try 
         {
-            $animal = $request->all();
+            $maquina = $request->all();
 
-            $novo_animal = $this->model->create($animal);
+            $nova_maquina = $this->model->create($maquina);
 
             //Alterar para retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $novo_animal
+                'item' => $nova_maquina
             ]);
         } 
         catch(\Exception $e) 
@@ -71,15 +71,15 @@ class AnimalController extends Controller
         }
     } 
 
-    public function ShowAnimal($id)
+    public function ShowMaquina($id)
     {
         try
         {
-            $animal = $this->model->with($this->relationships())
+            $maquina = $this->model->with($this->relationships())
                                 ->findOrFail($id);       
 
             //retornar view
-            return response()->json($animal);
+            return response()->json($maquina);
         }
         catch(\Exception $e)
         {
@@ -91,20 +91,20 @@ class AnimalController extends Controller
         }
     }   
 
-    public function UpdateAnimal(Request $request, $id)
+    public function UpdateMaquina(Request $request, $id)
     {
         //tratar entrada
         try
         {
-            $update_animal = $this->model->findOrFail($id);            
+            $update_maquina = $this->model->findOrFail($id);            
             $dados = $request->all();
 
-            $update_animal->update($dados);
+            $update_maquina->update($dados);
             
             //retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $update_animal
+                'item' => $update_maquina
             ]);
         }
         catch(\Exception $e) 
@@ -117,7 +117,7 @@ class AnimalController extends Controller
         }
     }
 
-    public function DeleteAnimal($id)
+    public function DeleteMaquina($id)
     {
         try 
         {

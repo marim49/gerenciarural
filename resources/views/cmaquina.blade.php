@@ -23,17 +23,14 @@
 								<div class="col-md-12">
 
 									<div class="row">
-										<div class="col-md-7">
+										<div class="col-md-5">
 											<div class="form-group">
 												<label>Nome do máquina:</label>
 												<input class="form-control" name="nome_maquina" type="text" placeholder="" />
 											</div>
 										</div>
-										<div class="col-md-5">
-											<div class="form-group">
-												<label>Tamanho tanque de combustível:</label>
-												<input class="form-control" name="tanque" type="text" placeholder="" />
-											</div>
+										<div class="col-md-7">
+											
 										</div>
 									</div>
 									<div class="row">
@@ -48,13 +45,13 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-2">
+										<div class="col-md-3">
 											<div class="form-group">
 												<label>Número da nota fiscal:</label>
 												<input class="form-control" name="nota_fisc" type="text" placeholder="" />
 											</div>
 										</div>
-										<div class="col-md-10">
+										<div class="col-md-9">
 
 										</div>
 									</div>

@@ -29,6 +29,10 @@
 											<input class="form-control" name="nome_func" type="text" placeholder="Insira aqui o nome completo do funcionário" />
 										</div>
 										<div class="form-group">
+											<label>RG:</label>
+											<input class="form-control" name="RG" type="text" placeholder="Insira aqui o RG do funcionário" />
+										</div>
+										<div class="form-group">
 											<label>Estado Civil:</label>
 											<div class="form-group">
 												<select class="form-control" name="estado_civil">
@@ -73,6 +77,10 @@
 											
 										</div>
 										<div class="form-group">
+											<label>CPF:</label>
+											<input class="form-control" name="CPF" type="text" placeholder="Insira aqui o CPF" />
+										</div>
+										<div class="form-group">
 											<label>Data de Nascimento:</label>
 											<input class="form-control" name="data_nasc_func" type="date" placeholder="DD/MM/AAAA" />
 										</div>
@@ -97,13 +105,14 @@
 											<input class="form-control" name="telefone" type="text" placeholder="(__)____-____" maxlength="10"/>
 										</div>
 										<div class="form-group">
+											<label>PIS:</label>
+											<input class="form-control" name="PIS" type="text" placeholder="PIS" />
+										</div>
+										<div class="form-group">
 											<label>Celular</label>
 											<input class="form-control" name="celular" type="text" placeholder="(__)_____-____"maxlength="11"/>
 										</div>
-										<div class="form-group">
-											<label></label>
-											<input class="form-control" type="hidden"/>
-										</div>
+										
 										<div class="form-group">
 											<label>Estado:</label>
 											<div class="form-group">
@@ -140,8 +149,8 @@
 										</div>
 										
 										<div class="form-group">
-											<label></label>
-											<input class="form-control" type="hidden"/>
+										<label>CEP:</label>
+											<input class="form-control" name="CEP" type="text" placeholder="CEP" />
 										</div>
 										
 										<div class="right-div">

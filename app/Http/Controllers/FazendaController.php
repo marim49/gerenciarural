@@ -5,26 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AnimalController extends Controller
+class FazendaController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Fazenda', 'GrupoAnimal', 'HistoricoAnimal'
+        'Produtor', 'Cidade', 'Maquinas', 'Combustiveis', 'Funcionarios', 'Celeiros',
+        'Terras', 'Medicamentos', 'GrupoAnimais'
     ];
     
-    public function __construct(\App\Animal $model)
+    public function __construct(\App\Fazenda $model)
     {
         $this->model = $model;
     }
 
-    public function GetAnimais()
+    public function GetFazendas()
     {
         try
         {
             //resultados por página
             $limit = 20;
             
-            $animais = $this->model->orderBy('id', 'asc')
+            $fazendas = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
                 ->where(function($query){
                     return $query
@@ -33,7 +34,7 @@ class AnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($animais);
+            return response()->json($fazendas);
         }
         catch(\Exception $e) 
         {
@@ -45,20 +46,20 @@ class AnimalController extends Controller
         }
     }
     
-    public function PostAnimal(Request $request)
+    public function PostFazenda(Request $request)
     {
         //É preciso fazer validações de dados para evitar campos que por exemplo:
         //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
         try 
         {
-            $animal = $request->all();
+            $fazenda = $request->all();
 
-            $novo_animal = $this->model->create($animal);
+            $nova_fazenda = $this->model->create($fazenda);
 
             //Alterar para retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $novo_animal
+                'item' => $nova_fazenda
             ]);
         } 
         catch(\Exception $e) 
@@ -71,15 +72,15 @@ class AnimalController extends Controller
         }
     } 
 
-    public function ShowAnimal($id)
+    public function ShowFazenda($id)
     {
         try
         {
-            $animal = $this->model->with($this->relationships())
+            $fazenda = $this->model->with($this->relationships())
                                 ->findOrFail($id);       
 
             //retornar view
-            return response()->json($animal);
+            return response()->json($fazenda);
         }
         catch(\Exception $e)
         {
@@ -91,20 +92,20 @@ class AnimalController extends Controller
         }
     }   
 
-    public function UpdateAnimal(Request $request, $id)
+    public function UpdateFazenda(Request $request, $id)
     {
         //tratar entrada
         try
         {
-            $update_animal = $this->model->findOrFail($id);            
+            $update_fazenda = $this->model->findOrFail($id);            
             $dados = $request->all();
 
-            $update_animal->update($dados);
+            $update_fazenda->update($dados);
             
             //retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $update_animal
+                'item' => $update_fazenda
             ]);
         }
         catch(\Exception $e) 
@@ -117,7 +118,7 @@ class AnimalController extends Controller
         }
     }
 
-    public function DeleteAnimal($id)
+    public function DeleteFazenda($id)
     {
         try 
         {
