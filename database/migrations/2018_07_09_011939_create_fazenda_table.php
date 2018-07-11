@@ -18,14 +18,15 @@ class CreateFazendaTable extends Migration
             $table->integer('id_produtor')->unsigned();  
             $table->string('nome', 100);            
             $table->string('telefone', 16);  
-            $table->string('end_cep', 9); 
-            $table->integer('end_id_cidade')->unsigned();
+            $table->string('end_cep', 9);  
+            $table->string('end_cidade', 45);             
+            $table->string('end_estado', 45);             
+            $table->string('end_pais', 45);
             $table->string('end_bairro', 45); 
             $table->string('end_rua', 50); 
             $table->string('end_numero', 15); 
             $table->string('end_complemento', 20)->nullable(); 
             $table->string('endereco', 100)->nullable();  
-            $table->foreign('end_id_cidade')->references('id')->on('cidade');
             $table->foreign('id_produtor')->references('id')->on('users');
             $table->timestamps();
         });

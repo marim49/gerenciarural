@@ -8,7 +8,8 @@ class Funcionario extends Model
 {
     protected $fillable = [
         'nome', 'id_estado_civil', 'endereco_rua',
-        'endereco_numero', 'endereco_bairro', 'id_cidade', 'sexo', 'nascimento',
+        'endereco_numero', 'endereco_bairro', 'endereco_cidade',
+        'endereco_estado', 'endereco_pais', 'sexo', 'nascimento',
         'admissao', 'cargo', 'rg', 'cpf', 'pis', 'tel_fixo', 'celular', 'cep'
     ];
     protected $table = 'funcionario';

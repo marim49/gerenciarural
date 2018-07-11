@@ -7,19 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Fazenda extends Model
 {
     protected $fillable = [
-        'id_produtor', 'nome', 'telefone', 'end_cep', 'end_id_cidade',
+        'id_produtor', 'nome', 'telefone', 'end_cep',
         'end_bairro', 'end_rua', 'end_numero', 'end_complemento',
-        'endereco'
+        'end_cidade', 'end_estado', 'end_pais', 'endereco'
     ];
     protected $table = 'fazenda';
 
     public function Produtor()
     {
         return $this->belongsTo(App\User::class, 'id_produtor');
-    }
-    public function Cidade()
-    {
-        return $this->belongsTo(App\Cidade::class, 'id_cidade');
     }
     public function Maquinas()
     {
