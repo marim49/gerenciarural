@@ -43,6 +43,18 @@ Route::get('/cadastro/insumo', function () {
 Route::get('/cadastro/maquina', function () {
     return view('cmaquina');
 });
+Route::get('/cadastro/tipomedicamento', function () {
+    return view('ctmedicamento');
+});
+Route::get('/cadastro/celeiro', function () {
+    return view('cceleiro');
+});
+Route::get('/cadastro/terra', function () {
+    return view('cterra');
+});
+Route::get('/cadastro/tipoinsumo', function () {
+    return view('ctinsumo');
+});
 
 //mas assim, agr vou ter q tratar as coisas q ela me retornar, so q isso so posso fazer se ja tiver cm os
 // "bancos" no migration ne ? sim, não entedi muito bem mas sim kkk
