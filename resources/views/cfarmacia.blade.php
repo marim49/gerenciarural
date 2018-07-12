@@ -45,10 +45,16 @@
 									</div>
 									<div class="row">
 										<div class="col-md-8">
-											<div class="form-group">
-												<label>Tratamentos:</label>
-												<input class="form-control" name="tratamento" type="text" placeholder="" />
-											</div>
+										<div class="form-group">
+                                            <label>Tipo de medicamento</label>
+                                            <select class="form-control" name="tipomed">
+                                                <option value="{{}}">Vermicída</option>
+                                                <option value ="{{}}">Two Vale</option>
+                                                <option value="{{}}">Three Vale</option>
+                                                <option value="{{}}">Four Vale</option>
+                                            </select>
+                                        </div>
+
 										</div>
 										<div class="col-md-4">
 
@@ -58,7 +64,16 @@
 										<div class="col-md-8">
 											<div class="form-group">
 												<label>Quantidade:</label>
-												<input class="form-control" name="quantidade" type="text" placeholder="" />
+												<input class="form-control" name="quantidade" type="number" placeholder="" />
+											</div>
+										</div>
+										<div class="col-md-4">
+
+										</div>
+										<div class="col-md-8">
+											<div class="form-group">
+												<label>Observações:</label>
+												<input class="form-control" name="obs" type="text" placeholder="" />
 											</div>
 										</div>
 										<div class="col-md-4">

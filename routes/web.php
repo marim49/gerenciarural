@@ -1,59 +1,61 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-//Rota para retornar os animais
+//Rota animais
 Route::get('/pesquisa/animal','AnimalController@GetAnimal');
 //Rota para pesquisar funcionário
 Route::get('/pesquisa/funcionario', 'HomeController@Teste');
 //Rota para cirar animal
 Route::post('/criar/animal', 'AnimalController@Create');
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/teste', function () {
-    return view('teste');
-});
-Route::get('/cadastro/funcionario', function () {
-    return view('cfuncionario');
-});
-Route::get('/cadastro/animal', function () {
-    return view('canimal');
-});
-Route::get('/cadastro/combustivel', function () {
-    return view('ccombustivel');
-});
+
+//Não sei o que é
 Route::get('/cadastro/farmacia', function () {
     return view('cfarmacia');
 });
+//Rotas de início
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', function () {
+    return view('welcome');
+});
+//Rotas para fazenda (arrumando)
 Route::get('/cadastro/fazenda', function () {
     return view('cfazenda');
 });
-Route::get('/cadastro/insumo', function () {
-    return view('cinsumo');
+//Rotas para funcionário
+Route::get('/cadastro/funcionario', function () {
+    return view('cfuncionario');
+});
+//Rotas para máquinas e combústiveis
+Route::get('/cadastro/combustivel', function () {
+    return view('ccombustivel');
 });
 Route::get('/cadastro/maquina', function () {
     return view('cmaquina');
 });
+//Rotas para animais, medicamentos e relacionados..
+Route::get('/cadastro/tipomedicamento', function () {
+    return view('ctmedicamento');
+});
+Route::get('/cadastro/animal', function () {
+    return view('canimal');
+});
+//Rotas para insumo, terra e realacionados..
+Route::get('/cadastro/insumo', function () {
+    return view('cinsumo');
+});
+Route::get('/cadastro/celeiro', function () {
+    return view('cceleiro');
+});
+Route::get('/cadastro/terra', function () {
+    return view('cterra');
+});
+Route::get('/cadastro/tipoinsumo', function () {
+    return view('ctinsumo');
+});
 
-//mas assim, agr vou ter q tratar as coisas q ela me retornar, so q isso so posso fazer se ja tiver cm os
-// "bancos" no migration ne ? sim, não entedi muito bem mas sim kkk
-// vc importou o "users" , ele é um treco do banco, vc conseguiu manipular os dados so pq vc fez o migration dele
-// teria cm eu manipular esses dados sem ter dados migration ? tipo COm  mtiagbraetlas ja existentes no banco ?
-////Thais: O migrate é só para criar as tabelas, o que vc precisa para manipular as tabelas são delas kkk
-// e ddo model saca:
-// Route::get('/pesquisa/funcionario', function () {
-//     return view('pfuncionario');
-// });
 
 Auth::routes();
-//
-Route::get('/home', 'HomeController@index')->name('home');
+
+//testes
+Route::get('/teste', function () {
+    return view('teste');
+});
