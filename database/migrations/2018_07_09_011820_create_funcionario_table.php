@@ -15,25 +15,25 @@ class CreateFuncionarioTable extends Migration
     {
         Schema::create('funcionario', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_tipo_funcionario')->unsigned();
             $table->string('nome', 100);
             $table->integer('id_estado_civil')->unsigned();
             $table->string('endereco_rua', 45);
             $table->string('endereco_numero', 45);
             $table->string('endereco_bairro', 45);  
-            $table->integer('id_cidade')->unsigned();
+            $table->string('endereco_cidade', 45);             
+            $table->string('endereco_estado', 45);             
+            $table->string('endereco_pais', 45);
             $table->string('sexo', 45);
             $table->date('nascimento');
             $table->date('admissao');
+            $table->string('cargo');
             $table->string('rg', 45);
             $table->string('cpf', 45);
             $table->string('pis', 45);
             $table->string('tel_fixo', 45);
             $table->string('celular', 45);
             $table->string('cep', 45);          
-            $table->foreign('id_cidade')->references('id')->on('cidade');
             $table->foreign('id_estado_civil')->references('id')->on('estado_civil');
-            $table->foreign('id_tipo_funcionario')->references('id')->on('grupo_tipo_funcionario');
             $table->timestamps();
         });
     }
