@@ -149,89 +149,44 @@
                 <li>
 
                     <a href="#entrada" data-toggle="collapse">
-                        <i class="glyphicon glyphicon-list-alt"></i>
+                        <i class="glyphicon glyphicon-arrow-up"></i>
                         Entrada
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="collapse list-unstyled" id="entrada">
                         <li>
-                            <a href="{{ url('cadastro/fazenda') }}"> Fazenda</a>
+                            <a href="{{ url('entrada/combustivel') }}"> Combustível</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/funcionario') }}"> Funcionários</a>
+                            <a href="{{ url('entrada/farmacia') }}"> Farmácia</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/animal') }}">
-                                Animais</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('cadastro/insumo') }}">
-                                Insumos</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{ url('cadastro/farmacia') }}">
-                                Farmácia</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{ url('cadastro/maquina') }}">
-                                Máquinas</a>
+                            <a href="{{ url('entrada/terra') }}"> Terra </a>
                         </li>
                     </ul>
                 </li>
                 <li>
 
                     <a href="#saida" data-toggle="collapse">
-                        <i class="glyphicon glyphicon-list-alt"></i>
+                        <i class="glyphicon glyphicon-arrow-down"></i>
                         Saída
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="collapse list-unstyled" id="saida">
                         <li>
-                            <a href="{{ url('cadastro/fazenda') }}"> Fazenda</a>
+                            <a href="{{ url('saida/combustivel') }}"> Combustível</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/funcionario') }}"> Funcionários</a>
+                            <a href="{{ url('saida/farmacia') }}"> Farmácia</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/animal') }}">
-                                Animais</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('cadastro/insumo') }}">
-                                Insumos</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{ url('cadastro/farmacia') }}">
-                                Farmácia</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{ url('cadastro/maquina') }}">
-                                Máquinas</a>
+                            <a href="{{ url('saida/terra') }}"> Terra </a>
                         </li>
                     </ul>
 
                 </li>
-
-                <li>
-                    <a href="https://gerenciarural.herokuapp.com/cadastro/abastecertanque/cadastrar.php">
-                        <i class="glyphicon glyphicon-shopping-cart"></i>
-                        Abastecer o tanque
-                    </a>
-                </li>
-                <li>
-                    <a href="https://gerenciarural.herokuapp.com/cadastro/retiracombustivel/cadastrar.php">
-                        <i class="glyphicon glyphicon-road"></i>
-                        Retirar combustível
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="glyphicon glyphicon-book"></i>
-                        Editar dados
-                    </a>
-                </li>
             </ul>
-            </ul>
+            
         </nav>
         @yield('content')
 </body>

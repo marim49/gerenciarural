@@ -37,15 +37,15 @@
 
 										<div class="form-group">
 											<label>Quantidade do Medicamento ( ML ):</label>
-											<input class="form-control" type="text" placeholder="Em Ml" />
+											<input class="form-control" type="text" name="quant_med" placeholder="Em Ml" />
 										</div>
 										<div class="form-group">
-											<label>Quantidade a retirar:</label>
-											<input class="form-control" type="text" placeholder="Em litros" />
+											<label>Fornecedor:</label>
+											<input class="form-control" name="fornecedor" type="text" placeholder="" />
 										</div>
 										<div class="form-group">
-											<label>Quantidade a retirar:</label>
-											<input class="form-control" type="text" placeholder="Em litros" />
+											<label>Nota Fiscal:</label>
+											<input class="form-control" type="text" name="NF" placeholder="" />
 										</div>
 									</div>
 									<div class="col-md-4">

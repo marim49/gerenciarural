@@ -3,7 +3,7 @@
 	<!--Cabeçalho pagina-->
 	<div class="col-md-12">
 		<div class="row pad-botm">
-			<h3 class="header-line">Retirada de combustível</h3>
+			<h3 class="header-line">Retirada de Medicamento</h3>
 		</div>
 	</div>
 	<!--/Cabeçalho pagina-->
@@ -22,22 +22,22 @@
 								<div class="row">
 									<div class="col-md-8">
 										<div class="form-group">
-											<label>Quantidade a retirar:</label>
-											<input class="form-control" type="text" placeholder="Em litros" />
+											<label>Quantidade de Saída do Medicamento ( ML ):</label>
+											<input class="form-control" type="text" name="quant_med" placeholder="Em Ml" />
 										</div>
 										<div class="form-group">
-											<label>Data de Saida:</label>
-											<input class="form-control" name="data_abast" type="date" placeholder="DD/MM/AAAA" />
+											<label>Animal de Destino</label>
+											<select class="form-control" name="animal_dest">
+												<option value="">Cocó</option>
+												<option value="">Two Vale</option>
+												<option value="">Three Vale</option>
+												<option value="">Four Vale</option>
+											</select>
 										</div>
 										<div class="form-group">
-                                            <label>Máquina de Destino</label>
-                                            <select class="form-control" name="maquina_dest">
-                                                <option value="">Relampago marquinhos</option>
-                                                <option value ="">Two Vale</option>
-                                                <option value="">Three Vale</option>
-                                                <option value="">Four Vale</option>
-                                            </select>
-                                        </div>
+											<label>Funcionário que aplicou:</label>
+											<input class="form-control" type="text" name="func" placeholder="" />
+										</div>
 									</div>
 									<div class="col-md-4">
 
