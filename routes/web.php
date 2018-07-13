@@ -8,7 +8,13 @@
 */
 Route::resource('animal', 'Animal\AnimalController')/*->middleware('auth')*/;
 
-
+/* ROTA: FAZENDAS
+ * fazendas => POST(store), GET(index) 
+ * fazendas/create => GET(create) 
+ * fazendas/{id} => GET(show), PUT(update), DELETE(destroy)
+ * fazendas/{id}/edit => GET(edit)
+*/
+Route::resource('fazenda', 'Fazenda\FazendaController')/*->middleware('auth')*/;
 
 
 //ACIMA ESTÀ CERTO
@@ -27,10 +33,6 @@ Route::get('/cadastro/farmacia', function () {
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
     return view('welcome');
-});
-//Rotas para fazenda (arrumando)
-Route::get('/cadastro/fazenda', function () {
-    return view('cfazenda');
 });
 //Rotas para funcionário
 Route::get('/cadastro/funcionario', function () {
