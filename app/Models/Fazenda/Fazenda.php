@@ -41,8 +41,4 @@ class Fazenda extends Model
     {
         return $this->hasMany(App\Models\Animal\Medicamento::class, 'id_fazenda');
     }
-    public function GrupoAnimais()
-    {
-        return $this->hasMany(App\Models\Animal\GrupoAnimal::class, 'id_fazenda');
-    }
 }
