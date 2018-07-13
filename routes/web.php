@@ -60,6 +60,24 @@ Route::get('/cadastro/terra', function () {
 Route::get('/cadastro/tipoinsumo', function () {
     return view('ctinsumo');
 });
+Route::get('/saida/combustivel', function () {
+    return view('scombustivel');
+});
+Route::get('/entrada/combustivel', function () {
+    return view('ecombustivel');
+});
+Route::get('/entrada/farmacia', function () {
+    return view('efarmacia');
+});
+Route::get('/saida/farmacia', function () {
+    return view('sfarmacia');
+});
+Route::get('/entrada/terra', function () {
+    return view('eterra');
+});
+Route::get('/saida/terra', function () {
+    return view('sterra');
+});
 
 
 Auth::routes();
