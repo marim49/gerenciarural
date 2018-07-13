@@ -60,6 +60,12 @@ Route::get('/cadastro/terra', function () {
 Route::get('/cadastro/tipoinsumo', function () {
     return view('ctinsumo');
 });
+Route::get('/saida/combustivel', function () {
+    return view('scombustivel');
+});
+Route::get('/entrada/combustivel', function () {
+    return view('ecombustivel');
+});
 
 
 Auth::routes();
