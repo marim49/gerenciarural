@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Animal;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class AnimalController extends Controller
 {
@@ -17,7 +18,8 @@ class AnimalController extends Controller
         $this->model = $model;
     }
 
-    public function GetAnimais()
+    //Método GET (retorna os animais)
+    public function index()
     {
         try
         {
@@ -45,33 +47,48 @@ class AnimalController extends Controller
         }
     }
     
-    public function PostAnimal(Request $request)
+    //Método GET (chama a view de criação)
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
+       
+        return view('canimal', ['grupos' => $grupos]);
+    }
+
+    /* Método POST (salva o animal) : OK
+     * (Adicionar view de retorno de erro)
+     */
+    public function store(Request $request)
+    {
+        //Validação
+        $validator = $this->Validator($request->only('nome', 'id_grupo_animal'));
+        if ($validator->fails()) {
+            return redirect('animal/create')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Inserção no banco
         try 
         {
             $animal = $request->all();
 
-            $novo_animal = $this->model->create($animal);
+            $success = $this->model->create($animal);
+            $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
 
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_animal
-            ]);
+            return view('canimal', ['success' => $success, 'grupos' => $grupos]);
         } 
         catch(\Exception $e) 
         {
-            //Alterar para retornar view
+            //Alterar para retornar view de erro
             return response()->json([
                 'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
+                'item' => 'Nao foi possível inserir o registro. Erro: '.$e->getMessage()
             ]);
         }
-    } 
+    }
 
-    public function ShowAnimal($id)
+    //Método GET (retorna um animal específico)
+    public function show($id)
     {
         try
         {
@@ -91,7 +108,11 @@ class AnimalController extends Controller
         }
     }   
 
-    public function UpdateAnimal(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza um animal)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +138,8 @@ class AnimalController extends Controller
         }
     }
 
-    public function DeleteAnimal($id)
+    //Método DELETE (deleta um animal específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +162,7 @@ class AnimalController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +170,19 @@ class AnimalController extends Controller
         }
 
         return [];
+    }    
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'nome.required'=> 'O campo de identificação do animal é obrigatório',
+            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+            'id_grupo_animal.required'=>'O campo de grupo do animal é obrigatório',
+        );    
+        $rules = array(
+            'nome'=>'required|max:45',
+            'id_grupo_animal'=>'required',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
     }
 }

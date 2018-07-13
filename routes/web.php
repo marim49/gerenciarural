@@ -1,7 +1,19 @@
 <?php
 
-//Rota animais
+/* ROTA: ANIMAIS
+ * animais => POST(store), GET(index) 
+ * animais/create => GET(create) 
+ * animais/{id} => GET(show), PUT(update), DELETE(destroy)
+ * animais/{id}/edit => GET(edit)
+*/
+Route::resource('animal', 'Animal\AnimalController')/*->middleware('auth')*/;
+
+
+
+
+//ACIMA ESTÀ CERTO
 Route::get('/pesquisa/animal','AnimalController@GetAnimal');
+
 //Rota para pesquisar funcionário
 Route::get('/pesquisa/funcionario', 'HomeController@Teste');
 //Rota para cirar animal
@@ -35,9 +47,6 @@ Route::get('/cadastro/maquina', function () {
 Route::get('/cadastro/tipomedicamento', function () {
     return view('ctmedicamento');
 });
-Route::get('/cadastro/animal', function () {
-    return view('canimal');
-});
 //Rotas para insumo, terra e realacionados..
 Route::get('/cadastro/insumo', function () {
     return view('cinsumo');
@@ -50,6 +59,24 @@ Route::get('/cadastro/terra', function () {
 });
 Route::get('/cadastro/tipoinsumo', function () {
     return view('ctinsumo');
+});
+Route::get('/saida/combustivel', function () {
+    return view('scombustivel');
+});
+Route::get('/entrada/combustivel', function () {
+    return view('ecombustivel');
+});
+Route::get('/entrada/farmacia', function () {
+    return view('efarmacia');
+});
+Route::get('/saida/farmacia', function () {
+    return view('sfarmacia');
+});
+Route::get('/entrada/terra', function () {
+    return view('eterra');
+});
+Route::get('/saida/terra', function () {
+    return view('sterra');
 });
 
 
