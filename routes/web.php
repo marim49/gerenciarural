@@ -1,7 +1,19 @@
 <?php
 
-//Rota animais
+/* ROTA: ANIMAIS
+ * animais => POST(store), GET(index) 
+ * animais/create => GET(create) 
+ * animais/{id} => GET(show), PUT(update), DELETE(destroy)
+ * animais/{id}/edit => GET(edit)
+*/
+Route::resource('animal', 'Animal\AnimalController')/*->middleware('auth')*/;
+
+
+
+
+//ACIMA ESTÀ CERTO
 Route::get('/pesquisa/animal','AnimalController@GetAnimal');
+
 //Rota para pesquisar funcionário
 Route::get('/pesquisa/funcionario', 'HomeController@Teste');
 //Rota para cirar animal
@@ -34,9 +46,6 @@ Route::get('/cadastro/maquina', function () {
 //Rotas para animais, medicamentos e relacionados..
 Route::get('/cadastro/tipomedicamento', function () {
     return view('ctmedicamento');
-});
-Route::get('/cadastro/animal', function () {
-    return view('canimal');
 });
 //Rotas para insumo, terra e realacionados..
 Route::get('/cadastro/insumo', function () {

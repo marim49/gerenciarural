@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controller\Animals;
+namespace App\Http\Controllers\Animal;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,7 +12,7 @@ class GrupoAnimalController extends Controller
         'Fazenda', 'Animais'
     ];
     
-    public function __construct(\App\Models\Animal\Animal $model)
+    public function __construct(\App\Models\Animal\GrupoAnimal $model)
     {
         $this->model = $model;
     }

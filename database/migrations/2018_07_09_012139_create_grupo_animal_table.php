@@ -14,10 +14,8 @@ class CreateGrupoAnimalTable extends Migration
     public function up()
     {
         Schema::create('grupo_animal', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('id_fazenda')->unsigned();         
+            $table->increments('id');         
             $table->string('nome', 45);   
-            $table->foreign('id_fazenda')->references('id')->on('fazenda');
             $table->timestamps();
         });
     }

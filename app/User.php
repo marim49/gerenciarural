@@ -18,6 +18,6 @@ class User extends Authenticatable
 
     public function Fazendas()
     {
-        return $this->hasMany(Fazenda::class, 'id_produtor');
+        return $this->hasMany(\App\Models\Fazenda\Fazenda::class, 'id_produtor');
     }
 }
