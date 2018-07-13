@@ -7,16 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Fazenda extends Model
 {
     protected $fillable = [
-        'id_produtor', 'nome', 'telefone', 'end_cep',
+        'nome', 'telefone', 'end_cep',
         'end_bairro', 'end_rua', 'end_numero', 'end_complemento',
         'end_cidade', 'end_estado', 'end_pais', 'endereco'
     ];
     protected $table = 'fazenda';
-
-    public function Produtor()
-    {
-        return $this->belongsTo(App\User::class, 'id_produtor');
-    }
+  
     public function Maquinas()
     {
         return $this->hasMany(App\Models\Maquina\Maquina::class, 'id_fazenda');

@@ -47,21 +47,28 @@ class AnimalController extends Controller
         }
     }
     
-    //Método GET (chama a view de criação)
+    //Método GET (chama a view de criação) : OK
     public function create()
     {
-        $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
-       
-        return view('canimal', ['grupos' => $grupos]);
+        try
+        {
+            $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
+        
+            return view('canimal', ['grupos' => $grupos]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('canimal', ['grupos' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
     }
 
-    /* Método POST (salva o animal) : OK
-     * (Adicionar view de retorno de erro)
-     */
+    // Método POST (salva o animal) : OK     
     public function store(Request $request)
     {
+        $animal = $request->only('nome', 'id_grupo_animal');
         //Validação
-        $validator = $this->Validator($request->only('nome', 'id_grupo_animal'));
+        $validator = $this->Validator($animal);
         if ($validator->fails()) {
             return redirect('animal/create')
                             ->withErrors($validator)
@@ -70,20 +77,16 @@ class AnimalController extends Controller
         //Inserção no banco
         try 
         {
-            $animal = $request->all();
-
             $success = $this->model->create($animal);
             $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
 
             return view('canimal', ['success' => $success, 'grupos' => $grupos]);
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Nao foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {          
+            return redirect('animal/create')
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(['grupos' => []]);
         }
     }
 
@@ -162,7 +165,7 @@ class AnimalController extends Controller
         }
     }
 
-    //Método que retorna os relacionamentos
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -170,7 +173,8 @@ class AnimalController extends Controller
         }
 
         return [];
-    }    
+    }   
+
     //Método de validação : OK
     protected function Validator($requisicao){        
         $messages = array(
@@ -184,5 +188,12 @@ class AnimalController extends Controller
         );
     
         return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

@@ -39,7 +39,7 @@
 								</div>
 								
 								<div class="form-group">
-									<label>Grupo Animal</label>
+									<label>Grupo do animal:</label>
 									<select class="form-control" name="id_grupo_animal">
 									@foreach($grupos as $item)
       									<option value="{{$item->id}}">{{$item->nome}}</option>
@@ -53,7 +53,7 @@
 									<button type="submit" class="btn btn-info pull-right">Salvar </button>
 								</div>
 								<div class="right-div">
-									<button type="submit" class="btn btn-info pull-right">Limpar </button>
+									<button type="reset" class="btn btn-info pull-right">Limpar </button>
 								</div>
 
 							</div>

@@ -8,7 +8,21 @@
 */
 Route::resource('animal', 'Animal\AnimalController')/*->middleware('auth')*/;
 
+/* ROTA: FAZENDAS
+ * fazendas => POST(store), GET(index) 
+ * fazendas/create => GET(create) 
+ * fazendas/{id} => GET(show), PUT(update), DELETE(destroy)
+ * fazendas/{id}/edit => GET(edit)
+*/
+Route::resource('fazenda', 'Fazenda\FazendaController')/*->middleware('auth')*/;
 
+/* ROTA: TERRA
+ * terra => POST(store), GET(index) 
+ * terra/create => GET(create) 
+ * terra/{id} => GET(show), PUT(update), DELETE(destroy)
+ * terra/{id}/edit => GET(edit)
+*/
+Route::resource('terra', 'Insumo\TerraController')/*->middleware('auth')*/;
 
 
 //ACIMA ESTÀ CERTO
@@ -27,10 +41,6 @@ Route::get('/cadastro/farmacia', function () {
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
     return view('welcome');
-});
-//Rotas para fazenda (arrumando)
-Route::get('/cadastro/fazenda', function () {
-    return view('cfazenda');
 });
 //Rotas para funcionário
 Route::get('/cadastro/funcionario', function () {
@@ -53,9 +63,6 @@ Route::get('/cadastro/insumo', function () {
 });
 Route::get('/cadastro/celeiro', function () {
     return view('cceleiro');
-});
-Route::get('/cadastro/terra', function () {
-    return view('cterra');
 });
 Route::get('/cadastro/tipoinsumo', function () {
     return view('ctinsumo');
