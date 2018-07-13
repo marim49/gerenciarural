@@ -54,7 +54,7 @@ class FazendaController extends Controller
         return view('cfazenda');        
     }
 
-    // Método POST (salva a fazenda)
+    // Método POST (salva a fazenda) : OK
     public function store(Request $request)
     {  
         $fazenda = $request->only(
@@ -105,7 +105,7 @@ class FazendaController extends Controller
     //Método GET (retorna a view de edição)
     public function edit($id){}
 
-    //Método PUT (atualiza um animal)
+    //Método PUT (atualiza uma fazenda)
     public function update(Request $request, $id)
     {
         //tratar entrada

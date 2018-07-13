@@ -52,7 +52,7 @@ class AnimalController extends Controller
     {
         try
         {
-            $grupos = \App\Models\Animal\GrupoAnimal::orderBy('id', 'asc')->get();
+            $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
         
             return view('canimal', ['grupos' => $grupos]);
         }         
@@ -173,7 +173,8 @@ class AnimalController extends Controller
         }
 
         return [];
-    }    
+    }   
+
     //Método de validação : OK
     protected function Validator($requisicao){        
         $messages = array(
@@ -188,6 +189,7 @@ class AnimalController extends Controller
     
         return Validator::make($requisicao, $rules,$messages);        
     }
+
     //Método de retorno de erro : OK
     protected function Error($message, \Exception $e){
         return [

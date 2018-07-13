@@ -16,6 +16,14 @@ Route::resource('animal', 'Animal\AnimalController')/*->middleware('auth')*/;
 */
 Route::resource('fazenda', 'Fazenda\FazendaController')/*->middleware('auth')*/;
 
+/* ROTA: TERRA
+ * terra => POST(store), GET(index) 
+ * terra/create => GET(create) 
+ * terra/{id} => GET(show), PUT(update), DELETE(destroy)
+ * terra/{id}/edit => GET(edit)
+*/
+Route::resource('terra', 'Insumo\TerraController')/*->middleware('auth')*/;
+
 
 //ACIMA ESTÀ CERTO
 Route::get('/pesquisa/animal','AnimalController@GetAnimal');
@@ -55,9 +63,6 @@ Route::get('/cadastro/insumo', function () {
 });
 Route::get('/cadastro/celeiro', function () {
     return view('cceleiro');
-});
-Route::get('/cadastro/terra', function () {
-    return view('cterra');
 });
 Route::get('/cadastro/tipoinsumo', function () {
     return view('ctinsumo');

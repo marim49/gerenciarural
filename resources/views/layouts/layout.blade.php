@@ -75,7 +75,7 @@
                             <a href="{{ url('fazenda/create') }}"> Fazenda</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/terra') }}"> Terra</a>
+                            <a href="{{ url('terra/create') }}"> Terra</a>
                         </li>
                         <li>
                             <a href="{{ url('cadastro/celeiro') }}"> Celeiro</a>
