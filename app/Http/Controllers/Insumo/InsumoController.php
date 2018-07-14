@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Insumo;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class InsumoController extends Controller
 {
@@ -17,7 +18,8 @@ class InsumoController extends Controller
         $this->model = $model;
     }
 
-    public function GetInsumos()
+    //Método GET (retorna os insumos)
+    public function index()
     {
         try
         {
@@ -45,33 +47,53 @@ class InsumoController extends Controller
         }
     }
     
-    public function PostInsumo(Request $request)
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        try
+        {
+            $celeiros = \App\Models\Insumo\Celeiro::orderBy('nome', 'asc')->get();            
+            $tipos = \App\Models\Insumo\TipoInsumo::orderBy('nome', 'asc')->get();
+        
+            return view('cinsumo', ['celeiros' => $celeiros, 'tipos' => $tipos]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('cinsumo', ['celeiros' => [], 'tipos'=> []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }
+    
+    // Método POST (salva o insumo) : OK
+    public function store(Request $request)
+    {
+        $insumo = $request->only('id_celeiro', 'id_tipo_insumo');
+        //Validação
+        $validator = $this->Validator($insumo);
+        if ($validator->fails()) {
+            return redirect('insumo/create')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Inserção no banco
         try 
         {
-            $insumo = $request->all();
+            $celeiros = \App\Models\Insumo\Celeiro::orderBy('nome', 'asc')->get();            
+            $tipos = \App\Models\Insumo\TipoInsumo::orderBy('nome', 'asc')->get();
+            $success = $this->model->create($insumo);
 
-            $novo_insumo = $this->model->create($insumo);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_insumo
-            ]);
+            return view('cinsumo', ['success' => $success, 'celeiros' => $celeiros, 'tipos' => $tipos]);
         } 
         catch(\Exception $e) 
         {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect('insumo/create')
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(['celeiros' => [], 'tipos' => []]);
         }
     } 
 
-    public function ShowInsumo($id)
+    //Método GET (retorna um insumo específico)
+    public function show($id)
     {
         try
         {
@@ -90,8 +112,12 @@ class InsumoController extends Controller
             ]);
         }
     }   
+    
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
 
-    public function UpdateInsumo(Request $request, $id)
+    //Método PUT (atualiza um insumo)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +143,8 @@ class InsumoController extends Controller
         }
     }
 
-    public function DeleteInsumo($id)
+    //Método DELETE (deleta um insumo específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +167,7 @@ class InsumoController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +175,27 @@ class InsumoController extends Controller
         }
 
         return [];
+    }
+
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'id_celeiro.required'=> 'O campo de celeiro é obrigatório',
+            'id_celeiro.unique_insumo'=> 'Já existe este tipo de insumo cadastrado neste celeiro',
+            'id_tipo_insumo.required'=> 'O campo de tipo de insumo',            
+        );    
+        $rules = array(
+            'id_celeiro'=>'required|unique_insumo',
+            'id_tipo_insumo'=>'required',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

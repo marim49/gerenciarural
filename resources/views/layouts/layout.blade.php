@@ -88,11 +88,11 @@
                                 Animais</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/insumo') }}">
+                            <a href="{{ url('insumo/create') }}">
                                 Insumos</a>
                         </li>
                         <li role="presentation">
-                            <a href="{{ url('cadastro/tipoinsumo') }}">
+                            <a href="{{ url('tipoinsumo/create') }}">
                                 Tipo de insumo</a>
                         </li>
                         <li role="presentation">

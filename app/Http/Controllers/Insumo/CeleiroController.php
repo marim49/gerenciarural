@@ -91,7 +91,7 @@ class CeleiroController extends Controller
         }
     } 
 
-    //Método GET (retorna um celeiro específica)
+    //Método GET (retorna um celeiro específico)
     public function show($id)
     {
         try
@@ -180,12 +180,13 @@ class CeleiroController extends Controller
     protected function Validator($requisicao){        
         $messages = array(
             'id_fazenda.required'=> 'O campo de identificação da fazenda é obrigatório',
+            'id_fazenda.unique' => 'Um celeiro já foi cadastrado para essa fazenda',
             'nome.required'=> 'O campo nome é obrigatório',
             'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
         );    
         $rules = array(
             'nome'=>'required|max:45',
-            'id_fazenda'=>'required',
+            'id_fazenda'=>'required|unique:celeiro',
         );
     
         return Validator::make($requisicao, $rules,$messages);        

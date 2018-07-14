@@ -25,9 +25,9 @@ class Fazenda extends Model
     {
         return $this->hasMany(FuncionarioFazenda::class, 'id_fazenda');
     }
-    public function Celeiros()
+    public function Celeiro()
     {
-        return $this->hasMany(App\Models\Insumo\Celeiro::class, 'id_fazenda');
+        return $this->hasOne(App\Models\Insumo\Celeiro::class, 'id_fazenda');
     }
     public function Terras()
     {
