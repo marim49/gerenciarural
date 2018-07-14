@@ -15,11 +15,11 @@ class Fazenda extends Model
   
     public function Maquinas()
     {
-        return $this->hasMany(App\Models\Maquina\Maquina::class, 'id_fazenda');
+        return $this->hasMany(\App\Models\Maquina\Maquina::class, 'id_fazenda');
     }
     public function Combustiveis()
     {
-        return $this->hasMany(App\Models\Maquina\Combustivel::class, 'id_fazenda');
+        return $this->hasMany(\App\Models\Maquina\Combustivel::class, 'id_fazenda');
     }
     public function Funcionarios()
     {
@@ -27,14 +27,14 @@ class Fazenda extends Model
     }
     public function Celeiros()
     {
-        return $this->hasMany(App\Models\Insumo\Celeiro::class, 'id_fazenda');
+        return $this->hasMany(\App\Models\Insumo\Celeiro::class, 'id_fazenda');
     }
     public function Terras()
     {
-        return $this->hasMany(App\Models\Insumo\Terra::class, 'id_fazenda');
+        return $this->hasMany(\App\Models\Insumo\Terra::class, 'id_fazenda');
     }
     public function Medicamentos()
     {
-        return $this->hasMany(App\Models\Animal\Medicamento::class, 'id_fazenda');
+        return $this->hasMany(\App\Models\Animal\Medicamento::class, 'id_fazenda');
     }
 }

@@ -6,7 +6,7 @@
 <div class="container">
 		<div class="row pad-botm">
 			<div class="col-md-12">
-				<h3 class="header-line">Pesquisar Animais</h3>
+				<h3 class="header-line">Pesquisar Funcionário</h3>
 			</div>
 		</div>
 
@@ -15,46 +15,48 @@
 				<!-- Advanced Tables -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Buscar por Animais
+						Buscar por Funcionários
 					</div>
 					<div class="panel-body">
 
-						<div class="table-responsive ">
-							<div id="printjs">
-								<table class="table table-striped table-bordered table-hover yesprint" id="dataTables-example ">
-									<thead>
-										<tr>
-											<th>Número de registro</th>
-											<th>Nome animal</th>
-											<th>Peso</th>
-											<th>Tratamentos já realizados</th>
-											<th>Histórico do animal</th>
-											<th></th>
-											<th></th>
-										</tr>
-									</thead>
-									<tbody>
-									@foreach ($result as $delicia)
-
-
-														<tr class='gradeA'>
-															<td> {{$delicia->numero_registro}} </td>
-															<td> {{$delicia->nome_animal}} </td>
-															<td> {{$delicia->peso}} </td>
-															<td> {{$delicia->tratamento_feito}} </td>
-															<td> {{$delicia->historico}} </td>
-															<td><a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_vertical{{$delicia->id_animal}}'><span class='icon-pencil7'></span> </a>
-															</td>
-															<td><a href='../../db/animais/deletar.php?id={{$delicia->id_animal}}'><span class='icon-trash'></span> </a> </td>
-															</tr>
-															
-															@endforeach									
-																		
-									</tbody>
-								</table>
-							</div>
-							@foreach ($result as $delicia)
-							<div id='modal_form_vertical{{$delicia->id_animal}}' class='modal fade'>
+						<div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Cargo</th>
+                                            <th>celular</th>
+                                            
+                                            <th>Data de admissão</th>
+											<th> </th>
+											<th> </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+									@foreach ($funcionarios as $funcionario)
+                                        <tr class='gradeA'>
+													<td> {{$funcionario->nome}} </td>
+													<td> {{$funcionario->cargo}} </td>
+													<td> {{$funcionario->celular}} </td>
+													<td> {{$funcionario->admissao}} </td>
+													
+													<td><a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_vertical$escrever[id_func]'><span class='icon-pencil7'></span> </a>
+													</td>
+													<td><a href='../../db/funcionarios/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
+													</tr>
+													@endforeach	
+											
+                                    </tbody>
+                                </table>
+								</div>
+								<a onclick="imprimir()" class="btn btn-primary pull-left">Imprimir</a>
+						</div>
+								
+							
+							
+						</div>
+						@foreach ($funcionarios as $funcionario)
+							<div id='modal_form_vertical{{$funcionario->id_animal}}' class='modal fade'>
 								<div class='modal-dialog'>
 									<div class='modal-content'>
 										<div class='modal-header'>
@@ -137,10 +139,7 @@
 									</div>
 								</div>
 							</div>
-							@endforeach		
-							
-							<a onclick="imprimir()" class="btn btn-primary pull-left">Imprimir</a>
-						</div>
+							@endforeach	
 					</div>
 
 				</div>

@@ -21,30 +21,30 @@ class Funcionario extends Model
     }
     public function HistoricoAbastecimentos()
     {
-        return $this->hasMany(App\Models\Maquina\HistoricoAbastecimento::class, 'id_funcionario');
+        return $this->hasMany(\App\Models\Maquina\HistoricoAbastecimento::class, 'id_funcionario');
     }
     public function HistoricoCompras()
     {
-        return $this->hasMany(App\Models\Maquina\HistoricoCompraCombustivel::class, 'id_funcionario');
+        return $this->hasMany(\App\Models\Maquina\HistoricoCompraCombustivel::class, 'id_funcionario');
     }
     public function FuncionarioFazendas()
     {
-        return $this->hasMany(App\Models\Fazenda\FuncionarioFazenda::class, 'id_funcionario');
+        return $this->hasMany(\App\Models\Fazenda\FuncionarioFazenda::class, 'id_funcionario');
     }
     public function HistoricoTerras()
     {
-        return $this->hasMany(App\Models\Insumo\HistoricoTerra::class, 'id_funcionario');
+        return $this->hasMany(\App\Models\Insumo\HistoricoTerra::class, 'id_funcionario');
     }
     public function HistoricoCompraInsumo()
     {
-        return $this->hasMany(App\Models\Insumo\HistoricoCompraInsumo::class, 'id_funcionario');
+        return $this->hasMany(\App\Models\Insumo\HistoricoCompraInsumo::class, 'id_funcionario');
     }
     public function HistoricoCompraMedicamento()
     {
-        return $this->hasMany(App\Models\Animal\HistoricoCompraMedicamento::class, 'id_funcionario');
+        return $this->hasMany(\App\Models\Animal\HistoricoCompraMedicamento::class, 'id_funcionario');
     }
     public function HistoricoAnimal()
     {
-        return $this->hasMany(App\Models\Animal\HistoricoAnimal::class, 'id_funcionario');
+        return $this->hasMany(\App\Models\Animal\HistoricoAnimal::class, 'id_funcionario');
     }
 }

@@ -36,8 +36,7 @@ class FuncionarioController extends Controller
                 })
                 ->paginate($limit);
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($funcionarios);
+            return view('pfuncionario', ['funcionarios' => $funcionarios]);
         }
         catch(\Exception $e) 
         {

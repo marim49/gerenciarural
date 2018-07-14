@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('fazendas', 'Fazenda\FazendaController@index');
+Route::get('insumos', 'Insumo\InsumoController@GetInsumos');
+Route::get('funcionarios', 'Funcionario\FuncionarioController@index');
 Route::get('teste', function(){
     phpinfo();
 });

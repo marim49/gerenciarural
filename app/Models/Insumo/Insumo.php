@@ -4,7 +4,7 @@ namespace App\Models\Insumo;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Isumo extends Model
+class Insumo extends Model
 {
     protected $fillable = [
         'id_celeiro', 'id_tipo_insumo', 'quantidade'

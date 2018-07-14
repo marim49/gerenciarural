@@ -121,7 +121,7 @@
                             <a href="https://gerenciarural.herokuapp.com/pesquisar/fazenda/pesquisar.php"> Fazenda</a>
                         </li>
                         <li>
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/funcionarios/pesquisar.php"> Funcionários</a>
+                            <a href="{{ url('funcionario')}}"> Funcionários</a>
                         </li>
                         <li>
                             <a href="https://gerenciarural.herokuapp.com/pesquisar/animais/pesquisar.php">
