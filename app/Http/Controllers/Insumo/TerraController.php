@@ -63,7 +63,7 @@ class TerraController extends Controller
         }
     }
 
-    // Método POST (salva a terra)
+    // Método POST (salva a terra) : OK
     public function store(Request $request)
     {
         $terra = $request->only('nome', 'area', 'id_fazenda');

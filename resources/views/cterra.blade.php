@@ -74,7 +74,7 @@
 										<button type="submit" class="btn btn-info pull-right">Salvar </button>
 									</div>
 									<div class="right-div">
-										<button type="submit" class="btn btn-info pull-right">Limpar </button>
+										<button type="reset" class="btn btn-info pull-right">Limpar </button>
 									</div>
 								</form>
 							</div>

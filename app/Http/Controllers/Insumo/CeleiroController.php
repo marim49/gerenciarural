@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Insumo;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CeleiroController extends Controller
 {
@@ -17,7 +18,8 @@ class CeleiroController extends Controller
         $this->model = $model;
     }
 
-    public function GetCeleiros()
+    //Método GET (retorna os celeiros)
+    public function index()
     {
         try
         {
@@ -44,34 +46,53 @@ class CeleiroController extends Controller
             ]);
         }
     }
-    
-    public function PostCeleiro(Request $request)
+
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        try
+        {
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+        
+            return view('cceleiro', ['fazendas' => $fazendas]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('cceleiro', ['fazendas' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }
+    
+    // Método POST (salva o celeiro) : OK
+    public function store(Request $request)
+    {
+        $celeiro = $request->only('nome', 'id_fazenda');
+        //Validação
+        $validator = $this->Validator($celeiro);
+        if ($validator->fails()) {
+            return redirect('celeiro/create')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Inserção no banco
         try 
         {
-            $celeiro = $request->all();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+            $success = $this->model->create($celeiro);
 
-            $novo_celeiro = $this->model->create($celeiro);
+            return view('cceleiro', ['success' => $success, 'fazendas' => $fazendas]);
 
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_celeiro
-            ]);
         } 
         catch(\Exception $e) 
         {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect('celeiro/create')
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(['fazendas' => []]);
         }
     } 
 
-    public function ShowCeleiro($id)
+    //Método GET (retorna um celeiro específica)
+    public function show($id)
     {
         try
         {
@@ -89,9 +110,13 @@ class CeleiroController extends Controller
                 'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
             ]);
         }
-    }   
+    }     
+    
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
 
-    public function UpdateCeleiro(Request $request, $id)
+    //Método PUT (atualiza um celeiro)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +142,8 @@ class CeleiroController extends Controller
         }
     }
 
-    public function DeleteCeleiro($id)
+    //Método DELETE (deleta um celeiro específica)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +166,7 @@ class CeleiroController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +174,27 @@ class CeleiroController extends Controller
         }
 
         return [];
+    }
+       
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'id_fazenda.required'=> 'O campo de identificação da fazenda é obrigatório',
+            'nome.required'=> 'O campo nome é obrigatório',
+            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+        );    
+        $rules = array(
+            'nome'=>'required|max:45',
+            'id_fazenda'=>'required',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

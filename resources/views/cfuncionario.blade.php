@@ -1,4 +1,5 @@
- @extends('layouts.layout') @section('content')
+ @extends('layouts.layout')
+ @section('content')
 
 
 <!-- MENU SECTION END-->
@@ -6,6 +7,18 @@
 	<div class="col-md-12">
 		<div class="row pad-botm">
 			<h3 class="header-line">Cadastrar Funcionários</h3>
+			@if (isset($success))
+				<div class="alert alert-success alert-dismissible">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Cadastrado!</strong> O funcionário foi armazenado.
+				</div>
+			@endif
+			@if ($errors->any())
+				<div class="alert alert-warning alert-dismissible">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Ops!</strong> {{$errors->first()}}.
+				</div>
+			@endif
 		</div>
 	</div>
 
@@ -13,47 +26,47 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Cadastre aqui os seus funcionários
+					Insira os dados para cadastrar um funcionário:
 				</div>
-				<form name="register-funcionario" action="../../controller/cadastro/funcionarios/funcionarios.php" method="post">
+				<form name="register-funcionario" action="{{ route('funcionario.store') }}" method="post">
+					{{ csrf_field() }}
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-md-4">
 
 								<div class="form-group">
 									<label>Nome do Funcionário:</label>
-									<input class="form-control" name="nome_func" type="text" placeholder="Insira aqui o nome completo do funcionário" />
+									<input class="form-control" name="nome" type="text" placeholder="Insira aqui o nome completo do funcionário" />
 								</div>
 								<div class="form-group">
 									<label>RG:</label>
-									<input class="form-control" name="RG" type="text" placeholder="Insira aqui o RG do funcionário" />
+									<input class="form-control" name="rg" type="text" placeholder="Insira aqui o RG do funcionário" />
 								</div>
 								<div class="form-group">
 									<label>Estado Civil:</label>
 									<div class="form-group">
-										<select class="form-control" name="estado_civil">
-											<option value="Solteiro(a)">Solteiro(a)</option>
-											<option value="Casado(a)">Casado(a)</option>
-											<option value="Separado(a)">Separado(a)</option>
-											<option value="Viúvo(a)">Viúvo(a)</option>
+										<select class="form-control" name="id_estado_civil">
+										@foreach($grupos as $item)
+											<option value="{{$item->id}}">{{$item->nome}}</option>
+										@endforeach
 										</select>
 									</div>
 								</div>
 								<div class="form-group">
-									<label>Endereço:</label>
-									<input class="form-control" type="text" name="endereco" placeholder="Insira aqui o endereço do funcionário" />
+									<label>Rua:</label>
+									<input class="form-control" type="text" name="endereco_rua" placeholder="Insira aqui o endereço do funcionário" />
 								</div>
 								<div class="form-group">
 									<label>Bairro:</label>
-									<input class="form-control" type="text" name="bairro" placeholder="Insira aqui o bairro do funcionário" />
-								</div>
+									<input class="form-control" type="text" name="endereco_bairro" placeholder="Insira aqui o bairro do funcionário" />
+								</div>															
 								<div class="form-group">
-									<label>Função:</label>
-									<input class="form-control" type="text" name="funcao" placeholder="Insira aqui a função do funcionário" />
+									<label>País:</label>
+									<input class="form-control" name="endereco_pais" type="text" placeholder="Insira aqui o país do funcionário" />
 								</div>
-
 
 							</div>
+
 							<div class="col-md-4">
 
 								<div class="form-group">
@@ -74,47 +87,48 @@
 								</div>
 								<div class="form-group">
 									<label>CPF:</label>
-									<input class="form-control" name="CPF" type="text" placeholder="Insira aqui o CPF" />
+									<input class="form-control" name="cpf" type="text" placeholder="Insira aqui o CPF" />
 								</div>
 								<div class="form-group">
 									<label>Data de Nascimento:</label>
-									<input class="form-control" name="data_nasc_func" type="date" placeholder="DD/MM/AAAA" />
+									<input class="form-control" name="nascimento" type="date" placeholder="DD/MM/AAAA" />
 								</div>
 								<div class="form-group">
 									<label>Nº:</label>
-									<input class="form-control" name="numero_moradia" type="text" placeholder="Insira aqui o número da casa" />
+									<input class="form-control" name="endereco_numero" type="text" placeholder="Insira aqui o número da casa" />
 								</div>
 								<div class="form-group">
 									<label>Cidade:</label>
-									<input class="form-control" name="cidade" type="text" placeholder="Insira aqui a cidade do funcionário" />
-								</div>
+									<input class="form-control" name="endereco_cidade" type="text" placeholder="Insira aqui a cidade do funcionário" />
+								</div>								
 								<div class="form-group">
-									<label>Data de Admissão:</label>
-									<input class="form-control" name="data_admissao" type="date" placeholder="DD/MM/AAAA" />
+									<label>Cargo:</label>
+									<input class="form-control" type="text" name="cargo" placeholder="Insira aqui a função do funcionário" />
 								</div>
 
 							</div>
+
 							<div class="col-md-4">
 
 								<div class="form-group">
 									<label>PIS:</label>
-									<input class="form-control" name="PIS" type="text" placeholder="PIS" />
+									<input class="form-control" name="pis" type="text" placeholder="PIS" />
 								</div>
 
 								<div class="form-group">
 									<label>Telefone:</label>
-									<input class="form-control" name="telefone" type="text" placeholder="(__)____-____" maxlength="10" />
+									<input class="form-control" name="tel_fixo" type="text" placeholder="(__)____-____" maxlength="16" />
 								</div>
 
 								<div class="form-group">
 									<label>Celular</label>
-									<input class="form-control" name="celular" type="text" placeholder="(__)_____-____" maxlength="11" />
+									<input class="form-control" name="celular" type="text" placeholder="(__)_____-____" maxlength="16" />
 								</div>
 
 								<div class="form-group">
 									<label>Estado:</label>
 									<div class="form-group">
-										<select class="form-control" name="estado">
+										<select class="form-control" name="endereco_estado">
 											<option value="AC">Acre</option>
 											<option value="AL">Alagoas</option>
 											<option value="AP">Amapá</option>
@@ -145,20 +159,23 @@
 										</select>
 									</div>
 								</div>
-
 								<div class="form-group">
 									<label>CEP:</label>
-									<input class="form-control" name="CEP" type="text" placeholder="CEP" />
+									<input class="form-control" name="cep" type="text" placeholder="CEP" />
+								</div>								
+								<div class="form-group">
+									<label>Data de Admissão:</label>
+									<input class="form-control" name="admissao" type="date" placeholder="DD/MM/AAAA" />
 								</div>
+							</div>							
 
-								<div class="right-div">
-									<button type="submit" class="btn btn-info pull-right">Salvar </button>
-								</div>
-								<div class="right-div">
-									<button type="submit" class="btn btn-info pull-right">Limpar </button>
-								</div>
-
+							<div class="right-div">
+								<button type="submit" class="btn btn-info pull-right">Salvar </button>
 							</div>
+							<div class="right-div">
+								<button type="reset" class="btn btn-info pull-right">Limpar </button>
+							</div>
+
 						</div>
 					</div>
 				</form>
