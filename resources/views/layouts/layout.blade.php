@@ -96,15 +96,15 @@
                                 Tipo de insumo</a>
                         </li>
                         <li role="presentation">
-                            <a href="{{ url('cadastro/farmacia') }}">
-                                Farmácia</a>
+                            <a href="{{ url('medicamento/create') }}">
+                                Medicamentos</a>
                         </li>
                         <li role="presentation">
-                            <a href="{{ url('cadastro/tipomedicamento') }}">
+                            <a href="{{ url('tipomedicamento/create') }}">
                                 Tipo de medicamento</a>
                         </li>
                         <li role="presentation">
-                            <a href="{{ url('cadastro/maquina') }}">
+                            <a href="{{ url('maquina/create') }}">
                                 Máquinas</a>
                         </li>
                     </ul>

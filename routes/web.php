@@ -56,6 +56,35 @@ Route::resource('insumo', 'Insumo\InsumoController')/*->middleware('auth')*/;
 */
 Route::resource('tipoinsumo', 'Insumo\TipoInsumoController')/*->middleware('auth')*/;
 
+/* ROTA: TIPO MEDICAMENTO
+ * tipomedicamento => POST(store), GET(index) 
+ * tipomedicamento/create => GET(create) 
+ * tipomedicamento/{id} => GET(show), PUT(update), DELETE(destroy)
+ * tipomedicamento/{id}/edit => GET(edit)
+*/
+Route::resource('tipomedicamento', 'Animal\TipoMedicamentoController')/*->middleware('auth')*/;
+
+/* ROTA: MEDICAMENTO
+ * medicamento => POST(store), GET(index) 
+ * medicamento/create => GET(create) 
+ * medicamento/{id} => GET(show), PUT(update), DELETE(destroy)
+ * medicamento/{id}/edit => GET(edit)
+*/
+Route::resource('medicamento', 'Animal\MedicamentoController')/*->middleware('auth')*/;
+
+/* ROTA: MÁQUINA
+ * maquina => POST(store), GET(index) 
+ * maquina/create => GET(create) 
+ * maquina/{id} => GET(show), PUT(update), DELETE(destroy)
+ * maquina/{id}/edit => GET(edit)
+*/
+Route::resource('maquina', 'Maquina\MaquinaController')/*->middleware('auth')*/;
+
+
+
+
+
+
 
 
 //ACIMA ESTÀ CERTO
@@ -66,10 +95,9 @@ Route::get('/pesquisa/funcionario', 'HomeController@Teste');
 //Rota para cirar animal
 Route::post('/criar/animal', 'AnimalController@Create');
 
-//Não sei o que é
-Route::get('/cadastro/farmacia', function () {
-    return view('cfarmacia');
-});
+
+
+
 //Rotas de início
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
@@ -85,10 +113,6 @@ Route::get('/cadastro/combustivel', function () {
 });
 Route::get('/cadastro/maquina', function () {
     return view('cmaquina');
-});
-//Rotas para animais, medicamentos e relacionados..
-Route::get('/cadastro/tipomedicamento', function () {
-    return view('ctmedicamento');
 });
 Route::get('/saida/combustivel', function () {
     return view('scombustivel');
