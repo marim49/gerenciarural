@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Maquina;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class TipoCombustivelController extends Controller
 {
@@ -17,7 +18,8 @@ class TipoCombustivelController extends Controller
         $this->model = $model;
     }
 
-    public function GetTiposCombustivel()
+    //Método GET (retorna os tipo de combustiveis)
+    public function index()
     {
         try
         {
@@ -45,33 +47,39 @@ class TipoCombustivelController extends Controller
         }
     }
     
-    public function PostTipoCombustivel(Request $request)
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        return view('ctcombustivel');
+    }
+    
+    //Método POST (salva o tipo de combustível) : OK    
+    public function store(Request $request)
+    {                
+        $tipocombustivel = $request->only('nome');
+        //Validação
+        $validator = $this->Validator($tipocombustivel);
+        if ($validator->fails()) {
+            return redirect('tipocombustivel/create')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Inserção no banco        
         try 
         {
-            $tipo_combustivel = $request->all();
-
-            $novo_tipo_combustivel = $this->model->create($tipo_combustivel);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_tipo_combustivel
-            ]);
+            $success = $this->model->create($tipocombustivel);
+            
+            return view('ctcombustivel', ['success' => $success]);
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {                           
+            return redirect('tipocombustivel/create')
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e));
         }
     } 
 
-    public function ShowTipoCombustivel($id)
+    //Método GET (retorna um tipo de combustivel específico)
+    public function show($id)
     {
         try
         {
@@ -91,7 +99,11 @@ class TipoCombustivelController extends Controller
         }
     }   
 
-    public function UpdateTipoCombustivel(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza um tipo de combustivel)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +129,8 @@ class TipoCombustivelController extends Controller
         }
     }
 
-    public function DeleteTipoCombustivel($id)
+    //Método DELETE (deleta um tipo de combustivel específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +153,7 @@ class TipoCombustivelController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +161,24 @@ class TipoCombustivelController extends Controller
         }
 
         return [];
+    }    
+
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'nome.required'=> 'O campo nome é obrigatório',
+            'nome.max'=>'O tamanho máximo do campo nome é 45 caracteres',);    
+        $rules = array(
+            'nome'=>'required|max:45',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

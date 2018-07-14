@@ -10,7 +10,7 @@ class FazendaController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Maquinas', 'Combustiveis', 'Funcionarios', 'Celeiros',
+        'Maquinas', 'Combustiveis', 'Funcionarios', 'Celeiro',
         'Terras', 'Medicamentos'
     ];
     

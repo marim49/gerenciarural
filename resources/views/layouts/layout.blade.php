@@ -104,6 +104,14 @@
                                 Tipo de medicamento</a>
                         </li>
                         <li role="presentation">
+                            <a href="{{ url('tipocombustivel/create') }}">
+                                Tipo de Combustivel</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="{{ url('combustivel/create') }}">
+                                Combustivel</a>
+                        </li>
+                        <li role="presentation">
                             <a href="{{ url('maquina/create') }}">
                                 Máquinas</a>
                         </li>
