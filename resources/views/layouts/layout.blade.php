@@ -78,10 +78,10 @@
                             <a href="{{ url('terra/create') }}"> Terra</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/celeiro') }}"> Celeiro</a>
+                            <a href="{{ url('celeiro/create') }}"> Celeiro</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/funcionario') }}"> Funcionários</a>
+                            <a href="{{ url('funcionario/create') }}"> Funcionários</a>
                         </li>
                         <li>
                             <a href="{{ url('animal/create') }}">

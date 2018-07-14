@@ -24,6 +24,23 @@ Route::resource('fazenda', 'Fazenda\FazendaController')/*->middleware('auth')*/;
 */
 Route::resource('terra', 'Insumo\TerraController')/*->middleware('auth')*/;
 
+/* ROTA: CELEIRO
+ * celeiro => POST(store), GET(index) 
+ * celeiro/create => GET(create) 
+ * celeiro/{id} => GET(show), PUT(update), DELETE(destroy)
+ * celeiro/{id}/edit => GET(edit)
+*/
+Route::resource('celeiro', 'Insumo\CeleiroController')/*->middleware('auth')*/;
+
+/* ROTA: FUNCIONARIO
+ * funcionario => POST(store), GET(index) 
+ * funcionario/create => GET(create) 
+ * funcionario/{id} => GET(show), PUT(update), DELETE(destroy)
+ * funcionario/{id}/edit => GET(edit)
+*/
+Route::resource('funcionario', 'Funcionario\FuncionarioController')/*->middleware('auth')*/;
+
+
 
 //ACIMA ESTÀ CERTO
 Route::get('/pesquisa/animal','AnimalController@GetAnimal');
@@ -60,9 +77,6 @@ Route::get('/cadastro/tipomedicamento', function () {
 //Rotas para insumo, terra e realacionados..
 Route::get('/cadastro/insumo', function () {
     return view('cinsumo');
-});
-Route::get('/cadastro/celeiro', function () {
-    return view('cceleiro');
 });
 Route::get('/cadastro/tipoinsumo', function () {
     return view('ctinsumo');

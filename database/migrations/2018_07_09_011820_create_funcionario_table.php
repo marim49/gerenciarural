@@ -26,10 +26,10 @@ class CreateFuncionarioTable extends Migration
             $table->string('sexo', 45);
             $table->date('nascimento');
             $table->date('admissao');
-            $table->string('cargo');
-            $table->string('rg', 45);
-            $table->string('cpf', 45);
-            $table->string('pis', 45);
+            $table->string('cargo', 45);
+            $table->string('rg', 45)->unique();
+            $table->string('cpf', 45)->unique();
+            $table->string('pis', 45)->unique();
             $table->string('tel_fixo', 45);
             $table->string('celular', 45);
             $table->string('cep', 45);          

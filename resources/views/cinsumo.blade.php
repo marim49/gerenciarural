@@ -1,4 +1,5 @@
- @extends('layouts.layout') @section('content')
+ @extends('layouts.layout')
+ @section('content')
 
 <div class="container">
 	<div class="col-md-12">
@@ -23,10 +24,10 @@
 										<div class="form-group">
 											<label>Selecione o celeiro</label>
 											<select class="form-control" name="tipomed">
-												<option value="{{}}">Celeiro 1</option>
-												<option value="{{}}">Two Vale</option>
+												<option value="">Celeiro 1</option>
+												<option value="">Two Vale</option>
 												<option value="{{}}">Three Vale</option>
-												<option value="{{}}">Four Vale</option>
+												<option value="">Four Vale</option>
 											</select>
 										</div>
 
@@ -41,10 +42,10 @@
 										<div class="form-group">
 											<label>Tipo de insumo</label>
 											<select class="form-control" name="tipomed">
-												<option value="{{}}">Milho</option>
-												<option value="{{}}">Two Vale</option>
-												<option value="{{}}">Three Vale</option>
-												<option value="{{}}">Four Vale</option>
+												<option value="">Milho</option>
+												<option value="">Two Vale</option>
+												<option value="">Three Vale</option>
+												<option value="">Four Vale</option>
 											</select>
 										</div>
 
