@@ -40,6 +40,22 @@ Route::resource('celeiro', 'Insumo\CeleiroController')/*->middleware('auth')*/;
 */
 Route::resource('funcionario', 'Funcionario\FuncionarioController')/*->middleware('auth')*/;
 
+/* ROTA: INSUMO
+ * insumo => POST(store), GET(index) 
+ * insumo/create => GET(create) 
+ * insumo/{id} => GET(show), PUT(update), DELETE(destroy)
+ * insumo/{id}/edit => GET(edit)
+*/
+Route::resource('insumo', 'Insumo\InsumoController')/*->middleware('auth')*/;
+
+/* ROTA: TIPO INSUMO
+ * tipoinsumo => POST(store), GET(index) 
+ * tipoinsumo/create => GET(create) 
+ * tipoinsumo/{id} => GET(show), PUT(update), DELETE(destroy)
+ * tipoinsumo/{id}/edit => GET(edit)
+*/
+Route::resource('tipoinsumo', 'Insumo\TipoInsumoController')/*->middleware('auth')*/;
+
 
 
 //ACIMA ESTÀ CERTO
@@ -71,13 +87,6 @@ Route::get('/cadastro/maquina', function () {
 //Rotas para animais, medicamentos e relacionados..
 Route::get('/cadastro/tipomedicamento', function () {
     return view('ctmedicamento');
-});
-//Rotas para insumo, terra e realacionados..
-Route::get('/cadastro/insumo', function () {
-    return view('cinsumo');
-});
-Route::get('/cadastro/tipoinsumo', function () {
-    return view('ctinsumo');
 });
 Route::get('/saida/combustivel', function () {
     return view('scombustivel');

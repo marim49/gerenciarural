@@ -48,10 +48,10 @@
 										<div class="form-group">
                                             <label>Tipo de medicamento</label>
                                             <select class="form-control" name="tipomed">
-                                                <option value="{{}}">Vermicída</option>
-                                                <option value ="{{}}">Two Vale</option>
-                                                <option value="{{}}">Three Vale</option>
-                                                <option value="{{}}">Four Vale</option>
+                                                <option value="">Vermicída</option>
+                                                <option value ="">Two Vale</option>
+                                                <option value="">Three Vale</option>
+                                                <option value="">Four Vale</option>
                                             </select>
                                         </div>
 
