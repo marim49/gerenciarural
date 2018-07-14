@@ -10,8 +10,8 @@ class FazendaController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Maquinas', 'Combustiveis', 'Funcionarios', 'Celeiro',
-        'Terras', 'Medicamentos', 'GrupoAnimais'
+        'Maquinas', 'Combustiveis', 'Funcionarios', 'Celeiros',
+        'Terras', 'Medicamentos'
     ];
     
     public function __construct(\App\Models\Fazenda\Fazenda $model)
@@ -53,7 +53,7 @@ class FazendaController extends Controller
     {
         return view('cfazenda');        
     }
-
+    
     // Método POST (salva a fazenda) : OK
     public function store(Request $request)
     {  

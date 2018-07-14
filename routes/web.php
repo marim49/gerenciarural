@@ -90,8 +90,6 @@ Route::resource('maquina', 'Maquina\MaquinaController')/*->middleware('auth')*/;
 //ACIMA ESTÀ CERTO
 Route::get('/pesquisa/animal','AnimalController@GetAnimal');
 
-//Rota para pesquisar funcionário
-Route::get('/pesquisa/funcionario', 'HomeController@Teste');
 //Rota para cirar animal
 Route::post('/criar/animal', 'AnimalController@Create');
 

@@ -36,6 +36,7 @@ class InsumoController extends Controller
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
             return response()->json($insumos);
+        
         }
         catch(\Exception $e) 
         {
