@@ -16,6 +16,10 @@ Route::get('terras', 'Insumo\TerraController@index');
 Route::get('maquinas', 'Maquina\MaquinaController@index');
 Route::get('medicamentos', 'Animal\MedicamentoController@index');
 Route::get('animal', 'Animal\AnimalController@index');
+Route::get('funciona', function(){
+    $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas')->orderBy('nome', 'asc')->get();
+    return response()->json($fazendas);
+});
 Route::get('fazendas', 'Fazenda\FazendaController@index');
 Route::get('insumos', 'Insumo\InsumoController@index');
 Route::get('celeiros', 'Insumo\CeleiroController@index');

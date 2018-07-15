@@ -1,5 +1,4 @@
- @extends('layouts.layout')
- @section('content')
+ @extends('layouts.layout') @section('content')
 
 
 <!-- MENU SECTION END-->
@@ -8,16 +7,15 @@
 		<div class="row pad-botm">
 			<h3 class="header-line">Cadastrar Funcionários</h3>
 			@if (isset($success))
-				<div class="alert alert-success alert-dismissible">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					<strong>Cadastrado!</strong> O funcionário foi armazenado.
-				</div>
-			@endif
-			@if ($errors->any())
-				<div class="alert alert-warning alert-dismissible">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					<strong>Ops!</strong> {{$errors->first()}}.
-				</div>
+			<div class="alert alert-success alert-dismissible">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Cadastrado!</strong> O funcionário foi armazenado.
+			</div>
+			@endif @if ($errors->any())
+			<div class="alert alert-warning alert-dismissible">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Ops!</strong> {{$errors->first()}}.
+			</div>
 			@endif
 		</div>
 	</div>
@@ -31,6 +29,18 @@
 				<form name="register-funcionario" action="{{ route('funcionario.store') }}" method="post">
 					{{ csrf_field() }}
 					<div class="panel-body">
+
+						<div class="form-group">
+							<label>Fazenda:</label>
+							<div class="form-group">
+								<select class="form-control" name="id_fazenda">
+									@foreach($fazendas as $fazenda)
+									<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+
 						<div class="row">
 							<div class="col-md-4">
 
@@ -46,9 +56,9 @@
 									<label>Estado Civil:</label>
 									<div class="form-group">
 										<select class="form-control" name="id_estado_civil">
-										@foreach($grupos as $item)
+											@foreach($grupos as $item)
 											<option value="{{$item->id}}">{{$item->nome}}</option>
-										@endforeach
+											@endforeach
 										</select>
 									</div>
 								</div>
@@ -59,7 +69,7 @@
 								<div class="form-group">
 									<label>Bairro:</label>
 									<input class="form-control" type="text" name="endereco_bairro" placeholder="Insira aqui o bairro do funcionário" />
-								</div>															
+								</div>
 								<div class="form-group">
 									<label>País:</label>
 									<input class="form-control" name="endereco_pais" type="text" placeholder="Insira aqui o país do funcionário" />
@@ -100,7 +110,7 @@
 								<div class="form-group">
 									<label>Cidade:</label>
 									<input class="form-control" name="endereco_cidade" type="text" placeholder="Insira aqui a cidade do funcionário" />
-								</div>								
+								</div>
 								<div class="form-group">
 									<label>Cargo:</label>
 									<input class="form-control" type="text" name="cargo" placeholder="Insira aqui a função do funcionário" />
@@ -162,12 +172,12 @@
 								<div class="form-group">
 									<label>CEP:</label>
 									<input class="form-control" name="cep" type="text" placeholder="CEP" />
-								</div>								
+								</div>
 								<div class="form-group">
 									<label>Data de Admissão:</label>
 									<input class="form-control" name="admissao" type="date" placeholder="DD/MM/AAAA" />
 								</div>
-							</div>							
+							</div>
 
 							<div class="right-div">
 								<button type="submit" class="btn btn-info pull-right">Salvar </button>

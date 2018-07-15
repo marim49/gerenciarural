@@ -14,6 +14,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Validator::extend('unique_combustivel', function ($attribute, $value, $parameters, $validator) {
+            $inputs = $validator->getData();
+            $id_fazenda = $inputs['id_fazenda'];
+            $id_tipo_combustivel = $inputs['id_tipo_combustivel'];
+            $result = true;
+
+            $insumo = \DB::select('select * from combustivel 
+                        where id_fazenda = ? AND id_tipo_combustivel = ?',
+                        [$id_fazenda, $id_tipo_combustivel]);
+
+            if ($insumo) {
+                $result = false;
+            }
+            return $result;
+        });
         Validator::extend('unique_insumo', function ($attribute, $value, $parameters, $validator) {
             $inputs = $validator->getData();
             $id_celeiro = $inputs['id_celeiro'];

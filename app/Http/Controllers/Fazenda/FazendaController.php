@@ -60,7 +60,7 @@ class FazendaController extends Controller
     {  
         $fazenda = $request->only(
             'nome', 'telefone', 'end_cep', 'end_rua', 'end_bairro', 'end_estado', 'end_pais',
-            'end_cidade', 'end_numero', 'end_complemento', 'edereco');
+            'end_cidade', 'end_numero', 'end_complemento', 'endereco');
         //Validação
         $validator = $this->Validator($fazenda);
         if ($validator->fails()) {
