@@ -16,8 +16,10 @@ class CreateAnimaisTable extends Migration
         Schema::create('animal', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_grupo_animal')->unsigned();
+            $table->integer('id_fazenda')->unsigned();
             $table->string('nome', 45);
             $table->foreign('id_grupo_animal')->references('id')->on('grupo_animal');
+            $table->foreign('id_fazenda')->references('id')->on('fazenda');
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@ class FuncionarioController extends Controller
     protected $model;
     protected $relationships = [
         'EstadoCivil', 'HistoricoAbastecimentos', 'HistoricoCompras',
-        'FuncionarioFazendas', 'HistoricoTerras', 'HistoricoCompraInsumo', 'HistoricoCompraMedicamento',
+        'Fazenda', 'HistoricoTerras', 'HistoricoCompraInsumo', 'HistoricoCompraMedicamento',
         'HistoricoAnimal'
     ];
     
@@ -54,12 +54,13 @@ class FuncionarioController extends Controller
         try
         {
             $grupos = \App\Models\Funcionario\EstadoCivil::orderBy('nome', 'asc')->get();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
         
-            return view('cfuncionario', ['grupos' => $grupos]);
+            return view('cfuncionario', ['grupos' => $grupos, 'fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('cfuncionario', ['grupos' => []])
+            return view('cfuncionario', ['grupos' => [], 'fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -70,7 +71,7 @@ class FuncionarioController extends Controller
         $funcionario = $request->only('nome', 'id_estado_civil', 'endereco_rua', 'endereco_numero',
                         'endereco_bairro', 'endereco_cidade', 'endereco_estado', 'endereco_pais',
                         'sexo', 'nascimento', 'admissao', 'cargo', 'rg', 'cpf', 'pis', 'tel_fixo',
-                        'celular', 'cep');
+                        'celular', 'cep', 'id_fazenda');
         //Validação
         $validator = $this->Validator($funcionario);
         if ($validator->fails()) {
@@ -81,18 +82,19 @@ class FuncionarioController extends Controller
         try 
         {
             $grupos = \App\Models\Funcionario\EstadoCivil::orderBy('nome', 'asc')->get();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
 
             $success = $this->model->create($funcionario);
 
             //Alterar para retornar view
-            return view('cfuncionario', ['success' => $success, 'grupos' => $grupos]);
+            return view('cfuncionario', ['success' => $success, 'grupos' => $grupos, 'fazendas' => $fazendas]);
 
         } 
         catch(\Exception $e) 
         {
             return redirect('funcionario/create')
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput(['grupos' => []]);
+                            ->withInput(['grupos' => [], 'fazendas' => []]);
 
         }
     } 
@@ -187,6 +189,7 @@ class FuncionarioController extends Controller
         $messages = array(
             'nome.required'=> 'O campo nome é obrigatório',
             'nome.max'=> 'O tamanho máximo do campo nome é 100 caracteres',
+            'id_fazenda.required'=> 'O campo de fazenda é obrigatório',
             'id_estado_civil.required'=> 'O campo de estado civil é obrigatório',
             'endereco_rua.required'=> 'O campo rua é obrigatório',
             'endereco_rua.max'=> 'O tamanho máximo do campo rua é 45 caracteres',
@@ -231,6 +234,7 @@ class FuncionarioController extends Controller
             'endereco_rua'=>'required|max:45',
             'endereco_numero'=>'required|max:15',
             'id_estado_civil'=>'required',
+            'id_fazenda'=>'required',
             'nascimento'=>'required',
             'admissao'=>'required',
             'cargo'=>'required|max:45',

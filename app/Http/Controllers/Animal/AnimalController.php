@@ -53,8 +53,9 @@ class AnimalController extends Controller
         try
         {
             $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
         
-            return view('canimal', ['grupos' => $grupos]);
+            return view('canimal', ['grupos' => $grupos, 'fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
@@ -66,7 +67,7 @@ class AnimalController extends Controller
     // Método POST (salva o animal) : OK     
     public function store(Request $request)
     {
-        $animal = $request->only('nome', 'id_grupo_animal');
+        $animal = $request->only('nome', 'id_grupo_animal', 'id_fazenda');
         //Validação
         $validator = $this->Validator($animal);
         if ($validator->fails()) {
@@ -79,14 +80,15 @@ class AnimalController extends Controller
         {
             $success = $this->model->create($animal);
             $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
 
-            return view('canimal', ['success' => $success, 'grupos' => $grupos]);
+            return view('canimal', ['success' => $success, 'grupos' => $grupos, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {          
             return redirect('animal/create')
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput(['grupos' => []]);
+                            ->withInput(['grupos' => [], 'fazendas' => []]);
         }
     }
 
@@ -181,8 +183,10 @@ class AnimalController extends Controller
             'nome.required'=> 'O campo de identificação do animal é obrigatório',
             'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
             'id_grupo_animal.required'=>'O campo de grupo do animal é obrigatório',
+            'id_fazenda.required' => 'O campo de fazenda é obrigatório'
         );    
         $rules = array(
+            'id_fazenda' => 'required',
             'nome'=>'required|max:45',
             'id_grupo_animal'=>'required',
         );

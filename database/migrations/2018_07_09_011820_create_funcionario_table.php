@@ -17,6 +17,7 @@ class CreateFuncionarioTable extends Migration
             $table->increments('id');
             $table->string('nome', 100);
             $table->integer('id_estado_civil')->unsigned();
+            $table->integer('id_fazenda')->unsigned();
             $table->string('endereco_rua', 45);
             $table->string('endereco_numero', 45);
             $table->string('endereco_bairro', 45);  
@@ -34,6 +35,7 @@ class CreateFuncionarioTable extends Migration
             $table->string('celular', 45);
             $table->string('cep', 45);          
             $table->foreign('id_estado_civil')->references('id')->on('estado_civil');
+            $table->foreign('id_fazenda')->references('id')->on('fazenda');
             $table->timestamps();
         });
     }

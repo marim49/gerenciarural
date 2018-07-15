@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('funciona', function(){
+    $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas')->orderBy('nome', 'asc')->get();
+    return response()->json($fazendas);
+});
 Route::get('fazendas', 'Fazenda\FazendaController@index');
 Route::get('insumos', 'Insumo\InsumoController@GetInsumos');
 Route::get('funcionarios', 'Funcionario\FuncionarioController@index');

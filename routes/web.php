@@ -78,6 +78,8 @@ Route::resource('medicamento', 'Animal\MedicamentoController')/*->middleware('au
  * maquina/{id}/edit => GET(edit)
 */
 Route::resource('maquina', 'Maquina\MaquinaController')/*->middleware('auth')*/;
+Route::get('entrada/combustivel', 'Maquina\CombustivelController@abastecimento');
+Route::post('maquina/abastecer', 'Maquina\CombustivelController@abastecer')->name('abastecer')/*->middleware('auth')*/;
 
 /* ROTA: COMBUSTÍVEL
  * combustivel => POST(store), GET(index) 
@@ -103,12 +105,6 @@ Route::resource('tipocombustivel', 'Maquina\TipoCombustivelController')/*->middl
 //ACIMA ESTÀ CERTO
 Route::get('/pesquisa/animal','AnimalController@GetAnimal');
 
-//Rota para cirar animal
-Route::post('/criar/animal', 'AnimalController@Create');
-
-
-
-
 //Rotas de início
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
@@ -117,9 +113,6 @@ Route::get('/', function () {
 
 Route::get('/saida/combustivel', function () {
     return view('scombustivel');
-});
-Route::get('/entrada/combustivel', function () {
-    return view('ecombustivel');
 });
 Route::get('/entrada/farmacia', function () {
     return view('efarmacia');

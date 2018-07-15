@@ -166,6 +166,27 @@ class CombustivelController extends Controller
             ]);
         }
     }
+    
+    //Método GET (chama view de abastecimento)
+    public function abastecimento()
+    {        
+        try
+        {            
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas')->orderBy('nome', 'asc')->get();
+
+            return view('ecombustivel', ['fazendas' => $fazendas]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('ecombustivel', ['fazendas' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }
+
+    //Método POST (atualiza o depósito de combustível)
+    public function abastecer(){
+        return "oi";
+    }
 
     //Método que retorna os relacionamentos : OK
     protected function relationships()

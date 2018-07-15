@@ -227,6 +227,7 @@
     <script src="{{ asset('js/custom.js') }}"></script>
     <script src="{{ asset('js/imprimir/imprimir.js') }}"></script>
     <script src="{{ asset('js/notificacao/sweet_alert.min.js') }}"></script>
+    <script src="{{ asset('js/select/EntradaCombustivel.js') }}"></script>
 </footer>
 
 </html>
