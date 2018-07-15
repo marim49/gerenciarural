@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Animal extends Model
 {
     protected $fillable = [
-        'id_grupo_animal', 'nome'
+        'id_grupo_animal', 'nome', 'id_fazenda'
     ];
     protected $table = 'animal';
 
     public function Fazenda()
     {
-        return $this->belongsTo(App\Models\Fazenda\Fazenda::class, 'id_fazenda');
+        return $this->belongsTo(\App\Models\Fazenda\Fazenda::class, 'id_fazenda');
     }
     public function GrupoAnimal()
     {

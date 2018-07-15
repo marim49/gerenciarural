@@ -35,7 +35,7 @@ class AnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($animais);
+            return view('panimal', ['animais' => $animais]);
         }
         catch(\Exception $e) 
         {

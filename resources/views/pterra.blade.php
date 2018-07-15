@@ -24,25 +24,22 @@
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
-                                            <th>Cargo</th>
-                                            <th>celular</th>
-                                            
-                                            <th>Data de admissão</th>
+                                            <th>Tamanho da área</th>
+                                            <th>Fazenda</th>
 											<th> </th>
 											<th> </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-									@foreach ($funcionarios as $funcionario)
+									@foreach ($terras as $terra)
                                         <tr class='gradeA'>
-													<td> {{$funcionario->nome}} </td>
-													<td> {{$funcionario->cargo}} </td>
-													<td> {{$funcionario->celular}} </td>
-													<td> {{$funcionario->admissao}} </td>
+													<td> {{$terra->nome}} </td>
+													<td> {{$terra->area}} </td>
+													<td> {{$terra->Fazenda->nome}} </td>
 													
 													<td><a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_vertical$escrever[id_func]'><span class='icon-pencil7'></span> </a>
 													</td>
-													<td><a href='../../db/funcionarios/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
+													<td><a href='../../db/terras/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
 													</tr>
 													@endforeach	
 											
@@ -55,8 +52,8 @@
 							
 							
 						</div>
-						@foreach ($funcionarios as $funcionario)
-							<div id='modal_form_vertical{{$funcionario->id_animal}}' class='modal fade'>
+						@foreach ($terras as $terra)
+							<div id='modal_form_vertical{{$terra->id_animal}}' class='modal fade'>
 								<div class='modal-dialog'>
 									<div class='modal-content'>
 										<div class='modal-header'>

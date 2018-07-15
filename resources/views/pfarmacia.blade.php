@@ -33,16 +33,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-									@foreach ($funcionarios as $funcionario)
+									@foreach ($medicamentos as $medicamento)
                                         <tr class='gradeA'>
-													<td> {{$funcionario->nome}} </td>
-													<td> {{$funcionario->cargo}} </td>
-													<td> {{$funcionario->celular}} </td>
-													<td> {{$funcionario->admissao}} </td>
+													<td> {{$medicamento->nome}} </td>
+													<td> {{$medicamento->cargo}} </td>
+													<td> {{$medicamento->celular}} </td>
+													<td> {{$medicamento->admissao}} </td>
 													
 													<td><a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_vertical$escrever[id_func]'><span class='icon-pencil7'></span> </a>
 													</td>
-													<td><a href='../../db/funcionarios/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
+													<td><a href='../../db/medicamentos/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
 													</tr>
 													@endforeach	
 											
@@ -55,8 +55,8 @@
 							
 							
 						</div>
-						@foreach ($funcionarios as $funcionario)
-							<div id='modal_form_vertical{{$funcionario->id_animal}}' class='modal fade'>
+						@foreach ($medicamentos as $medicamento)
+							<div id='modal_form_vertical{{$medicamento->id_animal}}' class='modal fade'>
 								<div class='modal-dialog'>
 									<div class='modal-content'>
 										<div class='modal-header'>

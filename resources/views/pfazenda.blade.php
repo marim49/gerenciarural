@@ -6,7 +6,7 @@
 <div class="container">
 		<div class="row pad-botm">
 			<div class="col-md-12">
-				<h3 class="header-line">Pesquisar Animal</h3>
+				<h3 class="header-line">Pesquisar Fazenda</h3>
 			</div>
 		</div>
 
@@ -15,7 +15,7 @@
 				<!-- Advanced Tables -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Buscar por Animais
+						Buscar por Fazendas
 					</div>
 					<div class="panel-body">
 
@@ -24,19 +24,17 @@
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
-                                            <th>Tipo</th>
 											<th> </th>
 											<th> </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-									@foreach ($animais as $animal)
+									@foreach ($fazendas as $fazenda)
                                         <tr class='gradeA'>
-													<td> {{$animal->nome}} </td>
-													<td> {{$animal->GrupoAnimal->nome}} </td>
+													<td> {{$fazenda->nome}} </td>
 													<td><a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_vertical$escrever[id_func]'><span class='icon-pencil7'></span> </a>
 													</td>
-													<td><a href='../../db/animais/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
+													<td><a href='../../db/fazendas/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
 													</tr>
 													@endforeach	
 											
@@ -49,8 +47,8 @@
 							
 							
 						</div>
-						@foreach ($animais as $animal)
-							<div id='modal_form_vertical{{$animal->id_animal}}' class='modal fade'>
+						@foreach ($fazendas as $fazenda)
+							<div id='modal_form_vertical{{$fazenda->id_animal}}' class='modal fade'>
 								<div class='modal-dialog'>
 									<div class='modal-content'>
 										<div class='modal-header'>

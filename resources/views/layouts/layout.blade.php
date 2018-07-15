@@ -118,29 +118,32 @@
                     </a>
                     <ul class="collapse list-unstyled" id="pesquisar">
                         <li>
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/fazenda/pesquisar.php"> Fazenda</a>
+                            <a href="{{ url('fazenda')}}"> Fazenda</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('terra')}}">Terra</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('celeiro')}}">Celeiro</a>
                         </li>
                         <li>
                             <a href="{{ url('funcionario')}}"> Funcionários</a>
                         </li>
                         <li>
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/animais/pesquisar.php">
+                            <a href="{{ url('animal')}}">
                                 Animais</a>
                         </li>
-                        <li role="presentation">
-                            <a href="#	">
-                                Tanque</a>
-                        </li>
+
                         <li>
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/insumos/pesquisar.php">
+                            <a href="{{ url('insumo')}}">
                                 Insumos</a>
                         </li>
-                        <li role="presentation">
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/farmacia/pesquisar.php">
+                        <li>
+                            <a href="{{ url('farmacia')}}">
                                 Farmácia</a>
                         </li>
-                        <li role="presentation">
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/maquinas/pesquisar.php">
+                        <li>
+                            <a href="{{ url('maquina')}}">
                                 Máquinas</a>
                         </li>
                     </ul>
@@ -186,7 +189,7 @@
 
                 </li>
             </ul>
-            
+
         </nav>
         @yield('content')
 </body>

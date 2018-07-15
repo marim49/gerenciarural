@@ -13,7 +13,7 @@ class Terra extends Model
 
     public function Fazenda()
     {
-        return $this->belongsTo(App\Models\Fazenda\Fazenda::class, 'id_fazenda');
+        return $this->belongsTo(\App\Models\Fazenda\Fazenda::class, 'id_fazenda');
     }
     public function HistoricosTerras()
     {

@@ -35,7 +35,7 @@ class CeleiroController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($celeiros);
+            return view('pceleiro', ['celeiros' => $celeiros]);
         }
         catch(\Exception $e) 
         {

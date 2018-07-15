@@ -10,8 +10,8 @@ class FazendaController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Maquinas', 'Combustiveis', 'Funcionarios', 'Celeiros',
-        'Terras', 'Medicamentos'
+        'Maquinas', 'Combustiveis', 'Funcionarios', 'Celeiro',
+        'Terras', 'Medicamentos', 'Animais'
     ];
     
     public function __construct(\App\Models\Fazenda\Fazenda $model)
@@ -36,7 +36,8 @@ class FazendaController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($fazendas);
+            return view('pfazenda', ['fazendas' => $fazendas]);
+            
         }
         catch(\Exception $e) 
         {

@@ -27,7 +27,7 @@ class Fazenda extends Model
     }
     public function Celeiro()
     {
-        return $this->hasOne(App\Models\Insumo\Celeiro::class, 'id_fazenda');
+        return $this->hasOne(\App\Models\Insumo\Celeiro::class, 'id_fazenda');
     }
     public function Terras()
     {
@@ -36,5 +36,9 @@ class Fazenda extends Model
     public function Medicamentos()
     {
         return $this->hasMany(\App\Models\Animal\Medicamento::class, 'id_fazenda');
+    }
+    public function Animais()
+    {
+        return $this->hasMany(\App\Models\Animal\Animal::class, 'id_fazenda');
     }
 }

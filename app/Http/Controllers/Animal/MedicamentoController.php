@@ -10,7 +10,7 @@ class MedicamentoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Fazenda', 'TipoMedicamento', 'HistoricoCompra', 'Animais'
+        'Fazenda', 'TipoMedicamento', 'HistoricoCompra', 'HistoricoAplicacao'
     ];
     
     public function __construct(\App\Models\Animal\Medicamento $model)

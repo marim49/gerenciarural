@@ -35,7 +35,7 @@ class MaquinaController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($maquinas);
+            return view('pmaquina', ['maquinas' => $maquinas]);
         }
         catch(\Exception $e) 
         {
