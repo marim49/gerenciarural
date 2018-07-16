@@ -4,20 +4,22 @@ namespace App\Http\Controllers\Animal;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class MedicamentoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Fazenda', 'TipoMedicamento', 'HistoricoCompra', 'Animais'
+        'Fazenda', 'TipoMedicamento', 'HistoricoCompra', 'HistoricoAplicacao'
     ];
     
-    public function __construct(\App\Models\Medicamento\Medicamento $model)
+    public function __construct(\App\Models\Animal\Medicamento $model)
     {
         $this->model = $model;
     }
 
-    public function GetMedicamentos()
+    //Método GET (retorna os medicamentos)
+    public function index()
     {
         try
         {
@@ -45,33 +47,52 @@ class MedicamentoController extends Controller
         }
     }
     
-    public function PostMedicamento(Request $request)
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        try
+        {
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+            $tipos = \App\Models\Animal\TipoMedicamento::orderBy('nome', 'asc')->get();
+        
+            return view('cfarmacia', ['fazendas' => $fazendas, 'tipos' => $tipos]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('cfarmacia', ['fazendas' => [], 'tipos' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }
+
+    // Método POST (salva o medicamento) : OK    
+    public function store(Request $request)
+    {        
+        $medicamento = $request->only('id_fazenda', 'nome', 'id_tipo_medicamento', 'obs');
+        //Validação
+        $validator = $this->Validator($medicamento);
+        if ($validator->fails()) {
+            return redirect('medicamento/create')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
         try 
         {
-            $medicamento = $request->all();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+            $tipos = \App\Models\Animal\TipoMedicamento::orderBy('nome', 'asc')->get();
+            $success = $this->model->create($medicamento);
 
-            $novo_medicamento = $this->model->create($medicamento);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_medicamento
-            ]);
+            return view('cfarmacia', ['fazendas' => $fazendas, 'tipos' => $tipos, 'success' => $success]);
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {        
+            return redirect('farmacia/create')
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(['fazendas' => [], 'tipos' => [], 'success' => []]);
         }
     } 
 
-    public function ShowMedicamento($id)
+    //Método GET (retorna um medicamento específico)
+    public function show($id)
     {
         try
         {
@@ -89,9 +110,13 @@ class MedicamentoController extends Controller
                 'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
             ]);
         }
-    }   
+    }       
 
-    public function UpdateMedicamento(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza um medicamento)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +142,8 @@ class MedicamentoController extends Controller
         }
     }
 
-    public function DeleteMedicamento($id)
+    //Método DELETE (deleta um medicamento específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +166,7 @@ class MedicamentoController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +174,31 @@ class MedicamentoController extends Controller
         }
 
         return [];
+    }    
+
+    //Método de validação
+    protected function Validator($requisicao){        
+        $messages = array(
+            'id_fazenda.required' => 'Informar a fazenda é obrigatório',
+            'id_tipo_medicamento.required' => 'Informar o tipo de medicamento é obrigatório',
+            'nome.required'=> 'O campo nome é obrigatório',
+            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+            'obs.max'=>'O campo de observação pode ter no máximo 140 caracteres',
+        );    
+        $rules = array(
+            'id_fazenda' => 'required',
+            'id_tipo_medicamento' => 'required',
+            'nome'=>'required|max:45',
+            'obs'=>'max:140',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

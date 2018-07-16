@@ -15,9 +15,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    public function Fazendas()
-    {
-        return $this->hasMany(\App\Models\Fazenda\Fazenda::class, 'id_produtor');
-    }
 }

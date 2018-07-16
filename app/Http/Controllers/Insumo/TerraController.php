@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Insumo;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class TerraController extends Controller
 {
@@ -17,7 +18,8 @@ class TerraController extends Controller
         $this->model = $model;
     }
 
-    public function GetTerras()
+    //Método GET (retorna as terras)
+    public function index()
     {
         try
         {
@@ -33,7 +35,7 @@ class TerraController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($terras);
+            return view('pterra', ['terras' => $terras]);
         }
         catch(\Exception $e) 
         {
@@ -45,33 +47,52 @@ class TerraController extends Controller
         }
     }
     
-    public function PostTerra(Request $request)
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        try
+        {
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+        
+            return view('cterra', ['fazendas' => $fazendas]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('cterra', ['fazendas' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }
+
+    // Método POST (salva a terra) : OK
+    public function store(Request $request)
+    {
+        $terra = $request->only('nome', 'area', 'id_fazenda');
+        //Validação
+        $validator = $this->Validator($terra);
+        if ($validator->fails()) {
+            return redirect('terra/create')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Inserção no banco
         try 
         {
-            $terra = $request->all();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+            $success = $this->model->create($terra);
 
-            $nova_terra = $this->model->create($terra);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $nova_terra
-            ]);
+            return view('cterra', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect('terra/create')
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(['fazendas' => []]);
+        
         }
     } 
 
-    public function ShowTerra($id)
+    //Método GET (retorna uma terra específica)
+    public function show($id)
     {
         try
         {
@@ -89,9 +110,13 @@ class TerraController extends Controller
                 'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
             ]);
         }
-    }   
+    } 
+    
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
 
-    public function UpdateTerra(Request $request, $id)
+    //Método PUT (atualiza uma terra)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +142,8 @@ class TerraController extends Controller
         }
     }
 
-    public function DeleteTerra($id)
+    //Método DELETE (deleta uma terra específica)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +166,7 @@ class TerraController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +174,30 @@ class TerraController extends Controller
         }
 
         return [];
+    }
+       
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'id_fazenda.required'=> 'O campo de identificação da fazenda é obrigatório',
+            'nome.required'=> 'O campo nome é obrigatório',
+            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+            'area.required'=>'O campo de área é obrigatório',
+            'area.max'=> 'O tamanho máximo do campo área é 45 caracteres',
+        );    
+        $rules = array(
+            'nome'=>'required|max:45',
+            'id_fazenda'=>'required',
+            'area'=> 'required|max:45',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

@@ -31,7 +31,16 @@
 					{{ csrf_field() }}
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-8">
+								
+								<div class="form-group">
+									<label>Fazenda:</label>
+									<select class="form-control" name="id_fazenda">
+									@foreach($fazendas as $fazenda)
+										<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
+									@endforeach
+									</select>
+								</div>																											
 
 								<div class="form-group">
 									<label>Identificão do Animal:</label>
@@ -39,7 +48,7 @@
 								</div>
 								
 								<div class="form-group">
-									<label>Grupo Animal</label>
+									<label>Grupo do animal:</label>
 									<select class="form-control" name="id_grupo_animal">
 									@foreach($grupos as $item)
       									<option value="{{$item->id}}">{{$item->nome}}</option>
@@ -49,14 +58,15 @@
 
 							</div>
 
+							<div class="col-md-12">
 								<div class="right-div">
 									<button type="submit" class="btn btn-info pull-right">Salvar </button>
 								</div>
 								<div class="right-div">
-									<button type="submit" class="btn btn-info pull-right">Limpar </button>
+									<button type="reset" class="btn btn-info pull-right">Limpar </button>
 								</div>
-
 							</div>
+							
 						</div>
 					</div>
 				</form>

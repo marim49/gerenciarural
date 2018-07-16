@@ -13,7 +13,7 @@ class Medicamento extends Model
 
     public function Fazenda()
     {
-        return $this->belongsTo(App\Models\Fazenda\Fazenda::class, 'id_fazenda');
+        return $this->belongsTo(\App\Models\Fazenda\Fazenda::class, 'id_fazenda');
     }
     public function TipoMedicamento()
     {
@@ -23,8 +23,8 @@ class Medicamento extends Model
     {
         return $this->hasMany(HistoricoCompraMedicamento::class, 'id_medicamento');
     }
-    public function Animais()
+    public function HistoricoAplicacao()
     {
-        return $this->hasMany(Animal::class, 'id_medicamento');
+        return $this->hasMany(HistoricoAnimal::class, 'id_medicamento');
     }
 }

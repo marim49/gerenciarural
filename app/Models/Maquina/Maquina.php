@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models\Maquina;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +13,7 @@ class Maquina extends Model
 
     public function Fazenda()
     {
-        return $this->belongsTo(App\Models\Fazenda\Fazenda::class, 'id_fazenda');
+        return $this->belongsTo(\App\Models\Fazenda\Fazenda::class, 'id_fazenda');
     }
     public function HistoricoAbastecimentos()
     {

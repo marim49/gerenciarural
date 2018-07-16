@@ -15,7 +15,8 @@ class CreateCeleiroTable extends Migration
     {
         Schema::create('celeiro', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_fazenda')->unsigned(); 
+            $table->integer('id_fazenda')->unsigned()->unique(); 
+            $table->string('nome', 45);
             $table->foreign('id_fazenda')->references('id')->on('fazenda');
             $table->timestamps();
         });

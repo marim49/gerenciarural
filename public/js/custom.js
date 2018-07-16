@@ -25,6 +25,9 @@
             $('#dataTables-example').dataTable();
 
         },
+        
+
+        
        
         custom_fun:function()
         {
@@ -52,6 +55,7 @@
                  $('#sidebarCollapse').on('click', function () {
                      $('#sidebar').toggleClass('active');
                  });
-             });
+             });
+
 
 

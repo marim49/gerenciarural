@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Celeiro extends Model
 {
     protected $fillable = [
-        'id_fazenda'
+        'id_fazenda', 'nome'
     ];
     protected $table = 'celeiro';
 
     public function Fazenda()
     {
-        return $this->belongsTo(App\Models\Fazenda\Fazenda::class, 'id_fazenda');
+        return $this->belongsTo(\App\Models\Fazenda\Fazenda::class, 'id_fazenda');
     }
     public function Insumos()
     {

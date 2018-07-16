@@ -1,5 +1,4 @@
 
-
 @extends('layouts.layout')
 
 @section('content')
@@ -8,6 +7,20 @@
 		<div class="col-md-12">
 			<div class="row pad-botm">
 				<h3 class="header-line">Tipo de medicamento</h3>
+				@if (isset($success))
+					<div class="alert alert-success alert-dismissible">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Cadastrado!</strong> O tipo de medicamento foi armazenado.
+					</div>
+				@endif
+				@if ($errors->any())
+					@foreach ($errors->all() as $error)
+					<div class="alert alert-warning alert-dismissible">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Ops!</strong> {{$error}}.
+					</div>
+					@endforeach
+				@endif
 			</div>
 		</div>
 		<!--/Cabeçalho pagina-->
@@ -17,17 +30,19 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Tipo de medicamento
+						Insira os dados para cadastrar um tipo de medicamento:
 					</div>
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-md-12">
-								<form role="form">
+
+								<form name="register-tipomedicamento" action="{{ route('tipomedicamento.store') }}" method="post">
+								{{ csrf_field() }}
 									<div class="row">
 										<div class="col-md-8">
 											<div class="form-group">
-												<label>Tipo de medicamento:</label>
-												<input class="form-control" type="text" name="tipomed" placeholder="" />
+												<label>Nome:</label>
+												<input class="form-control" type="text" name="nome" placeholder="" />
 											</div>
 										</div>
 										<div class="col-md-4">
@@ -39,7 +54,7 @@
 										<button type="submit" class="btn btn-info pull-right">Salvar </button>
 									</div>
 									<div class="right-div">
-										<button type="submit" class="btn btn-info pull-right">Limpar </button>
+										<button type="reset" class="btn btn-info pull-right">Limpar </button>
 									</div>
 								</form>
 							</div>

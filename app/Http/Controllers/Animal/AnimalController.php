@@ -35,7 +35,7 @@ class AnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($animais);
+            return view('panimal', ['animais' => $animais]);
         }
         catch(\Exception $e) 
         {
@@ -47,21 +47,29 @@ class AnimalController extends Controller
         }
     }
     
-    //Método GET (chama a view de criação)
+    //Método GET (chama a view de criação) : OK
     public function create()
     {
-        $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
-       
-        return view('canimal', ['grupos' => $grupos]);
+        try
+        {
+            $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+        
+            return view('canimal', ['grupos' => $grupos, 'fazendas' => $fazendas]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('canimal', ['grupos' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
     }
 
-    /* Método POST (salva o animal) : OK
-     * (Adicionar view de retorno de erro)
-     */
+    // Método POST (salva o animal) : OK     
     public function store(Request $request)
     {
+        $animal = $request->only('nome', 'id_grupo_animal', 'id_fazenda');
         //Validação
-        $validator = $this->Validator($request->only('nome', 'id_grupo_animal'));
+        $validator = $this->Validator($animal);
         if ($validator->fails()) {
             return redirect('animal/create')
                             ->withErrors($validator)
@@ -70,20 +78,17 @@ class AnimalController extends Controller
         //Inserção no banco
         try 
         {
-            $animal = $request->all();
-
             $success = $this->model->create($animal);
             $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
 
-            return view('canimal', ['success' => $success, 'grupos' => $grupos]);
+            return view('canimal', ['success' => $success, 'grupos' => $grupos, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Nao foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {          
+            return redirect('animal/create')
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(['grupos' => [], 'fazendas' => []]);
         }
     }
 
@@ -162,7 +167,7 @@ class AnimalController extends Controller
         }
     }
 
-    //Método que retorna os relacionamentos
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -170,19 +175,29 @@ class AnimalController extends Controller
         }
 
         return [];
-    }    
+    }   
+
     //Método de validação : OK
     protected function Validator($requisicao){        
         $messages = array(
             'nome.required'=> 'O campo de identificação do animal é obrigatório',
             'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
             'id_grupo_animal.required'=>'O campo de grupo do animal é obrigatório',
+            'id_fazenda.required' => 'O campo de fazenda é obrigatório'
         );    
         $rules = array(
+            'id_fazenda' => 'required',
             'nome'=>'required|max:45',
             'id_grupo_animal'=>'required',
         );
     
         return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Models\Maquina;
 
 use Illuminate\Database\Eloquent\Model;
 
 class HistoricoAbastecimento extends Model
 {
     protected $fillable = [
-        'id_maquina', 'id_combustivel', 'id_funcionario', 'quantidade'
+        'id_maquina', 'id_combustivel', 'id_funcionario', 'quantidade', 'data'
     ];
     protected $table = 'historico_abastecimento';
 
