@@ -72,39 +72,47 @@
                     </a>
                     <ul class="collapse list-unstyled" id="cadastrar">
                         <li>
-                            <a href="{{ url('cadastro/fazenda') }}"> Fazenda</a>
+                            <a href="{{ url('fazenda/create') }}"> Fazenda</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/terra') }}"> Terra</a>
+                            <a href="{{ url('terra/create') }}"> Terra</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/celeiro') }}"> Celeiro</a>
+                            <a href="{{ url('celeiro/create') }}"> Celeiro</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/funcionario') }}"> Funcionários</a>
+                            <a href="{{ url('funcionario/create') }}"> Funcionários</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/animal') }}">
+                            <a href="{{ url('animal/create') }}">
                                 Animais</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/insumo') }}">
+                            <a href="{{ url('insumo/create') }}">
                                 Insumos</a>
                         </li>
                         <li role="presentation">
-                            <a href="{{ url('cadastro/tipoinsumo') }}">
+                            <a href="{{ url('tipoinsumo/create') }}">
                                 Tipo de insumo</a>
                         </li>
                         <li role="presentation">
-                            <a href="{{ url('cadastro/farmacia') }}">
-                                Farmácia</a>
+                            <a href="{{ url('medicamento/create') }}">
+                                Medicamentos</a>
                         </li>
                         <li role="presentation">
-                            <a href="{{ url('cadastro/tipomedicamento') }}">
+                            <a href="{{ url('tipomedicamento/create') }}">
                                 Tipo de medicamento</a>
                         </li>
                         <li role="presentation">
-                            <a href="{{ url('cadastro/maquina') }}">
+                            <a href="{{ url('tipocombustivel/create') }}">
+                                Tipo de Combustivel</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="{{ url('combustivel/create') }}">
+                                Combustivel</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="{{ url('maquina/create') }}">
                                 Máquinas</a>
                         </li>
                     </ul>
@@ -118,29 +126,32 @@
                     </a>
                     <ul class="collapse list-unstyled" id="pesquisar">
                         <li>
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/fazenda/pesquisar.php"> Fazenda</a>
+                            <a href="{{ url('fazenda')}}"> Fazenda</a>
                         </li>
                         <li>
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/funcionarios/pesquisar.php"> Funcionários</a>
+                            <a href="{{ url('terra')}}">Terra</a>
                         </li>
                         <li>
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/animais/pesquisar.php">
+                            <a href="{{ url('celeiro')}}">Celeiro</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('funcionario')}}"> Funcionários</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('animal')}}">
                                 Animais</a>
                         </li>
-                        <li role="presentation">
-                            <a href="#	">
-                                Tanque</a>
-                        </li>
+
                         <li>
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/insumos/pesquisar.php">
+                            <a href="{{ url('insumo')}}">
                                 Insumos</a>
                         </li>
-                        <li role="presentation">
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/farmacia/pesquisar.php">
+                        <li>
+                            <a href="{{ url('farmacia')}}">
                                 Farmácia</a>
                         </li>
-                        <li role="presentation">
-                            <a href="https://gerenciarural.herokuapp.com/pesquisar/maquinas/pesquisar.php">
+                        <li>
+                            <a href="{{ url('maquina')}}">
                                 Máquinas</a>
                         </li>
                     </ul>
@@ -149,89 +160,88 @@
                 <li>
 
                     <a href="#entrada" data-toggle="collapse">
-                        <i class="glyphicon glyphicon-list-alt"></i>
+                        <i class="glyphicon glyphicon-arrow-up"></i>
                         Entrada
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="collapse list-unstyled" id="entrada">
                         <li>
-                            <a href="{{ url('cadastro/fazenda') }}"> Fazenda</a>
+                            <a href="{{ url('compra-combustivel/create') }}"> Combustível</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/funcionario') }}"> Funcionários</a>
+                            <a href="{{ url('entrada/farmacia') }}"> Farmácia</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/animal') }}">
-                                Animais</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('cadastro/insumo') }}">
-                                Insumos</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{ url('cadastro/farmacia') }}">
-                                Farmácia</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{ url('cadastro/maquina') }}">
-                                Máquinas</a>
+                            <a href="{{ url('entrada/terra') }}"> Terra </a>
                         </li>
                     </ul>
                 </li>
                 <li>
 
                     <a href="#saida" data-toggle="collapse">
-                        <i class="glyphicon glyphicon-list-alt"></i>
+                        <i class="glyphicon glyphicon-arrow-down"></i>
                         Saída
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="collapse list-unstyled" id="saida">
                         <li>
-                            <a href="{{ url('cadastro/fazenda') }}"> Fazenda</a>
+                            <a href="{{ url('abastecimento/create') }}"> Combustível</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/funcionario') }}"> Funcionários</a>
+                            <a href="{{ url('saida/farmacia') }}"> Farmácia</a>
                         </li>
                         <li>
-                            <a href="{{ url('cadastro/animal') }}">
+                            <a href="{{ url('saida/terra') }}"> Terra </a>
+                        </li>
+                    </ul>
+
+                </li>
+                <li>
+                    <a href="#relatorios" data-toggle="collapse">
+                        <i class="icon-book"></i>
+                        Relatórios
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="collapse list-unstyled" id="relatorios">
+
+                   <!-- <a href="#pageSubmenu" data-toggle="collapse">Pages<i class="fa fa-angle-down"></i></a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li><a href="#">Page 1</a></li>
+                            <li><a href="#">Page 2</a></li>
+                            <li><a href="#">Page 3</a></li>
+                        </ul> -->
+
+                        
+                            
+                        </li>
+                        <li>
+                            <a href="{{ url('terra')}}">Terras</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('funcionario')}}"> Combustível</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('animal')}}">
                                 Animais</a>
                         </li>
+
                         <li>
-                            <a href="{{ url('cadastro/insumo') }}">
+                            <a href="{{ url('insumo')}}">
                                 Insumos</a>
                         </li>
-                        <li role="presentation">
-                            <a href="{{ url('cadastro/farmacia') }}">
-                                Farmácia</a>
+                        <li>
+                            <a href="{{ url('farmacia')}}">
+                                Medicamentos</a>
                         </li>
-                        <li role="presentation">
-                            <a href="{{ url('cadastro/maquina') }}">
+                        <li>
+                            <a href="{{ url('maquina')}}">
                                 Máquinas</a>
                         </li>
                     </ul>
 
                 </li>
+            </ul>
 
-                <li>
-                    <a href="https://gerenciarural.herokuapp.com/cadastro/abastecertanque/cadastrar.php">
-                        <i class="glyphicon glyphicon-shopping-cart"></i>
-                        Abastecer o tanque
-                    </a>
-                </li>
-                <li>
-                    <a href="https://gerenciarural.herokuapp.com/cadastro/retiracombustivel/cadastrar.php">
-                        <i class="glyphicon glyphicon-road"></i>
-                        Retirar combustível
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="glyphicon glyphicon-book"></i>
-                        Editar dados
-                    </a>
-                </li>
-            </ul>
-            </ul>
         </nav>
         @yield('content')
 </body>
@@ -264,6 +274,8 @@
     <script src="{{ asset('js/custom.js') }}"></script>
     <script src="{{ asset('js/imprimir/imprimir.js') }}"></script>
     <script src="{{ asset('js/notificacao/sweet_alert.min.js') }}"></script>
+    <script src="{{ asset('js/select/EntradaCombustivel.js') }}"></script>
+    <script src="{{ asset('js/select/SaidaCombustivel.js') }}"></script>
 </footer>
 
 </html>

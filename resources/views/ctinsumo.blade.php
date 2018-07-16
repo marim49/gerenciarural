@@ -3,7 +3,21 @@
 	<!--Cabeçalho pagina-->
 	<div class="col-md-12">
 		<div class="row pad-botm">
-			<h3 class="header-line">Tipo Insumo</h3>
+			<h3 class="header-line">Tipo de Insumo</h3>
+				@if (isset($success))
+					<div class="alert alert-success alert-dismissible">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Cadastrado!</strong> O tipo de insumo foi armazenado.
+					</div>
+				@endif
+				@if ($errors->any())
+					@foreach ($errors->all() as $error)
+					<div class="alert alert-warning alert-dismissible">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Ops!</strong> {{$error}}.
+					</div>
+					@endforeach
+				@endif
 		</div>
 	</div>
 	<!--/Cabeçalho pagina-->
@@ -13,38 +27,21 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Cadastrar Tipo Insumo
+					Cadastrar Tipo de Insumo
 				</div>
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12">
-							<form role="form">
+							<form name="register-tipoinsumo" action="{{ route('tipoinsumo.store') }}" method="post">
+								{{ csrf_field() }}
 								<div class="row">
 									<div class="col-md-8">
 										<div class="form-group">
-											<label>Nome do insumo:</label>
-											<input class="form-control" type="text" name="insumo" placeholder="" />
+											<label>Nome do tipo de insumo:</label>
+											<input class="form-control" type="text" name="nome" placeholder="" />
 										</div>
 									</div>
-									<div class="col-md-4">
-
-									</div>
-									<div class="col-md-8">
-										<div class="form-group">
-											<label>Número da nota fiscal:</label>
-											<input class="form-control" name="nf_insumo" type="number" placeholder="" />
-										</div>
-									</div>
-									<div class="col-md-4">
-
-									</div>
-									<div class="col-md-8">
-										<div class="form-group">
-											<label>Data de Compra:</label>
-											<input class="form-control" name="data_compra" type="date" placeholder="DD/MM/AAAA" />
-										</div>
-									</div>
-									<div class="col-md-4">
+									<div class="col-md-4">									
 
 									</div>
 
@@ -54,7 +51,7 @@
 									<button type="submit" class="btn btn-info pull-right">Salvar </button>
 								</div>
 								<div class="right-div">
-									<button type="submit" class="btn btn-info pull-right">Limpar </button>
+									<button type="reset" class="btn btn-info pull-right">Limpar </button>
 								</div>
 							</form>
 						</div>

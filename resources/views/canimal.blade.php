@@ -1,9 +1,23 @@
- @extends('layouts.layout') @section('content')
-
+ @extends('layouts.layout')
+ @section('content')
 <div class="container">
 	<div class="col-md-12">
 		<div class="row pad-botm">
 			<h3 class="header-line">Cadastrar Animais</h3>
+			@if (isset($success))
+				<div class="alert alert-success alert-dismissible">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Cadastrado!</strong> O animal foi armazenado.
+				</div>
+			@endif
+			@if ($errors->any())
+				@foreach ($errors->all() as $error)
+				<div class="alert alert-warning alert-dismissible">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Ops!</strong> {{$error}}.
+				</div>
+				@endforeach
+			@endif
 		</div>
 	</div>
 
@@ -11,88 +25,48 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Cadastre o animal inserindo-o nos campos abaixo
+					Cadastre o animal inserindo-o nos campos abaixo:
 				</div>
-				<form name="register-animal" action="../../controller/cadastro/animais/animais.php" method="post">
+				<form name="register-animal" action="{{ route('animal.store') }}" method="post">
+					{{ csrf_field() }}
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-8">
+								
+								<div class="form-group">
+									<label>Fazenda:</label>
+									<select class="form-control" name="id_fazenda">
+									@foreach($fazendas as $fazenda)
+										<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
+									@endforeach
+									</select>
+								</div>																											
 
 								<div class="form-group">
 									<label>Identificão do Animal:</label>
-									<input class="form-control" name="nome_animal" type="text" placeholder="" />
+									<input class="form-control" name="nome" type="text" placeholder="" />
 								</div>
+								
 								<div class="form-group">
-									<label>Número de registro:</label>
-									<input class="form-control" name="numero_registro" type="text" placeholder="" />
+									<label>Grupo do animal:</label>
+									<select class="form-control" name="id_grupo_animal">
+									@foreach($grupos as $item)
+      									<option value="{{$item->id}}">{{$item->nome}}</option>
+    								@endforeach
+									</select>
 								</div>
-								<div class="form-group">
-									<label>Peso:</label>
-									<input class="form-control" name="peso" type="text" placeholder="Em arrobas" />
-								</div>
-								<div class="form-group">
-									<label>Tratamento realizado:</label>
-									<input class="form-control" name="tratamento_feito" type="text" placeholder="" />
-								</div>
-								<div class="form-group">
-									<label>Histórico:</label>
-									<input class="form-control" name="historico" type="text" placeholder="" />
-								</div>
-
 
 							</div>
-							<div class="col-md-4">
 
-								<div class="form-group">
-									<label>Pai:</label>
-									<input class="form-control" name="pai_animal" type="text" placeholder="" />
-
-								</div>
-								<div class="form-group">
-									<label>Data de Nascimento:</label>
-									<input class="form-control" name="data_nasc_animal" type="date" placeholder="DD/MM/AAAA" />
-								</div>
-								<div class="form-group">
-									<label>Medicamentos Utilizados:</label>
-									<input class="form-control" name="medicamento_usados" type="text" placeholder="" />
-								</div>
-
-
-							</div>
-							<div class="col-md-4">
-
-								<div class="form-group">
-									<label>Mãe:</label>
-									<input class="form-control" name="mae_animal" type="text" placeholder="" />
-								</div>
-								<div class="form-group">
-									<label>Data de Chegada:</label>
-									<input class="form-control" name="data_chegada" type="date" placeholder="DD/MM/AAAA" />
-								</div>
-								<div class="form-group">
-									<label></label>
-									<input class="form-control" type="hidden" />
-								</div>
-
-								<div class="form-group">
-									<label></label>
-									<input class="form-control" type="hidden" />
-								</div>
-
-								<div class="form-group">
-									<label>Foto do animal:</label>
-									<div class="form-group">
-										<input type="file" />
-									</div>
-								</div>
+							<div class="col-md-12">
 								<div class="right-div">
 									<button type="submit" class="btn btn-info pull-right">Salvar </button>
 								</div>
 								<div class="right-div">
-									<button type="submit" class="btn btn-info pull-right">Limpar </button>
+									<button type="reset" class="btn btn-info pull-right">Limpar </button>
 								</div>
-
 							</div>
+							
 						</div>
 					</div>
 				</form>
