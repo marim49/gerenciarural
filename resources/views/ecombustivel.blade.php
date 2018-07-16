@@ -1,5 +1,4 @@
- @extends('layouts.layout') 
- @section('content')
+ @extends('layouts.layout') @section('content')
 <div class="container ">
 	<!--Cabeçalho pagina-->
 	<div class="col-md-12">
@@ -8,14 +7,14 @@
 			@if (isset($success))
 			<div class="alert alert-success alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Registrado!</strong> O abastecimento foi registrado no histórico.
+				<strong>Registrado!</strong> A entrada de combustível foi registrada no histórico.
 			</div>
-			@endif @if ($errors->any()) @foreach ($errors->all() as $error)
+			@endif @if ($errors->any())
 			<div class="alert alert-warning alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Ops!</strong> {{$error}}.
+				<strong>Ops!</strong> {{$errors->first()}}.
 			</div>
-			@endforeach @endif
+			@endif
 		</div>
 	</div>
 	<!--/Cabeçalho pagina-->
@@ -25,29 +24,24 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Abastecer
+					Armazenar
 				</div>
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12">
 
-							<form name="abastecimento" action="{{ route('abastecer') }}" method="post">
+							<form name="armazenar" action="{{ route('compra-combustivel.store') }}" method="post">
 								{{ csrf_field() }}
 								<div class="row">
 									<div class="col-md-8">
 
 										<div class="form-group">
 											<label>Fazenda:</label>
-											<select id="fazendas" class="form-control" onchange="EntradaCombustivel()" name="id_fazenda">
+											<select type="hidden" id="fazendas" class="form-control" onchange="EntradaCombustivel()">
+												<option value="" selected>- Selecione Fazenda -</option>
 												@foreach($fazendas as $fazenda)
-												<option value="{{$fazenda->Combustiveis}}">{{$fazenda->nome}}</option>
+												<option value="{{$fazenda}}">{{$fazenda->nome}}</option>
 												@endforeach
-											</select>
-										</div>
-
-										<div class="form-group">
-											<label>Máquina:</label>
-											<select id="maquina" class="form-control" name="id_maquina">
 											</select>
 										</div>
 
@@ -65,12 +59,27 @@
 
 										<div class="form-group">
 											<label>Quantidade a abastecer:</label>
-											<input class="form-control" type="text" placeholder="Em litros" />
+											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" />
 										</div>
 
 										<div class="form-group">
 											<label>Data de Abastecimento:</label>
-											<input class="form-control" name="data_abast" type="date" placeholder="DD/MM/AAAA" />
+											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" />
+										</div>
+
+										<div class="form-group">
+											<label>Lote:</label>
+											<input class="form-control" name="lote" placeholder="Lote de compra" />
+										</div>
+
+										<div class="form-group">
+											<label>Nota fiscal:</label>
+											<input class="form-control" name="nota_fiscal" placeholder="Nota fiscal da compra" />
+										</div>
+
+										<div class="form-group">
+											<label>Valor:</label>
+											<input class="form-control" name="valor" type="numeric" placeholder="Valor da compra" />
 										</div>
 
 									</div>

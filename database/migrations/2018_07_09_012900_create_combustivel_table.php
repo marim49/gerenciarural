@@ -17,7 +17,7 @@ class CreateCombustivelTable extends Migration
             $table->increments('id');
             $table->integer('id_fazenda')->unsigned(); 
             $table->integer('id_tipo_combustivel')->unsigned(); 
-            $table->float('quantidade')->nullable()->default(0);            
+            $table->float('quantidade')->default(0);            
             $table->foreign('id_fazenda')->references('id')->on('fazenda');
             $table->foreign('id_tipo_combustivel')->references('id')->on('tipo_combustivel');
             $table->timestamps();

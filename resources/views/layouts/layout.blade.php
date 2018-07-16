@@ -166,7 +166,7 @@
                     </a>
                     <ul class="collapse list-unstyled" id="entrada">
                         <li>
-                            <a href="{{ url('entrada/combustivel') }}"> Combustível</a>
+                            <a href="{{ url('compra-combustivel/create') }}"> Combustível</a>
                         </li>
                         <li>
                             <a href="{{ url('entrada/farmacia') }}"> Farmácia</a>
@@ -185,7 +185,7 @@
                     </a>
                     <ul class="collapse list-unstyled" id="saida">
                         <li>
-                            <a href="{{ url('saida/combustivel') }}"> Combustível</a>
+                            <a href="{{ url('abastecimento/create') }}"> Combustível</a>
                         </li>
                         <li>
                             <a href="{{ url('saida/farmacia') }}"> Farmácia</a>
@@ -231,6 +231,7 @@
     <script src="{{ asset('js/imprimir/imprimir.js') }}"></script>
     <script src="{{ asset('js/notificacao/sweet_alert.min.js') }}"></script>
     <script src="{{ asset('js/select/EntradaCombustivel.js') }}"></script>
+    <script src="{{ asset('js/select/SaidaCombustivel.js') }}"></script>
 </footer>
 
 </html>

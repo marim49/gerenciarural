@@ -78,8 +78,22 @@ Route::resource('medicamento', 'Animal\MedicamentoController')/*->middleware('au
  * maquina/{id}/edit => GET(edit)
 */
 Route::resource('maquina', 'Maquina\MaquinaController')/*->middleware('auth')*/;
-Route::get('entrada/combustivel', 'Maquina\CombustivelController@abastecimento');
-Route::post('maquina/abastecer', 'Maquina\CombustivelController@abastecer')->name('abastecer')/*->middleware('auth')*/;
+
+/* ROTA: HISTÓRICO ABASTECIMENTO (para saída de combustível)
+ * abastecimento => POST(store), GET(index) 
+ * abastecimento/create => GET(create) 
+ * abastecimento/{id} => GET(show), PUT(update), DELETE(destroy)
+ * abastecimento/{id}/edit => GET(edit)
+*/
+Route::resource('abastecimento', 'Maquina\HistoricoAbastecimentoController')/*->middleware('auth')*/;
+
+/* ROTA: HISTÓRICO COMPRA COMBUSTÍVEL
+ * compra/combustivel => POST(store), GET(index) 
+ * compra/combustivel/create => GET(create) 
+ * compra/combustivel/{id} => GET(show), PUT(update), DELETE(destroy)
+ * compra/combustivel/{id}/edit => GET(edit)
+*/
+Route::resource('compra-combustivel', 'Maquina\HistoricoCompraCombustivelController')/*->middleware('auth')*/;
 
 /* ROTA: COMBUSTÍVEL
  * combustivel => POST(store), GET(index) 
@@ -109,10 +123,6 @@ Route::get('/pesquisa/animal','AnimalController@GetAnimal');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::get('/saida/combustivel', function () {
-    return view('scombustivel');
 });
 Route::get('/entrada/farmacia', function () {
     return view('efarmacia');

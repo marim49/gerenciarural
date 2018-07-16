@@ -17,7 +17,8 @@ Route::get('maquinas', 'Maquina\MaquinaController@index');
 Route::get('medicamentos', 'Animal\MedicamentoController@index');
 Route::get('animal', 'Animal\AnimalController@index');
 Route::get('funciona', function(){
-    $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas')->orderBy('nome', 'asc')->get();
+    $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();
     return response()->json($fazendas);
 });
 Route::get('fazendas', 'Fazenda\FazendaController@index');
