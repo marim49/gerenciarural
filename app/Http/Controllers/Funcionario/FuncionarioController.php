@@ -100,15 +100,15 @@ class FuncionarioController extends Controller
     } 
 
     //Método GET (retorna um funcionário específico)
-    public function show($id)
+    public function show($id) 
     {
         try
         {
-            $funcionario = $this->model->with($this->relationships())
-                                ->find($id);       
+            $funcionario = $this->model->find($id)->get();
 
             //retornar view
-            return response()->json($funcionario);
+            return view('rfuncionario', ['funcionarios' => $funcionario]);
+           // return response()->json($funcionario);
         }
         catch(\Exception $e)
         {
@@ -117,6 +117,8 @@ class FuncionarioController extends Controller
                 'status' => 'ERROR', 
                 'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
             ]);
+            
+
         }
     }   
 

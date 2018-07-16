@@ -196,6 +196,50 @@
                     </ul>
 
                 </li>
+                <li>
+                    <a href="#relatorios" data-toggle="collapse">
+                        <i class="icon-book"></i>
+                        Relatórios
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="collapse list-unstyled" id="relatorios">
+
+                   <!-- <a href="#pageSubmenu" data-toggle="collapse">Pages<i class="fa fa-angle-down"></i></a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li><a href="#">Page 1</a></li>
+                            <li><a href="#">Page 2</a></li>
+                            <li><a href="#">Page 3</a></li>
+                        </ul> -->
+
+                        
+                            
+                        </li>
+                        <li>
+                            <a href="{{ url('terra')}}">Terras</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('funcionario')}}"> Combustível</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('animal')}}">
+                                Animais</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url('insumo')}}">
+                                Insumos</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('farmacia')}}">
+                                Medicamentos</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('maquina')}}">
+                                Máquinas</a>
+                        </li>
+                    </ul>
+
+                </li>
             </ul>
 
         </nav>

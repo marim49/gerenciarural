@@ -1,7 +1,7 @@
  @extends('layouts.layout') @section('content')
 <script>
-	function modalEditar() {
-		$("#abremodalFuncionario").click(function () {
+	function modalEditarFuncionario() {
+		$("#abreedit").click(function () {
 			var request = $.ajax({
 				url: "funcionario/2/edit",
 				async: true
@@ -17,10 +17,10 @@
 		});
 	}
 
-	function modalRelatorio() {
-		$("#abrerelatorioFuncionario").click(function () {
+	function modalRelatorioFuncionario() {
+		$("#abrerelatorio").click(function () {
 			var request = $.ajax({
-				url: "funcionario/1/edit"
+				url: "funcionario/2"
 
 			});
 
@@ -76,14 +76,14 @@
 
 									<td>
 										<center>
-											<a id="abrerelatorioFuncionario" href='#modal_theme_danger' onclick="modalRelatorio()" data-toggle='modal' data-target='#modal_form_vertical'>
+											<a id="abrerelatorio" href='#modal_theme_danger' onclick="modalRelatorioFuncionario()" data-toggle='modal' data-target='#modal_form_vertical'>
 												<span class='icon-book alert-info'></span>
 											</a>
 										</center>
 									</td>
 									<td>
 										<center>
-											<a id="abremodalFuncionario" href='#modal_theme_danger' onclick="modalEditar()" data-toggle='modal' data-target='#modal_form_vertical'>
+											<a id="abreedit" href='#modal_theme_danger' onclick="modalEditarFuncionario()" data-toggle='modal' data-target='#modal_form_vertical'>
 												<span class='icon-pencil7 alert-warning'></span>
 											</a>
 										</center>
