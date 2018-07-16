@@ -19,6 +19,7 @@ class CreateHistoricoTerraTable extends Migration
             $table->integer('id_insumo')->unsigned();
             $table->integer('id_funcionario')->unsigned(); 
             $table->integer('quantidade');        
+            $table->date('data');  
             $table->foreign('id_terra')->references('id')->on('terra');
             $table->foreign('id_insumo')->references('id')->on('insumo');
             $table->foreign('id_funcionario')->references('id')->on('funcionario');
