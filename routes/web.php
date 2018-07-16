@@ -12,7 +12,7 @@ Route::resource('animal', 'Animal\AnimalController')/*->middleware('auth')*/;
  * fazendas/create => GET(create) 
  * fazendas/{id} => GET(show), PUT(update), DELETE(destroy)
  * fazendas/{id}/edit => GET(edit)
-*/
+*/ 
 Route::resource('fazenda', 'Fazenda\FazendaController')/*->middleware('auth')*/;
 
 /* ROTA: TERRA
@@ -87,13 +87,29 @@ Route::resource('maquina', 'Maquina\MaquinaController')/*->middleware('auth')*/;
 */
 Route::resource('abastecimento', 'Maquina\HistoricoAbastecimentoController')/*->middleware('auth')*/;
 
+/* ROTA: HISTÓRICO ANIMAL (para saída de medicamento)
+ * medicacao => POST(store), GET(index) 
+ * medicacao/create => GET(create) 
+ * medicacao/{id} => GET(show), PUT(update), DELETE(destroy)
+ * medicacao/{id}/edit => GET(edit)
+*/
+Route::resource('medicacao', 'Animal\HistoricoAnimalController')/*->middleware('auth')*/;
+
 /* ROTA: HISTÓRICO COMPRA COMBUSTÍVEL
- * compra/combustivel => POST(store), GET(index) 
- * compra/combustivel/create => GET(create) 
- * compra/combustivel/{id} => GET(show), PUT(update), DELETE(destroy)
- * compra/combustivel/{id}/edit => GET(edit)
+ * compra-combustivel => POST(store), GET(index) 
+ * compra-combustivel/create => GET(create) 
+ * compra-combustivel/{id} => GET(show), PUT(update), DELETE(destroy)
+ * compra-combustivel/{id}/edit => GET(edit)
 */
 Route::resource('compra-combustivel', 'Maquina\HistoricoCompraCombustivelController')/*->middleware('auth')*/;
+
+/* ROTA: HISTÓRICO COMPRA MEDICAMENTO
+ * compra-medicamento => POST(store), GET(index) 
+ * compra-medicamento/create => GET(create) 
+ * compra-medicamento/{id} => GET(show), PUT(update), DELETE(destroy)
+ * compra-medicamento/{id}/edit => GET(edit)
+*/
+Route::resource('compra-medicamento', 'Animal\HistoricoCompraMedicamentoController')/*->middleware('auth')*/;
 
 /* ROTA: COMBUSTÍVEL
  * combustivel => POST(store), GET(index) 

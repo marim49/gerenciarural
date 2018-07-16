@@ -18,7 +18,8 @@ class CreateHistoricoAnimalTable extends Migration
             $table->integer('id_animal')->unsigned(); 
             $table->integer('id_medicamento')->unsigned();               
             $table->integer('id_funcionario')->unsigned();
-            $table->float('quantidade');     
+            $table->float('quantidade');    
+            $table->date('data');   
             $table->foreign('id_animal')->references('id')->on('animal');
             $table->foreign('id_medicamento')->references('id')->on('medicamento');
             $table->foreign('id_funcionario')->references('id')->on('funcionario');

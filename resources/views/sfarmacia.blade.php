@@ -4,8 +4,20 @@
 	<div class="col-md-12">
 		<div class="row pad-botm">
 			<h3 class="header-line">Retirada de Medicamento</h3>
+			@if (isset($success))
+			<div class="alert alert-success alert-dismissible">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Registrado!</strong> A medicação foi registrada no histórico.
+			</div>
+			@endif 
+			@if ($errors->any())
+			<div class="alert alert-warning alert-dismissible">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Ops!</strong> {{$errors->first()}}.
+			</div>			
+			@endif 
 		</div>
-	</div>
+	</div> 
 	<!--/Cabeçalho pagina-->
 
 	<!--Conteudo da pagina-->
@@ -18,28 +30,50 @@
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12">
-							<form role="form">
+
+							<form name="medicacao" action="{{ route('medicacao.store') }}" method="post">
+							{{ csrf_field() }}
 								<div class="row">
 									<div class="col-md-8">
+
 										<div class="form-group">
-											<label>Quantidade de Saída do Medicamento ( ML ):</label>
-											<input class="form-control" type="text" name="quant_med" placeholder="Em Ml" />
-										</div>
-										<div class="form-group">
-											<label>Animal de Destino</label>
-											<select class="form-control" name="animal_dest">
-												<option value="">Cocó</option>
-												<option value="">Two Vale</option>
-												<option value="">Three Vale</option>
-												<option value="">Four Vale</option>
+											<label>Fazenda:</label>
+											<select type="hidden" id="fazendas" class="form-control" onchange="SaidaMedicamento()">
+												<option value="" selected>- Selecione Fazenda -</option>
+												@foreach($fazendas as $fazenda)
+												<option value="{{$fazenda}}">{{$fazenda->nome}}</option>
+												@endforeach
 											</select>
 										</div>
+										
+
 										<div class="form-group">
-											<label>Funcionário que aplicou:</label>
-											<input class="form-control" type="text" name="func" placeholder="" />
+											<label>Funcionário responsável:</label>
+											<select id="funcionario" class="form-control" name="id_funcionario">
+											</select>
 										</div>
-									</div>
-									<div class="col-md-4">
+
+										<div class="form-group">
+											<label>Animal medicado:</label>
+											<select id="animal" class="form-control" name="id_animal">
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label>Medicamento usado:</label>
+											<select id="medicamento" class="form-control" name="id_medicamento">
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label>Quantidade aplicada ( ML ):</label>
+											<input class="form-control" type="text" name="quantidade" placeholder="Em Ml" />
+										</div>
+
+										<div class="form-group">
+											<label>Data de aplicação:</label>
+											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" />
+										</div>
 
 									</div>
 								</div>
@@ -48,8 +82,9 @@
 									<button type="submit" class="btn btn-info pull-right">Salvar </button>
 								</div>
 								<div class="right-div">
-									<button type="submit" class="btn btn-info pull-right">Limpar </button>
+									<button type="reset" class="btn btn-info pull-right">Limpar </button>
 								</div>
+
 							</form>
 						</div>
 					</div>
