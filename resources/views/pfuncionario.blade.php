@@ -1,4 +1,40 @@
  @extends('layouts.layout') @section('content')
+<script>
+	function modalEditar() {
+		$("#abremodalFuncionario").click(function () {
+			var request = $.ajax({
+				url: "funcionario/2/edit",
+				async: true
+			});
+
+			request.done(function (data) {
+				$("#conteudoModal").html(data);
+			});
+
+			request.fail(function () {
+				console.log("Ocorreu um erro na requisição");
+			});
+		});
+	}
+
+	function modalRelatorio() {
+		$("#abrerelatorioFuncionario").click(function () {
+			var request = $.ajax({
+				url: "funcionario/1/edit"
+
+			});
+
+			request.done(function (data) {
+				$("#conteudoModal").html(data);
+			});
+
+			request.fail(function () {
+				console.log("Ocorreu um erro na requisição");
+			});
+		});
+	}
+</script>
+
 <div class="container">
 	<div class="row pad-botm">
 		<div class="col-md-12">
@@ -22,29 +58,42 @@
 									<th>Nome</th>
 									<th>Cargo</th>
 									<th>celular</th>
-
 									<th>Data de admissão</th>
-									<th> </th>
-									<th> </th>
+									<th> Relatório </th>
+									<th> Editar </th>
+									<th> Excluir </th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach ($funcionarios as $funcionario)
 								<tr class='gradeA'>
-									<td> {{$funcionario->nome}} </td>
+									<a>
+										<td> {{$funcionario->nome}} </td>
+									</a>
 									<td> {{$funcionario->cargo}} </td>
 									<td> {{$funcionario->celular}} </td>
 									<td> {{$funcionario->admissao}} </td>
 
 									<td>
-										<a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_vertical$escrever[id_func]'>
-											<span class='icon-pencil7'></span>
-										</a>
+										<center>
+											<a id="abrerelatorioFuncionario" href='#modal_theme_danger' onclick="modalRelatorio()" data-toggle='modal' data-target='#modal_form_vertical'>
+												<span class='icon-book alert-info'></span>
+											</a>
+										</center>
 									</td>
 									<td>
-										<a href='../../db/funcionarios/deletar.php?id=$escrever[id_func]'>
-											<span class='icon-trash'></span>
-										</a>
+										<center>
+											<a id="abremodalFuncionario" href='#modal_theme_danger' onclick="modalEditar()" data-toggle='modal' data-target='#modal_form_vertical'>
+												<span class='icon-pencil7 alert-warning'></span>
+											</a>
+										</center>
+									</td>
+									<td>
+										<center>
+											<a href='../../db/funcionarios/deletar.php?id=$escrever[id_func]'>
+												<span class='icon-trash alert-danger'></span>
+											</a>
+										</center>
 									</td>
 								</tr>
 								@endforeach
@@ -53,96 +102,28 @@
 						</table>
 					</div>
 					<a onclick="imprimir()" class="btn btn-primary pull-left">Imprimir</a>
+
 				</div>
 
 
 
 			</div>
-			@foreach ($funcionarios as $funcionario)
-			<div id='modal_form_vertical{{$funcionario->id_animal}}' class='modal fade'>
-				<div class='modal-dialog'>
-					<div class='modal-content'>
+
+			<div class="modal fade" id="modal_form_vertical">
+				<div class="modal-dialog">
+					<div class="modal-content">
 						<div class='modal-header'>
 							<button type='button' class='close' data-dismiss='modal'>&times;</button>
 							<h5 class='modal-title'>Editar Funcionário </h5>
 						</div>
-						<form name='register-animal' action='../../controller/editar/animais/animais.php?id=$escrever[id_animal]' method='post'>
-							<div class='panel-body'>
-								<div class='row'>
-									<div class='col-md-4'>
+						<div id="printjs" class="modal-body">
+							<div id="conteudoModal">
 
-										<div class='form-group'>
-											<label>Identificão do Animal:</label>
-											<input class='form-control' name='nome_animal' type='text' placeholder='' />
-										</div>
-										<div class='form-group'>
-											<label>Número de registro:</label>
-											<input class='form-control' name='numero_registro' type='text' placeholder='' />
-										</div>
-										<div class='form-group'>
-											<label>Peso:</label>
-											<input class='form-control' name='peso' type='text' placeholder='Em arrobas' />
-										</div>
-										<div class='form-group'>
-											<label>Tratamento realizado:</label>
-											<input class='form-control' name='tratamento_feito' type='text' placeholder='' />
-										</div>
-										<div class='form-group'>
-											<label>Histórico:</label>
-											<input class='form-control' name='historico' type='text' placeholder='' />
-										</div>
-
-
-									</div>
-									<div class='col-md-4'>
-
-										<div class='form-group'>
-											<label>Pai:</label>
-											<input class='form-control' name='pai_animal' type='text' placeholder='' />
-
-										</div>
-										<div class='form-group'>
-											<label>Data de Nascimento:</label>
-											<input class='form-control' name='data_nasc_animal' type='date' placeholder='DD/MM/AAAA' />
-										</div>
-										<div class='form-group'>
-											<label>Medicamentos Utilizados:</label>
-											<input class='form-control' name='medicamento_usados' type='text' placeholder='' />
-										</div>
-
-
-									</div>
-									<div class='col-md-4'>
-
-										<div class='form-group'>
-											<label>Mãe:</label>
-											<input class='form-control' name='mae_animal' type='text' placeholder='' />
-										</div>
-										<div class='form-group'>
-											<label>Data de Chegada:</label>
-											<input class='form-control' name='data_chegada' type='date' placeholder='DD/MM/AAAA' />
-										</div>
-
-										<div class='form-group'>
-											<label>Foto do animal:</label>
-											<div class='form-group'>
-												<input type='file' />
-											</div>
-										</div>
-
-
-									</div>
-								</div>
 							</div>
-							<div class='modal-footer'>
-								<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>
-								<button type='submit' class='btn btn-primary'>Editar</button>
-							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			</div>
-			@endforeach
 		</div>
 
 	</div>

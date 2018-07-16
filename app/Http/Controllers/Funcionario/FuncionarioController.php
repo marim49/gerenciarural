@@ -105,7 +105,7 @@ class FuncionarioController extends Controller
         try
         {
             $funcionario = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
+                                ->find($id);       
 
             //retornar view
             return response()->json($funcionario);
@@ -121,7 +121,15 @@ class FuncionarioController extends Controller
     }   
 
     //Método GET (retorna a view de edição)
-    public function edit($id){}
+    public function edit($id)
+    { 
+        $funcionario = $this->model->find($id); 
+        $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+        $grupos = \App\Models\Funcionario\EstadoCivil::orderBy('nome', 'asc')->get();
+                   
+        return view('mfuncionario', ['id' => $id, 'funcionario' => $funcionario,
+                    'fazendas' => $fazendas, 'grupos' => $grupos]);          
+    }
 
     //Método PUT (atualiza um funcionário)
     public function update(Request $request, $id)
@@ -129,7 +137,7 @@ class FuncionarioController extends Controller
         //tratar entrada
         try
         {
-            $update_funcionario = $this->model->findOrFail($id);            
+            $update_funcionario = $this->model->find($id);            
             $dados = $request->all();
 
             $update_funcionario->update($dados);
