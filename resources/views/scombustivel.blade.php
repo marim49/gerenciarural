@@ -65,7 +65,7 @@
 
 										<div class="form-group">
 											<label>Quantidade a abastecer:</label>
-											<input class="form-control" name="quantidade" type="number" placeholder="Em litros" />
+											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" />
 										</div>
 
 										<div class="form-group">

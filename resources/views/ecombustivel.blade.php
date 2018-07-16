@@ -59,7 +59,7 @@
 
 										<div class="form-group">
 											<label>Quantidade a abastecer:</label>
-											<input class="form-control" name="quantidade" type="number" placeholder="Em litros" />
+											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" />
 										</div>
 
 										<div class="form-group">
@@ -79,7 +79,7 @@
 
 										<div class="form-group">
 											<label>Valor:</label>
-											<input class="form-control" name="valor" type="number" placeholder="Valor da compra" />
+											<input class="form-control" name="valor" type="numeric" placeholder="Valor da compra" />
 										</div>
 
 									</div>
