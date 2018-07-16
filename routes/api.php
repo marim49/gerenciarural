@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 Route::get('funciona', function(){
-    $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas')->orderBy('nome', 'asc')->get();
+    $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();
     return response()->json($fazendas);
 });
 Route::get('fazendas', 'Fazenda\FazendaController@index');

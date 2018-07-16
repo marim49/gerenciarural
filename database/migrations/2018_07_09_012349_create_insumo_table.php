@@ -17,7 +17,7 @@ class CreateInsumoTable extends Migration
             $table->increments('id');
             $table->integer('id_celeiro')->unsigned(); 
             $table->integer('id_tipo_insumo')->unsigned(); 
-            $table->integer('quantidade')->nullable()->default(0);    
+            $table->integer('quantidade')->default(0);    
             $table->foreign('id_celeiro')->references('id')->on('celeiro');
             $table->foreign('id_tipo_insumo')->references('id')->on('tipo_insumo');
             $table->timestamps();
