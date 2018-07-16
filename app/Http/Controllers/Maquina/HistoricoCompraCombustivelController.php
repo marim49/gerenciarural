@@ -216,9 +216,9 @@ class HistoricoCompraCombustivelController extends Controller
             'id_funcionario'=>'required',
             'data'=>'required|date',
             'lote'=>'required|max:45',
-            'quantidade'=>'required|max:45|numeric',
+            'quantidade'=>'required|numeric',
             'nota_fiscal'=>'required|max:45',
-            'valor'=>'required|max:45|numeric',
+            'valor'=>'required|numeric',
         );
     
         return Validator::make($requisicao, $rules,$messages);        
