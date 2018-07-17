@@ -30,11 +30,16 @@
 <body>
     <div class="navbar navbar-inverse set-radius-zero">
         <div class="container">
+
+
+
+
             <div class="navbar-header">
                 <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn navbar-toggle">
                     <i class="glyphicon glyphicon-align-left"></i>
                     <span>Toggle Sidebar</span>
                 </button>
+
 
                 <a class="navbar-brand" href="../../index.php">
 
@@ -43,10 +48,20 @@
 
             </div>
 
-            <div class="right-div">
-                <a href="../../controller/account/deslogar.php" class="btn btn-primary pull-right">Sair</a>
+        <div class="right-div">
+            <a href="{{ route('logout') }}" onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();" class="btn btn-primary pull-right">{{ __('Logout') }}</a>
+            
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
             </div>
         </div>
+    </div>
+
+
+
+
     </div>
     <!-- LOGO HEADER END-->
     <div class="wrapper">
@@ -204,40 +219,40 @@
                     </a>
                     <ul class="collapse list-unstyled" id="relatorios">
 
-                   <!-- <a href="#pageSubmenu" data-toggle="collapse">Pages<i class="fa fa-angle-down"></i></a>
+                        <!-- <a href="#pageSubmenu" data-toggle="collapse">Pages<i class="fa fa-angle-down"></i></a>
                         <ul class="collapse list-unstyled" id="pageSubmenu">
                             <li><a href="#">Page 1</a></li>
                             <li><a href="#">Page 2</a></li>
                             <li><a href="#">Page 3</a></li>
                         </ul> -->
 
-                        
-                            
-                        </li>
-                        <li>
-                            <a href="{{ url('terra')}}">Terras</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('funcionario')}}"> Combustível</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('animal')}}">
-                                Animais</a>
-                        </li>
 
-                        <li>
-                            <a href="{{ url('insumo')}}">
-                                Insumos</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('farmacia')}}">
-                                Medicamentos</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('maquina')}}">
-                                Máquinas</a>
-                        </li>
-                    </ul>
+
+                </li>
+                <li>
+                    <a href="{{ url('terra')}}">Terras</a>
+                </li>
+                <li>
+                    <a href="{{ url('funcionario')}}"> Combustível</a>
+                </li>
+                <li>
+                    <a href="{{ url('animal')}}">
+                        Animais</a>
+                </li>
+
+                <li>
+                    <a href="{{ url('insumo')}}">
+                        Insumos</a>
+                </li>
+                <li>
+                    <a href="{{ url('farmacia')}}">
+                        Medicamentos</a>
+                </li>
+                <li>
+                    <a href="{{ url('maquina')}}">
+                        Máquinas</a>
+                </li>
+                </ul>
 
                 </li>
             </ul>
