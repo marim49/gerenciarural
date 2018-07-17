@@ -55,11 +55,11 @@ class HistoricoCompraMedicamentoController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Medicamentos.TipoMedicamento', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('efarmacia', ['fazendas' => $fazendas]);
+            return view('entrada.efarmacia', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('efarmacia', ['fazendas' => []])
+            return view('entrada.efarmacia', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -98,7 +98,7 @@ class HistoricoCompraMedicamentoController extends Controller
                 throw new \Exception('Não foi possível encontrar o medicamento no banco de dados');
             }
 
-            return view('efarmacia', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('entrada.efarmacia', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {                      

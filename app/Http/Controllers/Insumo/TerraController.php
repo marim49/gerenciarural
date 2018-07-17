@@ -35,7 +35,7 @@ class TerraController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return view('pterra', ['terras' => $terras]);
+            return view('pesquisa.pterra', ['terras' => $terras]);
         }
         catch(\Exception $e) 
         {
@@ -54,11 +54,11 @@ class TerraController extends Controller
         {
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
         
-            return view('cterra', ['fazendas' => $fazendas]);
+            return view('cadastro.cterra', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('cterra', ['fazendas' => []])
+            return view('cadastro.cterra', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -80,7 +80,7 @@ class TerraController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
             $success = $this->model->create($terra);
 
-            return view('cterra', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('cadastro.cterra', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {

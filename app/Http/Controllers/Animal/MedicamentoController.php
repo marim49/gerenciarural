@@ -55,11 +55,11 @@ class MedicamentoController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
             $tipos = \App\Models\Animal\TipoMedicamento::orderBy('nome', 'asc')->get();
         
-            return view('cfarmacia', ['fazendas' => $fazendas, 'tipos' => $tipos]);
+            return view('cadastro.cfarmacia', ['fazendas' => $fazendas, 'tipos' => $tipos]);
         }         
         catch(\Exception $e) 
         {          
-            return view('cfarmacia', ['fazendas' => [], 'tipos' => []])
+            return view('cadastro.cfarmacia', ['fazendas' => [], 'tipos' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -81,7 +81,7 @@ class MedicamentoController extends Controller
             $tipos = \App\Models\Animal\TipoMedicamento::orderBy('nome', 'asc')->get();
             $success = $this->model->create($medicamento);
 
-            return view('cfarmacia', ['fazendas' => $fazendas, 'tipos' => $tipos, 'success' => $success]);
+            return view('cadastro.cfarmacia', ['fazendas' => $fazendas, 'tipos' => $tipos, 'success' => $success]);
         } 
         catch(\Exception $e) 
         {        

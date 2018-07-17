@@ -55,11 +55,11 @@ class HistoricoAbastecimentoController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('scombustivel', ['fazendas' => $fazendas]);
+            return view('saida.scombustivel', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('scombustivel', ['fazendas' => []])
+            return view('saida.scombustivel', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }    
@@ -99,7 +99,7 @@ class HistoricoAbastecimentoController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('scombustivel', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('saida.scombustivel', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {                      

@@ -35,7 +35,7 @@ class MaquinaController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return view('pmaquina', ['maquinas' => $maquinas]);
+            return view('pesquisa.pmaquina', ['maquinas' => $maquinas]);
         }
         catch(\Exception $e) 
         {
@@ -54,11 +54,11 @@ class MaquinaController extends Controller
         {
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
         
-            return view('cmaquina', ['fazendas' => $fazendas]);
+            return view('cadastro.cmaquina', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('cmaquina', ['fazendas' => []])
+            return view('cadastro.cmaquina', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -80,7 +80,7 @@ class MaquinaController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
             $success = $this->model->create($maquina);
 
-            return view('cmaquina', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('cadastro.cmaquina', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {

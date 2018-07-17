@@ -1,104 +1,111 @@
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gerência Rural</title>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+    <title>Gerência Rural</title>
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-image: url("{{asset('img/fundo.jpg')}}");
-                background-repeat: no-repeat;
-                background-size: cover;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
-            .full-height {
-                height: 70%;
-            }
+    <!-- Styles -->
+    <style>
+        html,
+        body {
+            background-image: url("{{asset('img/fundo.jpg')}}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: #636b6f;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 100;
+            height: 100vh;
+            margin: 0;
+        }
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
+        .full-height {
+            height: 70%;
+        }
 
-            .position-ref {
-                position: relative;
-            }
+        .flex-center {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
 
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 10px;                
-            }
+        .position-ref {
+            position: relative;
+        }
 
-            .content {
-                text-align: center;
-            }
+        .top-right {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
 
-            .title {
-                font-size: 84px;
-            }
-            .navbar-custom {
-                background: linear-gradient(white, transparent);               
-                color:#ffffff;
-                padding: 40px;
-            }
+        .content {
+            text-align: center;
+        }
 
-            .links > a {
-                color: black;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
+        .title {
+            font-size: 84px;
+        }
 
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-            @if (Route::has('login'))
-                <nav class="navbar-custom">
-                    @auth
-                        <a href="{{ url('/home') }}" class="top-right">Home</a>
-                    @else
-                    <div class="top-right links">
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    </div>
-                    @endauth
-                </nav>
-            @endif
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">            
+        .navbar-custom {
+            background: linear-gradient(white, transparent);
+            color: #ffffff;
+            padding: 40px;
+        }
 
-            <div class="content">            
+        .links>a {
+            color: black;
+            padding: 0 25px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
 
-                <div class="links">
-                    <a href="" icon="home" >Sobre</a>
-                    <a href="">Donos</a>
-                    <a href="">Fornecedores</a>
-                </div>
-
-                <div class="title m-b-md">
-                <img src="{{ asset('img/tec.svg') }}" style="width:70%;">
-                </div>
-
-            </div>
+        .m-b-md {
+            margin-bottom: 30px;
+        }
+    </style>
+    @if (Route::has('login'))
+    <nav class="navbar-custom">
+        @auth
+        <div class="top-right links">
+            <a href="{{ url('/home') }}">Home</a>
         </div>
-    </body>
+        @else
+        <div class="top-right links">
+            <a href="{{ route('login') }}">Login</a>
+            <a href="{{ route('register') }}">Registro</a>
+        </div>
+        @endauth
+    </nav>
+    @endif
+</head>
+
+<body>
+    <div class="flex-center position-ref full-height">
+
+        <div class="content">
+
+            <div class="links">
+                <a href="" icon="home">Sobre</a>
+                <a href="">Donos</a>
+                <a href="">Fornecedores</a>
+            </div>
+
+            <div class="title m-b-md">
+                <img src="{{ asset('img/tec.svg') }}" style="width:70%;">
+            </div>
+
+        </div>
+    </div>
+</body>
+
 </html>

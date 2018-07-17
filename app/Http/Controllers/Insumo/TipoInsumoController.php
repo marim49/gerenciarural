@@ -50,7 +50,7 @@ class TipoInsumoController extends Controller
     //Método GET (chama a view de criação) : OK
     public function create()
     {
-          return view('ctinsumo');
+          return view('cadastro.ctinsumo');
     }
 
     // Método POST (salva o tipo de insumo) : OK
@@ -68,7 +68,7 @@ class TipoInsumoController extends Controller
         {
             $success = $this->model->create($tipoinsumo);
 
-            return view('ctinsumo', ['success' => $success]);
+            return view('cadastro.ctinsumo', ['success' => $success]);
         } 
         catch(\Exception $e) 
         {            

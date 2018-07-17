@@ -55,11 +55,11 @@ class HistoricoCompraCombustivelController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('ecombustivel', ['fazendas' => $fazendas]);
+            return view('entrada.ecombustivel', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('ecombustivel', ['fazendas' => []])
+            return view('entrada.ecombustivel', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -98,7 +98,7 @@ class HistoricoCompraCombustivelController extends Controller
                 throw new \Exception('Não foi possível encontrar o combustível no banco de dados');
             }
 
-            return view('ecombustivel', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('entrada.ecombustivel', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {                      

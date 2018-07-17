@@ -55,11 +55,11 @@ class HistoricoAnimalController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Animais.GrupoAnimal', 'Medicamentos.TipoMedicamento', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('sfarmacia', ['fazendas' => $fazendas]);
+            return view('saida.sfarmacia', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('sfarmacia', ['fazendas' => []])
+            return view('saida.sfarmacia', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }    
@@ -100,7 +100,7 @@ class HistoricoAnimalController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Animais.GrupoAnimal', 'Medicamentos.TipoMedicamento', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('sfarmacia', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('saida.sfarmacia', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {                      

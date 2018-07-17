@@ -55,11 +55,11 @@ class HistoricoTerraController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Terras', 'Celeiro.Insumos.TipoInsumo', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('eterra', ['fazendas' => $fazendas]);
+            return view('entrada.eterra', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('eterra', ['fazendas' => []])
+            return view('entrada.eterra', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }    
@@ -99,7 +99,7 @@ class HistoricoTerraController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Terras', 'Celeiro.Insumos.TipoInsumo', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('eterra', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('entrada.eterra', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {                      

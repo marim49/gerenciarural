@@ -55,11 +55,11 @@ class HistoricoCompraInsumoController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Celeiro.Insumos.TipoInsumo', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('einsumo', ['fazendas' => $fazendas]);
+            return view('entrada.einsumo', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('einsumo', ['fazendas' => []])
+            return view('entrada.einsumo', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }   
@@ -99,7 +99,7 @@ class HistoricoCompraInsumoController extends Controller
                 throw new \Exception('Não foi possível encontrar o insumo no banco de dados');
             }
 
-            return view('einsumo', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('entrada.einsumo', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {                      

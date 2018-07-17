@@ -55,11 +55,11 @@ class CombustivelController extends Controller
             $tipos = \App\Models\Maquina\TipoCombustivel::orderBy('nome', 'asc')->get();
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
         
-            return view('ccombustivel', ['fazendas' => $fazendas, 'tipos' => $tipos]);
+            return view('cadastro.ccombustivel', ['fazendas' => $fazendas, 'tipos' => $tipos]);
         }         
         catch(\Exception $e) 
         {          
-            return view('ccombustivel', ['fazendas' => [], 'tipos' => []])
+            return view('cadastro.ccombustivel', ['fazendas' => [], 'tipos' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -82,7 +82,7 @@ class CombustivelController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
             $success = $this->model->create($combustivel);
             
-            return view('ccombustivel', ['success' => $success, 'fazendas' => $fazendas, 'tipos' => $tipos]);
+            return view('cadastro.ccombustivel', ['success' => $success, 'fazendas' => $fazendas, 'tipos' => $tipos]);
         } 
         catch(\Exception $e) 
         {                      

@@ -60,8 +60,6 @@
     </div>
 
 
-
-
     </div>
     <!-- LOGO HEADER END-->
     <div class="wrapper">
@@ -162,7 +160,7 @@
                                 Insumos</a>
                         </li>
                         <li>
-                            <a href="{{ url('farmacia')}}">
+                            <a href="{{ url('medicamento')}}">
                                 Farmácia</a>
                         </li>
                         <li>
