@@ -55,11 +55,11 @@ class HistoricoCompraCombustivelController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('ecombustivel', ['fazendas' => $fazendas]);
+            return view('entrada.ecombustivel', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('ecombustivel', ['fazendas' => []])
+            return view('entrada.ecombustivel', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -86,8 +86,8 @@ class HistoricoCompraCombustivelController extends Controller
 
             
             if($combustivel){
-                if($compra['quantidade'] < 0){
-                    throw new \Exception('A quantidade não pode ser negativa');                    
+                if($compra['quantidade'] <= 0){
+                    throw new \Exception('A quantidade não pode ser negativa ou igual a 0');                    
                 }
                 else{
                     $combustivel->increment('quantidade', $compra['quantidade']);
@@ -98,7 +98,7 @@ class HistoricoCompraCombustivelController extends Controller
                 throw new \Exception('Não foi possível encontrar o combustível no banco de dados');
             }
 
-            return view('ecombustivel', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('entrada.ecombustivel', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {                      
@@ -183,6 +183,7 @@ class HistoricoCompraCombustivelController extends Controller
         }
     }
 
+    //Retorna as relações : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -190,8 +191,7 @@ class HistoricoCompraCombustivelController extends Controller
         }
 
         return [];
-    }
-    
+    }    
 
     //Método de validação : OK
     protected function Validator($requisicao){        

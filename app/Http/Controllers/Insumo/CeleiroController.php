@@ -35,7 +35,7 @@ class CeleiroController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return view('pceleiro', ['celeiros' => $celeiros]);
+            return view('pesquisa.pceleiro', ['celeiros' => $celeiros]);
         }
         catch(\Exception $e) 
         {
@@ -54,11 +54,11 @@ class CeleiroController extends Controller
         {
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
         
-            return view('cceleiro', ['fazendas' => $fazendas]);
+            return view('cadastro.cceleiro', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('cceleiro', ['fazendas' => []])
+            return view('cadastro.cceleiro', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -80,7 +80,7 @@ class CeleiroController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
             $success = $this->model->create($celeiro);
 
-            return view('cceleiro', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('cadastro.cceleiro', ['success' => $success, 'fazendas' => $fazendas]);
 
         } 
         catch(\Exception $e) 

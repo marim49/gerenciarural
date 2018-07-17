@@ -50,7 +50,7 @@ class TipoMedicamentoController extends Controller
     //Método GET (chama a view de criação) : OK
     public function create()
     {
-        return view('ctmedicamento');
+        return view('cadastro.ctmedicamento');
     }
 
     // Método POST (salva o tipo de medicamento) : OK   
@@ -68,7 +68,7 @@ class TipoMedicamentoController extends Controller
         {
             $success = $this->model->create($tipo_medicamento);
 
-            return view('ctmedicamento', ['success' => $success]);
+            return view('cadastro.ctmedicamento', ['success' => $success]);
         } 
         catch(\Exception $e) 
         {

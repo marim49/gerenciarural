@@ -35,7 +35,7 @@ class InsumoController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return view('pinsumo', ['insumos' => $insumos]);
+            return view('pesquisa.pinsumo', ['insumos' => $insumos]);
         
         }
         catch(\Exception $e) 
@@ -56,11 +56,11 @@ class InsumoController extends Controller
             $celeiros = \App\Models\Insumo\Celeiro::orderBy('nome', 'asc')->get();            
             $tipos = \App\Models\Insumo\TipoInsumo::orderBy('nome', 'asc')->get();
         
-            return view('cinsumo', ['celeiros' => $celeiros, 'tipos' => $tipos]);
+            return view('cadastro.cinsumo', ['celeiros' => $celeiros, 'tipos' => $tipos]);
         }         
         catch(\Exception $e) 
         {          
-            return view('cinsumo', ['celeiros' => [], 'tipos'=> []])
+            return view('cadastro.cinsumo', ['celeiros' => [], 'tipos'=> []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -83,7 +83,7 @@ class InsumoController extends Controller
             $tipos = \App\Models\Insumo\TipoInsumo::orderBy('nome', 'asc')->get();
             $success = $this->model->create($insumo);
 
-            return view('cinsumo', ['success' => $success, 'celeiros' => $celeiros, 'tipos' => $tipos]);
+            return view('cadastro.cinsumo', ['success' => $success, 'celeiros' => $celeiros, 'tipos' => $tipos]);
         } 
         catch(\Exception $e) 
         {

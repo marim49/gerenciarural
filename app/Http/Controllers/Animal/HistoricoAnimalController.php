@@ -4,20 +4,22 @@ namespace App\Http\Controllers\Animal;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class HistoricoAnimalController extends Controller
 {
     protected $model;
     protected $relationships = [
         'Animal', 'Medicamento', 'Funcionario'
-    ];
+    ]; 
     
     public function __construct(\App\Models\Animal\HistoricoAnimal $model)
     {
         $this->model = $model;
     }
 
-    public function GetHistoricosAnimais()
+    //Método GET (retorna o histórico de animais)
+    public function index()
     {
         try
         {
@@ -45,33 +47,71 @@ class HistoricoAnimalController extends Controller
         }
     }
     
-    public function PostHistoricoAnimal(Request $request)
+    //Método GET (chama a view de criação) : OK
+    public function create() 
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        try
+        {            
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Animais.GrupoAnimal', 'Medicamentos.TipoMedicamento', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();
+
+            return view('saida.sfarmacia', ['fazendas' => $fazendas]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('saida.sfarmacia', ['fazendas' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }    
+    
+    //Método POST (salva o histórico do combustível) : OK    
+    public function store(Request $request)
+    {
+        $medicacao = $request->only('id_animal', 'id_medicamento', 'id_funcionario', 'quantidade',
+                                        'data');
+        //Validação
+        $validator = $this->Validator($medicacao);
+        if ($validator->fails()) {
+            return redirect('medicacao/create')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Inserção no banco
         try 
-        {
-            $historico_animal = $request->all();
+        {         
+            
+            $medicamento = \App\Models\Animal\Medicamento::find($medicacao['id_medicamento']);
+            
+            if($medicamento){
+                if($medicacao['quantidade'] <= 0){
+                    throw new \Exception('A quantidade não pode ser negativa ou igual a 0.');                    
+                }
+                if($medicamento->quantidade >= $medicacao['quantidade']){
+                    $medicamento->decrement('quantidade', $medicacao['quantidade']);
+                    $success = $this->model->create($medicacao);
+                }
+                else{                    
+                    throw new \Exception('O estoque não possui saldo suficiente para retirada');
+                }
+            }
+            else{
+                throw new \Exception('Não foi possível encontrar o medicamento no banco de dados');
+            }            
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Animais.GrupoAnimal', 'Medicamentos.TipoMedicamento', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();
 
-            $novo_historico_animal = $this->model->create($historico_animal);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_historico_animal
-            ]);
+            return view('saida.sfarmacia', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {                      
+            return redirect('medicacao/create')
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput();
         }
     } 
 
-    public function ShowHistoricoAnimal($id)
+    //Método GET (retorna um histórico de animal específico) 
+    public function show($id)
     {
         try
         {
@@ -91,7 +131,11 @@ class HistoricoAnimalController extends Controller
         }
     }   
 
-    public function UpdateHistoricoAnimal(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza um histórico de animal)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +161,8 @@ class HistoricoAnimalController extends Controller
         }
     }
 
-    public function DeleteHistoricoAnimal($id)
+    //Método DELETE (deleta um hisórico de animal específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +185,7 @@ class HistoricoAnimalController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +193,34 @@ class HistoricoAnimalController extends Controller
         }
 
         return [];
+    }
+
+     //Método de validação : OK
+     protected function Validator($requisicao){        
+        $messages = array(
+            'id_animal.required'=> 'O campo de animal é obrigatório',
+            'id_medicamento.required'=>'O campo de medicamento é obrigatório',
+            'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+            'quantidade.required'=>'O campo de quantidade é obrigatório',
+            'quantidade.numeric'=>'A quantidade só pode ser em números',
+            'data.required'=>'O campo de data de abastecimento é obrigatório',
+            'data.date'=>'O campo de data está em formato inválido',
+        );    
+        $rules = array(
+            'id_animal'=>'required',
+            'id_medicamento'=>'required',
+            'id_funcionario'=>'required',
+            'quantidade'=>'required|numeric',
+            'data'=>'required|date',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

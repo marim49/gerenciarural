@@ -36,7 +36,7 @@ class FuncionarioController extends Controller
                 })
                 ->paginate($limit);
 
-            return view('pfuncionario', ['funcionarios' => $funcionarios]);
+            return view('pesquisa.pfuncionario', ['funcionarios' => $funcionarios]);
         }
         catch(\Exception $e) 
         {
@@ -56,11 +56,11 @@ class FuncionarioController extends Controller
             $grupos = \App\Models\Funcionario\EstadoCivil::orderBy('nome', 'asc')->get();
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
         
-            return view('cfuncionario', ['grupos' => $grupos, 'fazendas' => $fazendas]);
+            return view('cadastro.cfuncionario', ['grupos' => $grupos, 'fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('cfuncionario', ['grupos' => [], 'fazendas' => []])
+            return view('cadastro.cfuncionario', ['grupos' => [], 'fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -87,7 +87,7 @@ class FuncionarioController extends Controller
             $success = $this->model->create($funcionario);
 
             //Alterar para retornar view
-            return view('cfuncionario', ['success' => $success, 'grupos' => $grupos, 'fazendas' => $fazendas]);
+            return view('cadastro.cfuncionario', ['success' => $success, 'grupos' => $grupos, 'fazendas' => $fazendas]);
 
         } 
         catch(\Exception $e) 

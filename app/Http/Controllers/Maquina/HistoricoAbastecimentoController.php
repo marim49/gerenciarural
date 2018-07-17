@@ -55,11 +55,11 @@ class HistoricoAbastecimentoController extends Controller
             $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('scombustivel', ['fazendas' => $fazendas]);
+            return view('saida.scombustivel', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('scombustivel', ['fazendas' => []])
+            return view('saida.scombustivel', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }    
@@ -78,16 +78,12 @@ class HistoricoAbastecimentoController extends Controller
         }
         //Inserção no banco
         try 
-        {          
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
-                                                    ->orderBy('nome', 'asc')->get();
-            
+        {                     
             $combustivel = \App\Models\Maquina\Combustivel::find($abastecimento['id_combustivel']);
-
             
             if($combustivel){
-                if($abastecimento['quantidade'] < 0){
-                    throw new \Exception('A quantidade não pode ser negativa');                    
+                if($abastecimento['quantidade'] <= 0){
+                    throw new \Exception('A quantidade não pode ser negativa ou igual a 0');                    
                 }
                 if($combustivel->quantidade >= $abastecimento['quantidade']){
                     $combustivel->decrement('quantidade', $abastecimento['quantidade']);
@@ -99,9 +95,11 @@ class HistoricoAbastecimentoController extends Controller
             }
             else{
                 throw new \Exception('Não foi possível encontrar o combustível no banco de dados');
-            }
+            }             
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();
 
-            return view('ecombustivel', ['success' => $success, 'fazendas' => $fazendas]);
+            return view('saida.scombustivel', ['success' => $success, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {                      
@@ -162,7 +160,7 @@ class HistoricoAbastecimentoController extends Controller
         }
     }
 
-    //Método DELETE (deleta um combustivel específico)
+    //Método DELETE (deleta um hitórico de abastecimento específico)
     public function destroy($id)
     {
         try 
@@ -194,7 +192,7 @@ class HistoricoAbastecimentoController extends Controller
         }
 
         return [];
-    }     
+    }      
 
     //Método de validação : OK
     protected function Validator($requisicao){        

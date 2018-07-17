@@ -35,7 +35,7 @@ class AnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return view('panimal', ['animais' => $animais]);
+            return view('pesquisa.panimal', ['animais' => $animais]);
         }
         catch(\Exception $e) 
         {
@@ -55,11 +55,11 @@ class AnimalController extends Controller
             $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
         
-            return view('canimal', ['grupos' => $grupos, 'fazendas' => $fazendas]);
+            return view('cadastro.canimal', ['grupos' => $grupos, 'fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('canimal', ['grupos' => []])
+            return view('cadastro.canimal', ['grupos' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -82,7 +82,7 @@ class AnimalController extends Controller
             $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
 
-            return view('canimal', ['success' => $success, 'grupos' => $grupos, 'fazendas' => $fazendas]);
+            return view('cadastro.canimal', ['success' => $success, 'grupos' => $grupos, 'fazendas' => $fazendas]);
         } 
         catch(\Exception $e) 
         {          

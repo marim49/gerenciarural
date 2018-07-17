@@ -36,7 +36,7 @@ class FazendaController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return view('pfazenda', ['fazendas' => $fazendas]);
+            return view('pesquisa.pfazenda', ['fazendas' => $fazendas]);
             
         }
         catch(\Exception $e) 
@@ -52,7 +52,7 @@ class FazendaController extends Controller
     //Método GET (chama a view de criação) : OK
     public function create()
     {
-        return view('cfazenda');        
+        return view('cadastro.cfazenda');        
     }
     
     // Método POST (salva a fazenda) : OK
@@ -72,7 +72,7 @@ class FazendaController extends Controller
         {
             $success = $this->model->create($fazenda);
 
-            return view('cfazenda', ['success' => $success]);        
+            return view('cadastro.cfazenda', ['success' => $success]);        
         } 
         catch(\Exception $e) 
         {                      

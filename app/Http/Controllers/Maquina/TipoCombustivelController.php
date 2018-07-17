@@ -50,7 +50,7 @@ class TipoCombustivelController extends Controller
     //Método GET (chama a view de criação) : OK
     public function create()
     {
-        return view('ctcombustivel');
+        return view('cadastro.ctcombustivel');
     }
     
     //Método POST (salva o tipo de combustível) : OK    
@@ -69,7 +69,7 @@ class TipoCombustivelController extends Controller
         {
             $success = $this->model->create($tipocombustivel);
             
-            return view('ctcombustivel', ['success' => $success]);
+            return view('cadastro.ctcombustivel', ['success' => $success]);
         } 
         catch(\Exception $e) 
         {                           
