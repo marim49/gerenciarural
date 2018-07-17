@@ -41,9 +41,9 @@
                 </button>
 
 
-                <a class="navbar-brand" href="../../index.php">
+                <a class="navbar-brand" href="{{ url('/') }}">
 
-                    <img src="{{ asset('img/admdeterras2.png') }}" width="50%" />
+                    <img src="{{ asset('img/tec-title.svg') }}" width="20%" />
                 </a>
 
             </div>
