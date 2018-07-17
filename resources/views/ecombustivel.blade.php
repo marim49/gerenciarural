@@ -1,7 +1,7 @@
  @extends('layouts.layout') @section('content')
 <div class="container ">
 	<!--Cabeçalho pagina-->
-	<div class="col-md-12">
+	<div class="col-md-12"> 
 		<div class="row pad-botm">
 			<h3 class="header-line">Entrada de combustível</h3>
 			@if (isset($success))

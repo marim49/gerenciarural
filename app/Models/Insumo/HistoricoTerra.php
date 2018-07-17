@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class HistoricoTerra extends Model
 {
     protected $fillable = [
-        'id_terra', 'id_insumo', 'id_funcionario', 'quantidade'
+        'id_terra', 'id_insumo', 'id_funcionario', 'quantidade', 'data'
     ];
     protected $table = 'historico_terra';
 

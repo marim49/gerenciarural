@@ -16,7 +16,7 @@
 			</div>
 			@endif
 		</div>
-	</div>
+	</div> 
 	<!--/Cabeçalho pagina-->
 
 	<!--Conteudo da pagina-->

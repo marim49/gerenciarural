@@ -169,10 +169,13 @@
                             <a href="{{ url('compra-combustivel/create') }}"> Combustível</a>
                         </li>
                         <li>
-                            <a href="{{ url('entrada/farmacia') }}"> Farmácia</a>
+                            <a href="{{ url('compra-medicamento/create') }}"> Farmácia</a>
                         </li>
                         <li>
-                            <a href="{{ url('entrada/terra') }}"> Terra </a>
+                            <a href="{{ url('plantio/create') }}"> Terra </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('compra-insumo/create') }}"> Insumo </a>
                         </li>
                     </ul>
                 </li>
@@ -188,10 +191,7 @@
                             <a href="{{ url('abastecimento/create') }}"> Combustível</a>
                         </li>
                         <li>
-                            <a href="{{ url('saida/farmacia') }}"> Farmácia</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('saida/terra') }}"> Terra </a>
+                            <a href="{{ url('medicacao/create') }}"> Farmácia</a>
                         </li>
                     </ul>
 
@@ -275,7 +275,11 @@
     <script src="{{ asset('js/imprimir/imprimir.js') }}"></script>
     <script src="{{ asset('js/notificacao/sweet_alert.min.js') }}"></script>
     <script src="{{ asset('js/select/EntradaCombustivel.js') }}"></script>
+    <script src="{{ asset('js/select/EntradaMedicamento.js') }}"></script>
+    <script src="{{ asset('js/select/EntradaTerra.js') }}"></script>
+    <script src="{{ asset('js/select/EntradaInsumo.js') }}"></script>
     <script src="{{ asset('js/select/SaidaCombustivel.js') }}"></script>
+    <script src="{{ asset('js/select/SaidaMedicamento.js') }}"></script>
 </footer>
 
 </html>
