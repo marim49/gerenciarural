@@ -17,6 +17,7 @@ class CreateHistoricoCompraCombustivelTable extends Migration
             $table->increments('id');
             $table->integer('id_combustivel')->unsigned(); 
             $table->integer('id_funcionario')->unsigned(); 
+            $table->integer('id_fornecedor')->unsigned(); 
             $table->date('data');            
             $table->string('lote', 45);  
             $table->string('quantidade', 45); 
@@ -24,6 +25,7 @@ class CreateHistoricoCompraCombustivelTable extends Migration
             $table->float('valor');        
             $table->foreign('id_combustivel')->references('id')->on('combustivel');
             $table->foreign('id_funcionario')->references('id')->on('funcionario');
+            $table->foreign('id_fornecedor')->references('id')->on('fornecedor');
             $table->timestamps();
         });
     }

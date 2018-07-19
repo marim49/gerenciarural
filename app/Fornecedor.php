@@ -19,4 +19,8 @@ class Fornecedor extends Model
     {
         return $this->hasMany(\App\Models\Animal\HistoricoCompraMedicamento::class, 'id_fornecedor');
     }
+    public function HistoricoCompraCombustiveis()
+    {
+        return $this->hasMany(\App\Models\Maquina\HistoricoCompraCombustivel::class, 'id_fornecedor');
+    }
 }

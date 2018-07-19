@@ -18,7 +18,7 @@ class TerraController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna as terras)
+    //Método GET (retorna as terras) : OK
     public function index()
     {
         try
@@ -27,23 +27,15 @@ class TerraController extends Controller
             $limit = 20;
             
             $terras = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->with('Fazenda')
+                ->get();/*->paginate($limit); //limite por páginas */
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
             return view('pesquisa.pterra', ['terras' => $terras]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pterra', ['terras' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     

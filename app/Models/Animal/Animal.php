@@ -23,4 +23,12 @@ class Animal extends Model
     {
         return $this->hasMany(HistoricoAnimal::class, 'id_animal');
     }
+
+    //Atributos    
+    public function getnascimentoAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d/m/Y');
+    }
+    public function getentradaAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d/m/Y');
+    }
 }

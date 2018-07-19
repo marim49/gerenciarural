@@ -19,17 +19,15 @@ class FazendaController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna as fazendas)
+    //Método GET (retorna as fazendas) : OK
     public function index()
     {
         try
-        {            
+        {    
+            //limites por página 
+            $limit = 20;       
             $fazendas = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })->get();
+                ->get();/*->paginate($limit); //limite por páginas */
 
             return view('pesquisa.pfazenda', ['fazendas' => $fazendas]);
             
@@ -37,7 +35,7 @@ class FazendaController extends Controller
         catch(\Exception $e) 
         {
             return view('pesquisa.pfazenda', ['fazendas' => []])
-                            ->withErrors($this->Error('Não foi recuperar os registros.',$e));
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
 

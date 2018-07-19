@@ -10,7 +10,7 @@ class HistoricoCompraInsumoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Insumo', 'Funcionario'
+        'Insumo', 'Funcionario', 'Fornecedor'
     ];
     
     public function __construct(\App\Models\Insumo\HistoricoCompraInsumo $model)
@@ -69,7 +69,7 @@ class HistoricoCompraInsumoController extends Controller
     {
         
         $compra = $request->only('id_insumo', 'id_funcionario', 'data', 'lote', 'quantidade',
-                                 'nota_fiscal', 'valor');
+                                 'nota_fiscal', 'valor', 'id_fornecedor');
         //Validação
         $validator = $this->Validator($compra);
         if ($validator->fails()) {
@@ -199,6 +199,7 @@ class HistoricoCompraInsumoController extends Controller
         $messages = array(
             'id_insumo.required'=>'O campo de insumo é obrigatório',
             'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+            'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
             'data.required'=>'O campo de data é obrigatório',
             'data.date'=>'O campo de data está em formato inválio',
             'lote.required'=>'O campo de lote é obrigatório',
@@ -215,6 +216,7 @@ class HistoricoCompraInsumoController extends Controller
         $rules = array(
             'id_insumo'=>'required',
             'id_funcionario'=>'required',
+            'id_fornecedor'=>'required',
             'data'=>'required|date',
             'lote'=>'required|max:45',
             'quantidade'=>'required|numeric',

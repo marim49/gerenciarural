@@ -19,4 +19,9 @@ class Maquina extends Model
     {
         return $this->hasMany(HistoricoAbastecimento::class, 'id_maquina');
     }
+
+    //Atributos    
+    public function getdataaquisicaoAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d/m/Y');
+    }
 }

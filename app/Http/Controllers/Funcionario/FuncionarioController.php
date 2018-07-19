@@ -20,7 +20,7 @@ class FuncionarioController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna os funcionários)
+    //Método GET (retorna os funcionários) : OK
     public function index()
     {
         try
@@ -29,22 +29,15 @@ class FuncionarioController extends Controller
             $limit = 20;
             
             $funcionarios = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->with('Fazenda')
+                ->get();/*->paginate($limit); //limite por páginas */
 
             return view('pesquisa.pfuncionario', ['funcionarios' => $funcionarios]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pfuncionario', ['funcionarios' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     } 
 
@@ -104,11 +97,13 @@ class FuncionarioController extends Controller
     {
         try
         {
-            $funcionario = $this->model->find($id)->get();
+            $funcionario = $this->model
+                                    ->with('Fazenda', 'EstadoCivil')
+                                    ->find($id);
 
             //retornar view
-            return view('rfuncionario', ['funcionarios' => $funcionario]);
-           // return response()->json($funcionario);
+           return response()->json($funcionario);
+            return view('show.funcionario', ['funcionario' => $funcionario]);
         }
         catch(\Exception $e)
         {
@@ -116,8 +111,7 @@ class FuncionarioController extends Controller
             return response()->json([
                 'status' => 'ERROR', 
                 'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-            
+            ]);         
 
         }
     }   

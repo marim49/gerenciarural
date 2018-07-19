@@ -10,7 +10,7 @@ class HistoricoCompraCombustivelController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Combustivel', 'Funcionario'
+        'Combustivel', 'Funcionario', 'Fornecedor'
     ];
     
     public function __construct(\App\Models\Maquina\HistoricoCompraCombustivel $model)
@@ -68,7 +68,7 @@ class HistoricoCompraCombustivelController extends Controller
     public function store(Request $request)
     {
         $compra = $request->only('id_combustivel', 'id_funcionario', 'data', 'lote', 'quantidade',
-                                 'nota_fiscal', 'valor');
+                                 'nota_fiscal', 'valor', 'id_fornecedor');
         //Validação
         $validator = $this->Validator($compra);
         if ($validator->fails()) {
@@ -197,6 +197,7 @@ class HistoricoCompraCombustivelController extends Controller
     protected function Validator($requisicao){        
         $messages = array(
             'id_combustivel.required'=>'O campo de combustível é obrigatório',
+            'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
             'id_funcionario.required'=>'O campo de funcionário é obrigatório',
             'data.required'=>'O campo de data é obrigatório',
             'data.date'=>'O campo de data está em formato inválio',
@@ -213,6 +214,7 @@ class HistoricoCompraCombustivelController extends Controller
         );    
         $rules = array(
             'id_combustivel'=>'required',
+            'id_fornecedor'=>'required',
             'id_funcionario'=>'required',
             'data'=>'required|date',
             'lote'=>'required|max:45',

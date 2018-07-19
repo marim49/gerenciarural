@@ -10,7 +10,7 @@ class HistoricoCompraMedicamentoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Medicamento', 'Funcionario'
+        'Medicamento', 'Funcionario', 'Fornecedor'
     ];
     
     public function __construct(\App\Models\Animal\HistoricoCompraMedicamento $model)
@@ -68,7 +68,7 @@ class HistoricoCompraMedicamentoController extends Controller
     public function store(Request $request)
     {
         $compra = $request->only('id_medicamento', 'id_funcionario', 'data', 'lote', 'quantidade',
-                                 'nota_fiscal', 'valor');
+                                 'nota_fiscal', 'valor', 'id_fornecedor');
         //Validação
         $validator = $this->Validator($compra);
         if ($validator->fails()) {
@@ -198,6 +198,7 @@ class HistoricoCompraMedicamentoController extends Controller
         $messages = array(
             'id_medicamento.required'=>'O campo de medicamento é obrigatório',
             'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+            'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
             'data.required'=>'O campo de data é obrigatório',
             'data.date'=>'O campo de data está em formato inválio',
             'lote.required'=>'O campo de lote é obrigatório',
@@ -213,6 +214,7 @@ class HistoricoCompraMedicamentoController extends Controller
         );    
         $rules = array(
             'id_medicamento'=>'required',
+            'id_fornecedor'=>'required',
             'id_funcionario'=>'required',
             'data'=>'required|date',
             'lote'=>'required|max:45',

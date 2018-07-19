@@ -147,6 +147,10 @@
                                 Farmácia</a>
                         </li>
                         <li>
+                            <a href="{{ url('combustivel')}}">
+                                Combustíveis</a>
+                        </li>
+                        <li>
                             <a href="{{ url('maquina')}}">
                                 Máquinas</a>
                         </li>

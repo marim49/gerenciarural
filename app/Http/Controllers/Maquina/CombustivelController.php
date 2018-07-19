@@ -10,7 +10,7 @@ class CombustivelController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'TipoCombustivel', 'HistoricoAbastecimentos', 'Compras'
+        'HistoricoAbastecimentos', 'HistoricosCompras', 'Fazenda'
     ];
     
     public function __construct(\App\Models\Maquina\Combustivel $model)
@@ -18,7 +18,7 @@ class CombustivelController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna os combustiveis)
+    //Método GET (retorna os combustiveis) : OK
     public function index()
     {
         try
@@ -27,27 +27,19 @@ class CombustivelController extends Controller
             $limit = 20;
             
             $combustiveis = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->with('Fazenda')
+                ->get();/*->paginate($limit); //limite por páginas */
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($combustiveis);
+            return view('pesquisa.pcombustivel', ['combustiveis' => $combustiveis]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pcombustivel', ['combustiveis' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }    
     
-    //Método GET (chama a view de criação) : OK
+    //Método GET (chama a view de criação) 
     public function create()
     {
         try
@@ -64,7 +56,7 @@ class CombustivelController extends Controller
         }
     }
     
-    //Método POST (salva o combustivel) : OK
+    //Método POST (salva o combustivel) 
     public function store(Request $request)
     {        
         $combustivel = $request->only('id_fazenda', 'id_tipo_combustivel');

@@ -18,7 +18,7 @@ class MedicamentoController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna os medicamentos)
+    //Método GET (retorna os medicamentos) : OK
     public function index()
     {
         try
@@ -27,23 +27,15 @@ class MedicamentoController extends Controller
             $limit = 20;
             
             $medicamentos = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
-
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($medicamentos);
+                ->with('Fazenda', 'TipoMedicamento')
+                ->get();/*->paginate($limit); //limite por páginas */
+                
+            return view('pesquisa.pfarmacia', ['medicamentos' => $medicamentos]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pfarmacia', ['medicamentos' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     
