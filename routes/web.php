@@ -34,14 +34,6 @@ Route::group(['middleware' => 'auth'], function()
     */
     Route::resource('terra', 'Insumo\TerraController')/*->middleware('auth')*/;
 
-    /* ROTA: CELEIRO
-    * celeiro => POST(store), GET(index) 
-    * celeiro/create => GET(create) 
-    * celeiro/{id} => GET(show), PUT(update), DELETE(destroy)
-    * celeiro/{id}/edit => GET(edit)
-    */
-    Route::resource('celeiro', 'Insumo\CeleiroController')/*->middleware('auth')*/;
-
     /* ROTA: FUNCIONARIO
     * funcionario => POST(store), GET(index) 
     * funcionario/create => GET(create) 
@@ -50,6 +42,15 @@ Route::group(['middleware' => 'auth'], function()
     */
     Route::resource('funcionario', 'Funcionario\FuncionarioController')/*->middleware('auth')*/;
 
+ 
+    /* ROTA: FUNCIONARIO
+    * funcionario => POST(store), GET(index) 
+    * funcionario/create => GET(create) 
+    * funcionario/{id} => GET(show), PUT(update), DELETE(destroy)
+    * funcionario/{id}/edit => GET(edit)
+    */
+    Route::resource('fornecedor', 'FornecedorController')/*->middleware('auth')*/;
+   
     /* ROTA: INSUMO
     * insumo => POST(store), GET(index) 
     * insumo/create => GET(create) 
@@ -65,6 +66,14 @@ Route::group(['middleware' => 'auth'], function()
     * tipoinsumo/{id}/edit => GET(edit)
     */
     Route::resource('tipoinsumo', 'Insumo\TipoInsumoController')/*->middleware('auth')*/;
+
+    /* ROTA: GRUPO ANIMAL
+    * grupoanimal => POST(store), GET(index) 
+    * grupoanimal/create => GET(create) 
+    * grupoanimal/{id} => GET(show), PUT(update), DELETE(destroy)
+    * grupoanimal/{id}/edit => GET(edit)
+    */
+    Route::resource('grupoanimal', 'Animal\GrupoAnimalController')/*->middleware('auth')*/;
 
     /* ROTA: TIPO MEDICAMENTO
     * tipomedicamento => POST(store), GET(index) 
@@ -145,14 +154,4 @@ Route::group(['middleware' => 'auth'], function()
     * combustivel/{id}/edit => GET(edit)
     */
     Route::resource('combustivel', 'Maquina\CombustivelController')/*->middleware('auth')*/;
-
-    /* ROTA: TIPO COMBUSTÍVEL
-    * tipocombustivel => POST(store), GET(index) 
-    * tipocombustivel/create => GET(create) 
-    * tipocombustivel/{id} => GET(show), PUT(update), DELETE(destroy)
-    * tipocombustivel/{id}/edit => GET(edit)
-    */
-    Route::resource('tipocombustivel', 'Maquina\TipoCombustivelController')/*->middleware('auth')*/;
-
-
 });

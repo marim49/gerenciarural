@@ -10,7 +10,7 @@ class InsumoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Celeiro', 'TipoInsumo', 'HistoricoTerras', 'HistoricoCompraInsumo'
+        'TipoInsumo', 'HistoricoTerras', 'HistoricoCompraInsumo', 
     ];
     
     public function __construct(\App\Models\Insumo\Insumo $model)
@@ -53,14 +53,14 @@ class InsumoController extends Controller
     {
         try
         {
-            $celeiros = \App\Models\Insumo\Celeiro::orderBy('nome', 'asc')->get();            
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();            
             $tipos = \App\Models\Insumo\TipoInsumo::orderBy('nome', 'asc')->get();
         
-            return view('cadastro.cinsumo', ['celeiros' => $celeiros, 'tipos' => $tipos]);
+            return view('cadastro.cinsumo', ['fazendas' => $fazendas, 'tipos' => $tipos]);
         }         
         catch(\Exception $e) 
         {          
-            return view('cadastro.cinsumo', ['celeiros' => [], 'tipos'=> []])
+            return view('cadastro.cinsumo', ['fazendas' => [], 'tipos'=> []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -68,28 +68,31 @@ class InsumoController extends Controller
     // Método POST (salva o insumo) : OK
     public function store(Request $request)
     {
-        $insumo = $request->only('id_celeiro', 'id_tipo_insumo');
+        $insumo = $request->only('id_fazenda', 'id_tipo_insumo', 'nome');
         //Validação
         $validator = $this->Validator($insumo);
         if ($validator->fails()) {
-            return redirect('insumo/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
         //Inserção no banco
         try 
         {
-            $celeiros = \App\Models\Insumo\Celeiro::orderBy('nome', 'asc')->get();            
-            $tipos = \App\Models\Insumo\TipoInsumo::orderBy('nome', 'asc')->get();
             $success = $this->model->create($insumo);
 
-            return view('cadastro.cinsumo', ['success' => $success, 'celeiros' => $celeiros, 'tipos' => $tipos]);
+            return redirect()
+                            ->back()
+                            ->with('success',$success);  
+
         } 
         catch(\Exception $e) 
         {
-            return redirect('insumo/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput(['celeiros' => [], 'tipos' => []]);
+                            ->withInput();  
         }
     } 
 
@@ -181,13 +184,15 @@ class InsumoController extends Controller
     //Método de validação : OK
     protected function Validator($requisicao){        
         $messages = array(
-            'id_celeiro.required'=> 'O campo de celeiro é obrigatório',
-            'id_celeiro.unique_insumo'=> 'Já existe este tipo de insumo cadastrado neste celeiro',
-            'id_tipo_insumo.required'=> 'O campo de tipo de insumo',            
+            'id_fazenda.required'=> 'O campo de fazenda é obrigatório',
+            'id_tipo_insumo.required'=> 'O campo de tipo de insumo',
+            'nome.required' => 'O campo nome é obrigatório'           ,
+            'nome.max' => 'O tamanho máximo do campo nome é 45 caracteres'
         );    
         $rules = array(
-            'id_celeiro'=>'required|unique_insumo',
+            'id_fazenda'=>'required',
             'id_tipo_insumo'=>'required',
+            'nome'=>'required|max:45'
         );
     
         return Validator::make($requisicao, $rules,$messages);        

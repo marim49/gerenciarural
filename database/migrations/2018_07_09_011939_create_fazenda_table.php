@@ -16,16 +16,7 @@ class CreateFazendaTable extends Migration
         Schema::create('fazenda', function (Blueprint $table) {
             $table->increments('id'); 
             $table->string('nome', 100);            
-            $table->string('telefone', 16);  
-            $table->string('end_cep', 9);  
-            $table->string('end_cidade', 45);             
-            $table->string('end_estado', 45);             
-            $table->string('end_pais', 45);
-            $table->string('end_bairro', 45); 
-            $table->string('end_rua', 50); 
-            $table->string('end_numero', 15); 
-            $table->string('end_complemento', 20)->nullable(); 
-            $table->string('endereco', 100)->nullable();  
+            $table->string('localidade', 45)->nullable();   
             $table->timestamps();
         });
     }

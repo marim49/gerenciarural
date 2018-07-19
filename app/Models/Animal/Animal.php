@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Models\Animal;
 
@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Animal extends Model
 {
     protected $fillable = [
-        'id_grupo_animal', 'nome', 'id_fazenda'
+        'id_grupo_animal', 'nome', 'id_fazenda', 'entrada', 'nascimento', 'nome_mae', 'nome_pai'
     ];
     protected $table = 'animal';
 

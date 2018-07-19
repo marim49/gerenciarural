@@ -11,7 +11,7 @@ class MaquinaController extends Controller
     protected $model;
     protected $relationships = [
         'Fazenda', 'HistoricoAbastecimentos'
-    ];
+    ]; 
     
     public function __construct(\App\Models\Maquina\Maquina $model)
     {
@@ -70,23 +70,26 @@ class MaquinaController extends Controller
         //Validação
         $validator = $this->Validator($maquina);
         if ($validator->fails()) {
-            return redirect('maquina/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
-        //Inserção no banco        
+        //Cadastro       
         try 
         {
-            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
             $success = $this->model->create($maquina);
 
-            return view('cadastro.cmaquina', ['success' => $success, 'fazendas' => $fazendas]);
+            return redirect()
+                            ->back()
+                            ->with('success',$success);  
         } 
         catch(\Exception $e) 
         {
-            return redirect('maquina/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput(['fazendas' => []]);
+                            ->withInput();  
         }
     } 
 
@@ -179,7 +182,7 @@ class MaquinaController extends Controller
     protected function Validator($requisicao){        
         $messages = array(
             'id_fazenda' => 'O campo de fazenda é obrigatório',
-            'nome.required'=> 'O campo de identificação do animal é obrigatório',
+            'nome.required'=> 'O campo nome é obrigatório',
             'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
             'data_aquisicao.required'=>'O campo de data de aquisição é obrigatório',
         );    
