@@ -41,20 +41,20 @@
                 </button>
 
 
-                <a class="navbar-brand" href="../../index.php">
+                <a class="navbar-brand" href="{{ url('/') }}">
 
-                    <img src="{{ asset('img/admdeterras2.png') }}" width="50%" />
+                    <img src="{{ asset('img/tec-title.svg') }}" width="20%" />
                 </a>
 
             </div>
 
-        <div class="right-div">
-            <a href="{{ route('logout') }}" onclick="event.preventDefault();
+            <div class="right-div">
+                <a href="{{ route('logout') }}" onclick="event.preventDefault();
             document.getElementById('logout-form').submit();" class="btn btn-primary pull-right">{{ __('Logout') }}</a>
-            
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </div>
         </div>
     </div>
@@ -74,8 +74,6 @@
                     </a>
                 </li>
 
-
-
                 <li>
 
                     <a href="#cadastrar" data-toggle="collapse">
@@ -91,10 +89,10 @@
                             <a href="{{ url('terra/create') }}"> Terra</a>
                         </li>
                         <li>
-                            <a href="{{ url('celeiro/create') }}"> Celeiro</a>
+                            <a href="{{ url('funcionario/create') }}"> Funcionários</a>
                         </li>
                         <li>
-                            <a href="{{ url('funcionario/create') }}"> Funcionários</a>
+                            <a href="{{ url('fornecedor/create') }}"> Fornecedores</a>
                         </li>
                         <li>
                             <a href="{{ url('animal/create') }}">
@@ -105,24 +103,8 @@
                                 Insumos</a>
                         </li>
                         <li role="presentation">
-                            <a href="{{ url('tipoinsumo/create') }}">
-                                Tipo de insumo</a>
-                        </li>
-                        <li role="presentation">
                             <a href="{{ url('medicamento/create') }}">
                                 Medicamentos</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{ url('tipomedicamento/create') }}">
-                                Tipo de medicamento</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{ url('tipocombustivel/create') }}">
-                                Tipo de Combustivel</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{ url('combustivel/create') }}">
-                                Combustivel</a>
                         </li>
                         <li role="presentation">
                             <a href="{{ url('maquina/create') }}">
@@ -131,6 +113,7 @@
                     </ul>
 
                 </li>
+
                 <li>
                     <a href="#pesquisar" data-toggle="collapse">
                         <i class="glyphicon glyphicon-search"></i>
@@ -145,10 +128,10 @@
                             <a href="{{ url('terra')}}">Terra</a>
                         </li>
                         <li>
-                            <a href="{{ url('celeiro')}}">Celeiro</a>
+                            <a href="{{ url('funcionario')}}"> Funcionários</a>
                         </li>
                         <li>
-                            <a href="{{ url('funcionario')}}"> Funcionários</a>
+                            <a href="{{ url('fornecedor')}}"> Fornecedor</a>
                         </li>
                         <li>
                             <a href="{{ url('animal')}}">
@@ -170,6 +153,7 @@
                     </ul>
 
                 </li>
+
                 <li>
 
                     <a href="#entrada" data-toggle="collapse">
@@ -192,6 +176,7 @@
                         </li>
                     </ul>
                 </li>
+
                 <li>
 
                     <a href="#saida" data-toggle="collapse">
@@ -209,6 +194,7 @@
                     </ul>
 
                 </li>
+
                 <li>
                     <a href="#relatorios" data-toggle="collapse">
                         <i class="icon-book"></i>
@@ -217,44 +203,56 @@
                     </a>
                     <ul class="collapse list-unstyled" id="relatorios">
 
-                        <!-- <a href="#pageSubmenu" data-toggle="collapse">Pages<i class="fa fa-angle-down"></i></a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li><a href="#">Page 1</a></li>
-                            <li><a href="#">Page 2</a></li>
-                            <li><a href="#">Page 3</a></li>
-                        </ul> -->
+                        <li>
+                            <a href="{{ url('terra')}}">Terras</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('funcionario')}}"> Combustível</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('animal')}}">
+                                Animais</a>
+                        </li>
 
+                        <li>
+                            <a href="{{ url('insumo')}}">
+                                Insumos</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('farmacia')}}">
+                                Medicamentos</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('maquina')}}">
+                                Máquinas</a>
+                        </li>
+                    </ul>
+                </li>
 
-
-                </li>
                 <li>
-                    <a href="{{ url('terra')}}">Terras</a>
+                    <a href="#configuracoes" data-toggle="collapse">
+                        <i class="icon-wrench"></i>
+                        Configurações
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="collapse list-unstyled" id="configuracoes">
+                        <li>
+                            <a href="{{ url('grupoanimal/create')}}">Grupo de Animais</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('tipoinsumo/create')}}"> Tipo de Insumos</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('tipomedicamento/create')}}">
+                                Tipo de Medicamentos</a>
+                        </li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="{{ url('funcionario')}}"> Combustível</a>
-                </li>
-                <li>
-                    <a href="{{ url('animal')}}">
-                        Animais</a>
-                </li>
-
-                <li>
-                    <a href="{{ url('insumo')}}">
-                        Insumos</a>
-                </li>
-                <li>
-                    <a href="{{ url('farmacia')}}">
-                        Medicamentos</a>
-                </li>
-                <li>
-                    <a href="{{ url('maquina')}}">
-                        Máquinas</a>
-                </li>
-                </ul>
 
                 </li>
             </ul>
-
+            </li>
+            </ul>
         </nav>
         @yield('content')
 </body>

@@ -64,30 +64,33 @@ class MedicamentoController extends Controller
         }
     }
 
-    // Método POST (salva o medicamento) : OK    
+    // Método POST (salva o medicamento) : OK     
     public function store(Request $request)
     {        
         $medicamento = $request->only('id_fazenda', 'nome', 'id_tipo_medicamento', 'obs');
         //Validação
         $validator = $this->Validator($medicamento);
         if ($validator->fails()) {
-            return redirect('medicamento/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
+        //Cadastro
         try 
         {
-            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
-            $tipos = \App\Models\Animal\TipoMedicamento::orderBy('nome', 'asc')->get();
-            $success = $this->model->create($medicamento);
+            $success = $this->model->create($medicamento);            
 
-            return view('cadastro.cfarmacia', ['fazendas' => $fazendas, 'tipos' => $tipos, 'success' => $success]);
+            return redirect()
+                            ->back()
+                            ->with('success',$success);  
         } 
         catch(\Exception $e) 
         {        
-            return redirect('farmacia/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput(['fazendas' => [], 'tipos' => [], 'success' => []]);
+                            ->withInput(); 
         }
     } 
 

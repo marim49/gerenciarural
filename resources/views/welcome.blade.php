@@ -54,7 +54,7 @@
         }
 
         .navbar-custom {
-            background: linear-gradient(white, transparent);
+            background: linear-gradient(white 30%, transparent);
             color: #ffffff;
             padding: 40px;
         }

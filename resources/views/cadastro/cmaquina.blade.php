@@ -5,7 +5,7 @@
 		<div class="col-md-12">
 			<div class="row pad-botm">
 				<h3 class="header-line">Cadastrar Máquinas</h3>
-				@if (isset($success))
+				@if (session()->has('success'))
 					<div class="alert alert-success alert-dismissible">
 						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 						<strong>Cadastrado!</strong> A máquina foi armazenada.
@@ -38,12 +38,16 @@
 									<div class="row">
 										<div class="col-md-8">
 										<div class="form-group">
-                                            <label>Fazenda:</label>
+                                            <label>Fazenda: *</label>
                                             <select class="form-control" name="id_fazenda">
-												@foreach($fazendas as $fazenda)
-													<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
-												@endforeach
-                                            </select>
+											@foreach($fazendas as $fazenda)
+												@if (old('id_fazenda') == $fazenda->id)
+												<option value="{{$fazenda->id}}" selected>{{$fazenda->nome}}</option>
+												@else
+												<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
+												@endif
+											@endforeach
+											</select>
                                         </div>
 										</div>
 									</div>
@@ -51,8 +55,8 @@
 									<div class="row">
 										<div class="col-md-5">
 											<div class="form-group">
-												<label>Nome do máquina:</label>
-												<input class="form-control" name="nome" type="text" placeholder="" />
+												<label>Nome: *</label>
+												<input class="form-control" name="nome" type="text" placeholder="Nome da máquina" maxlength="45" value="{{ old('nome')}}"/>
 											</div>
 										</div>
 									</div>
@@ -60,8 +64,8 @@
 									<div class="row">
 										<div class="col-md-3">
 											<div class="form-group">
-												<label>Data de Compra:</label>
-												<input class="form-control" name="data_aquisicao" type="date" placeholder="DD/MM/AAAA" />
+												<label>Data de Compra: *</label>
+												<input class="form-control" name="data_aquisicao" type="date" placeholder="DD/MM/AAAA" value="{{ old('data_aquisicao')}}"/>
 											</div>
 										</div>
 									</div>

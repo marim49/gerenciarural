@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Maquina;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class TipoCombustivelController extends Controller
+class FornecedorController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Combustiveis'
+        'HistoricoCompraInsumos', 'HistoricoCompraMedicamentos'
     ];
     
-    public function __construct(\App\Models\Maquina\TipoCombustivel $model)
+    public function __construct(\App\Fornecedor $model)
     {
         $this->model = $model;
     }
 
-    //Método GET (retorna os tipo de combustiveis)
+    //Método GET (retorna os fornecedores)
     public function index()
     {
         try
@@ -26,7 +26,7 @@ class TipoCombustivelController extends Controller
             //resultados por página
             $limit = 20;
             
-            $tipos_combustivel = $this->model->orderBy('id', 'asc')
+            $fornecedores = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
                 ->where(function($query){
                     return $query
@@ -35,7 +35,8 @@ class TipoCombustivelController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($tipos_combustivel);
+            return view('pesquisa.pfornecedor', ['fornecedores' => $fornecedores]);
+            
         }
         catch(\Exception $e) 
         {
@@ -46,48 +47,54 @@ class TipoCombustivelController extends Controller
             ]);
         }
     }
-    
+
     //Método GET (chama a view de criação) : OK
     public function create()
     {
-        return view('cadastro.ctcombustivel');
+        return view('cadastro.cfornecedor');        
     }
     
-    //Método POST (salva o tipo de combustível) : OK    
+    // Método POST (salva o fornecedor) : OK
     public function store(Request $request)
-    {                
-        $tipocombustivel = $request->only('nome');
+    {  
+        $fazenda = $request->only(
+            'nome', 'telefone');
         //Validação
-        $validator = $this->Validator($tipocombustivel);
+        $validator = $this->Validator($fazenda);
         if ($validator->fails()) {
-            return redirect('tipocombustivel/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
-        //Inserção no banco        
+        //Cadastro
         try 
         {
-            $success = $this->model->create($tipocombustivel);
-            
-            return view('cadastro.ctcombustivel', ['success' => $success]);
+            $success = $this->model->create($fazenda);
+
+            return redirect()
+                            ->back()
+                            ->with('success',$success);      
         } 
         catch(\Exception $e) 
-        {                           
-            return redirect('tipocombustivel/create')
-                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e));
+        {   
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput();        
         }
     } 
 
-    //Método GET (retorna um tipo de combustivel específico)
+    //Método GET (retorna um fornecedor específica)
     public function show($id)
     {
         try
         {
-            $tipo_combustivel = $this->model->with($this->relationships())
+            $fornecedor = $this->model->with($this->relationships())
                                 ->findOrFail($id);       
 
             //retornar view
-            return response()->json($tipo_combustivel);
+            return response()->json($fornecedor);
         }
         catch(\Exception $e)
         {
@@ -102,21 +109,21 @@ class TipoCombustivelController extends Controller
     //Método GET (retorna a view de edição)
     public function edit($id){}
 
-    //Método PUT (atualiza um tipo de combustivel)
+    //Método PUT (atualiza um fornecedor)
     public function update(Request $request, $id)
     {
         //tratar entrada
         try
         {
-            $update_tipo_combustivel = $this->model->findOrFail($id);            
+            $update_fornecedor = $this->model->findOrFail($id);            
             $dados = $request->all();
 
-            $update_tipo_combustivel->update($dados);
+            $update_fornecedor->update($dados);
             
             //retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $update_tipo_combustivel
+                'item' => $update_fornecedor
             ]);
         }
         catch(\Exception $e) 
@@ -129,7 +136,7 @@ class TipoCombustivelController extends Controller
         }
     }
 
-    //Método DELETE (deleta um tipo de combustivel específico)
+    //Método DELETE (deleta uma fornecedor específica)
     public function destroy($id)
     {
         try 
@@ -161,20 +168,23 @@ class TipoCombustivelController extends Controller
         }
 
         return [];
-    }    
-
+    }
+       
     //Método de validação : OK
     protected function Validator($requisicao){        
         $messages = array(
             'nome.required'=> 'O campo nome é obrigatório',
-            'nome.max'=>'O tamanho máximo do campo nome é 45 caracteres',);    
+            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+            'telefone.required'=> 'O campo telefone é obrigatório',
+            'telefone.max'=> 'O tamanho máximo do campo telefone é 45 caracteres',
+        );    
         $rules = array(
-            'nome'=>'required|max:45',
+            'nome'=>'required|max:100',
+            'telefone'=>'required|max:45',
         );
     
         return Validator::make($requisicao, $rules,$messages);        
     }
-
     //Método de retorno de erro : OK
     protected function Error($message, \Exception $e){
         return [

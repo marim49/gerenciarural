@@ -1,145 +1,111 @@
-
-
-@extends('layouts.layout')
-
-@section('content')
+@extends('layouts.layout') @section('content')
 <div class="container">
-		<div class="row pad-botm">
-			<div class="col-md-12">
-				<h3 class="header-line">Pesquisar Fazenda</h3>
+	<div class="row pad-botm">
+		<div class="col-md-12">
+			<h3 class="header-line">Pesquisar Fazenda</h3>
+			@if (session()->has('success'))
+			<div class="alert alert-success alert-dismissible">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Atualizado!</strong> A fazenda foi atualizada.
 			</div>
+			@endif
+			@if ($errors->any())
+			<div class="alert alert-warning alert-dismissible">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Ops!</strong> {{$errors->first()}}.
+			</div>
+			@endif
 		</div>
+	</div>
 
-		<div class="row">
-			<div class="col-md-12">
-				<!-- Advanced Tables -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						Buscar por Fazendas
+	<div class="row">
+		<div class="col-md-12">
+			<!-- Advanced Tables -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Buscar por Fazendas
+				</div>
+				<div class="panel-body">
+
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+							<thead>
+								<tr>
+									<th>Nome</th>
+									<th>Localidade</th>
+									<th>Editar</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach ($fazendas as $fazenda)
+								<tr class='gradeA'>
+									<td> {{$fazenda->nome}} </td>
+									@if($fazenda->localidade)
+									<td> {{$fazenda->localidade}} </td>
+									@else
+									<td> - </td>
+									@endif
+									<td>
+										<a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_update{{$fazenda->id}}'>
+											<span class='icon-pencil7'></span>
+										</a>
+									</td>
+								</tr>
+								@endforeach
+
+							</tbody>
+						</table>
 					</div>
-					<div class="panel-body">
+					<a onclick="imprimir()" class="btn btn-primary pull-left">Imprimir</a>
+				</div>
 
-						<div class="table-responsive">
-                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                    <thead>
-                                        <tr>
-                                            <th>Nome</th>
-											<th> </th>
-											<th> </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-									@foreach ($fazendas as $fazenda)
-                                        <tr class='gradeA'>
-													<td> {{$fazenda->nome}} </td>
-													<td><a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_vertical$escrever[id_func]'><span class='icon-pencil7'></span> </a>
-													</td>
-													<td><a href='../../db/fazendas/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
-													</tr>
-													@endforeach	
-											
-                                    </tbody>
-                                </table>
-								</div>
-								<a onclick="imprimir()" class="btn btn-primary pull-left">Imprimir</a>
+
+
+			</div>
+			<!-- Modal de Editar Dados -->
+			@foreach ($fazendas as $fazenda)
+			<div id='modal_form_update{{$fazenda->id}}' class='modal fade'>
+				<div class='modal-dialog'>
+					<div class='modal-content'>
+						<div class='modal-header'>
+							<button type='button' class='close' data-dismiss='modal'>&times;</button>
+							<h5 class='modal-title'>Editar Fazenda </h5>
 						</div>
-								
-							
-							
-						</div>
-						@foreach ($fazendas as $fazenda)
-							<div id='modal_form_vertical{{$fazenda->id_animal}}' class='modal fade'>
-								<div class='modal-dialog'>
-									<div class='modal-content'>
-										<div class='modal-header'>
-											<button type='button' class='close' data-dismiss='modal'>&times;</button>
-											<h5 class='modal-title'>Editar Funcionário </h5>
+
+						<form name='update-fazenda' action="{{ route('fazenda.update', $fazenda->id) }}" method='POST'>
+							{{ csrf_field() }} {{ method_field('PUT') }}
+							<div class='panel-body'>
+								<div class='row'>
+									<div class='col-md-4'>
+
+										<div class='form-group'>
+											<label>Nome:</label>
+											<input class='form-control' name='nome' type='text' value='{{$fazenda->nome}}' />
 										</div>
-										<form name='register-animal' action='../../controller/editar/animais/animais.php?id=$escrever[id_animal]' method='post'>
-											<div class='panel-body'>
-												<div class='row'>
-													<div class='col-md-4'>
+										<div class='form-group'>
+											<label>Localidade:</label>
+											<input class='form-control' name='localidade' type='text' value='{{$fazenda->localidade}}' />
+										</div>
 
-														<div class='form-group'>
-															<label>Identificão do Animal:</label>
-															<input class='form-control' name='nome_animal' type='text' placeholder='' />
-														</div>
-														<div class='form-group'>
-															<label>Número de registro:</label>
-															<input class='form-control' name='numero_registro' type='text' placeholder='' />
-														</div>
-														<div class='form-group'>
-															<label>Peso:</label>
-															<input class='form-control' name='peso' type='text' placeholder='Em arrobas' />
-														</div>
-														<div class='form-group'>
-															<label>Tratamento realizado:</label>
-															<input class='form-control' name='tratamento_feito' type='text' placeholder='' />
-														</div>
-														<div class='form-group'>
-															<label>Histórico:</label>
-															<input class='form-control' name='historico' type='text' placeholder='' />
-														</div>
-
-
-													</div>
-													<div class='col-md-4'>
-
-														<div class='form-group'>
-															<label>Pai:</label>
-															<input class='form-control' name='pai_animal' type='text' placeholder='' />
-
-														</div>
-														<div class='form-group'>
-															<label>Data de Nascimento:</label>
-															<input class='form-control' name='data_nasc_animal' type='date' placeholder='DD/MM/AAAA' />
-														</div>
-														<div class='form-group'>
-															<label>Medicamentos Utilizados:</label>
-															<input class='form-control' name='medicamento_usados' type='text' placeholder='' />
-														</div>
-
-
-													</div>
-													<div class='col-md-4'>
-
-														<div class='form-group'>
-															<label>Mãe:</label>
-															<input class='form-control' name='mae_animal' type='text' placeholder='' />
-														</div>
-														<div class='form-group'>
-															<label>Data de Chegada:</label>
-															<input class='form-control' name='data_chegada' type='date' placeholder='DD/MM/AAAA' />
-														</div>
-
-														<div class='form-group'>
-															<label>Foto do animal:</label>
-															<div class='form-group'>
-																<input type='file' />
-															</div>
-														</div>
-
-
-													</div>
-												</div>
-											</div>
-											<div class='modal-footer'>
-												<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>
-												<button type='submit' class='btn btn-primary'>Editar</button>
-											</div>
-										</form>
 									</div>
 								</div>
 							</div>
-							@endforeach	
+							<div class='modal-footer'>
+								<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>
+								<button type='submit' class='btn btn-primary'>Editar</button>
+							</div>
+						</form>
 					</div>
-
 				</div>
 			</div>
-			<!--End Advanced Tables -->
+			@endforeach
 		</div>
+
 	</div>
-	</div>
+</div>
+<!--End Advanced Tables -->
+</div>
+</div>
+</div>
 
 @endsection
-

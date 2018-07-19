@@ -17,7 +17,7 @@ class CreateTerraTable extends Migration
             $table->increments('id');
             $table->integer('id_fazenda')->unsigned();        
             $table->string('nome', 45);  
-            $table->string('area', 45); 
+            $table->string('area', 45)->nullable(); 
             $table->foreign('id_fazenda')->references('id')->on('fazenda');
             $table->timestamps();
         });

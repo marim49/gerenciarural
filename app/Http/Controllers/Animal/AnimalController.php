@@ -67,11 +67,13 @@ class AnimalController extends Controller
     // Método POST (salva o animal) : OK     
     public function store(Request $request)
     {
-        $animal = $request->only('nome', 'id_grupo_animal', 'id_fazenda');
+        $animal = $request->only('nome', 'id_grupo_animal', 'id_fazenda', 'entrada', 'nascimento',
+                                 'nome_mae', 'nome_pai');
         //Validação
         $validator = $this->Validator($animal);
         if ($validator->fails()) {
-            return redirect('animal/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
@@ -79,16 +81,17 @@ class AnimalController extends Controller
         try 
         {
             $success = $this->model->create($animal);
-            $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
-            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
 
-            return view('cadastro.canimal', ['success' => $success, 'grupos' => $grupos, 'fazendas' => $fazendas]);
+            return redirect()
+                            ->back()
+                            ->with('success',$success);  
         } 
         catch(\Exception $e) 
         {          
-            return redirect('animal/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput(['grupos' => [], 'fazendas' => []]);
+                            ->withInput(); 
         }
     }
 
@@ -181,13 +184,23 @@ class AnimalController extends Controller
     protected function Validator($requisicao){        
         $messages = array(
             'nome.required'=> 'O campo de identificação do animal é obrigatório',
-            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+            'nome.max'=> 'O tamanho máximo do campo de identificação do animal é 45 caracteres',
+            'nome.unique'=> 'Já existe um animal com essa identificação cadastrado',
+            'nome_mae.max'=> 'O tamanho máximo do campo de identificação da mãe é 45 caracteres',
+            'nome_pai.max'=> 'O tamanho máximo do campo de identificação do pai é 45 caracteres',
+            'entrada.required'=> 'O campo de entrada é obrigatório',
+            'entrada.date'=> 'O campo de entrada tem que ser do tipo data',
+            'nascimento.date'=> 'O campo de nascimento não contém uma data válida',
             'id_grupo_animal.required'=>'O campo de grupo do animal é obrigatório',
             'id_fazenda.required' => 'O campo de fazenda é obrigatório'
         );    
         $rules = array(
             'id_fazenda' => 'required',
-            'nome'=>'required|max:45',
+            'nome'=>'required|max:45|unique:animal',
+            'nome_mae'=>'max:45',
+            'nome_pai'=>'max:45',
+            'nascimento'=>'date',
+            'entrada'=>'required|date',
             'id_grupo_animal'=>'required',
         );
     
