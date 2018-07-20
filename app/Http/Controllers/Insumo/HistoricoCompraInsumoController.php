@@ -10,7 +10,7 @@ class HistoricoCompraInsumoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Insumo', 'Funcionario'
+        'Insumo.TipoInsumo', 'Funcionario'
     ];
     
     public function __construct(\App\Models\Insumo\HistoricoCompraInsumo $model)
@@ -18,6 +18,7 @@ class HistoricoCompraInsumoController extends Controller
         $this->model = $model;
     }
 
+// ahm, to fazendo é historico compra insumo ok ?
     //Método GET (retorna os historicos de insumos)
     public function index()
     {
@@ -28,14 +29,11 @@ class HistoricoCompraInsumoController extends Controller
             
             $historicos_compra_insumo = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($historicos_compra_insumo);
+            //return response()->json($historicos_compra_insumo);
+            return view('relatorio.rcompra-insumo', ['historicos_compra_insumo' => $historicos_compra_insumo]);
         }
         catch(\Exception $e) 
         {

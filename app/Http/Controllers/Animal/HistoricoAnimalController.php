@@ -35,7 +35,7 @@ class HistoricoAnimalController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($historicos_animais);
+            return view('relatorio.raplicacao', ['historicos_animais' => $historicos_animais]);
         }
         catch(\Exception $e) 
         {

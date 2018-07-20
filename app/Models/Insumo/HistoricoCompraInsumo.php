@@ -18,6 +18,6 @@ class HistoricoCompraInsumo extends Model
     }
     public function Funcionario()
     {
-        return $this->belongsTo(App\Models\Funcionario\Funcionario::class, 'id_funcionario');
+        return $this->belongsTo(\App\Models\Funcionario\Funcionario::class, 'id_funcionario');
     }
 }

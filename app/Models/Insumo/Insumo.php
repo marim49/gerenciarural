@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models\Insumo;
-
 use Illuminate\Database\Eloquent\Model;
 
 class Insumo extends Model

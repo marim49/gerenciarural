@@ -35,7 +35,8 @@ class HistoricoAbastecimentoController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($historicos_abastecimento);
+            //return response()->json($historicos_abastecimento);
+            return view('relatorio.rabastecimento', ['historicos_abastecimento' => $historicos_abastecimento]);
         }
         catch(\Exception $e) 
         {
