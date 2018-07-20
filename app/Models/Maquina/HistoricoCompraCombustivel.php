@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class HistoricoCompraCombustivel extends Model
 {
     protected $fillable = [
-        'id_combustivel', 'id_funcionario', 'data', 'lote', 'quantidade',
+        'id_fazenda', 'id_funcionario', 'data', 'lote', 'quantidade',
         'nota_fiscal', 'valor', 'id_fornecedor'
     ];
     protected $table = 'historico_compra_combustivel';

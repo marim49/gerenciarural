@@ -173,9 +173,6 @@
                             <a href="{{ url('compra-medicamento/create') }}"> Farmácia</a>
                         </li>
                         <li>
-                            <a href="{{ url('plantio/create') }}"> Terra </a>
-                        </li>
-                        <li>
                             <a href="{{ url('compra-insumo/create') }}"> Insumo </a>
                         </li>
                     </ul>
@@ -194,6 +191,9 @@
                         </li>
                         <li>
                             <a href="{{ url('medicacao/create') }}"> Farmácia</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('plantio/create') }}"> Insumo </a>
                         </li>
                     </ul>
 
