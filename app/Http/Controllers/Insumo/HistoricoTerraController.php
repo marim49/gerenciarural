@@ -52,14 +52,14 @@ class HistoricoTerraController extends Controller
     {
         try
         {            
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Terras', 'Celeiro.Insumos.TipoInsumo', 'Funcionarios')
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Terras', 'Insumos.TipoInsumo', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
-            return view('entrada.eterra', ['fazendas' => $fazendas]);
+            return view('saida.sinsumo', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('entrada.eterra', ['fazendas' => []])
+            return view('saida.sinsumo', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }    
@@ -72,7 +72,8 @@ class HistoricoTerraController extends Controller
         //Validação
         $validator = $this->Validator($plantio);
         if ($validator->fails()) {
-            return redirect('plantio/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         } 
@@ -94,18 +95,19 @@ class HistoricoTerraController extends Controller
                 }
             }
             else{
-                throw new \Exception('Não foi possível encontrar o combustível no banco de dados');
-            }             
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Terras', 'Celeiro.Insumos.TipoInsumo', 'Funcionarios')
-                                                    ->orderBy('nome', 'asc')->get();
-
-            return view('entrada.eterra', ['success' => $success, 'fazendas' => $fazendas]);
+                throw new \Exception('Não foi possível encontrar o insumo no banco de dados');
+            }  
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$success);
         } 
         catch(\Exception $e) 
         {                      
-            return redirect('plantio/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput();
+                            ->withInput(); 
         }
     } 
 

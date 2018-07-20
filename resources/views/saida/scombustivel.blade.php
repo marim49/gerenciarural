@@ -70,7 +70,7 @@
 
 										<div class="form-group">
 											<label>Data de Abastecimento: *</label>
-											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA"value="{{ old('data')}}" />
+											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
 										</div>
 
 									</div>

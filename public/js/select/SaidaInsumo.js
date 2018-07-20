@@ -1,9 +1,9 @@
-function EntradaTerra() {
+function SaidaInsumo() {
     fazenda = JSON.parse($("#fazendas").val());
 
     terras = fazenda.terras;
     funcionarios = fazenda.funcionarios;
-    insumos = fazenda.celeiro.insumos;
+    insumos = fazenda.insumos;
 
     var selectTerra = document.getElementById("terra");
     var selectInsumo = document.getElementById("insumo");

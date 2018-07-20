@@ -19,7 +19,7 @@ class HistoricoAnimalController extends Controller
     }
 
     //Método GET (retorna o histórico de animais)
-    public function index()
+    public function index() 
     {
         try
         {
@@ -72,7 +72,8 @@ class HistoricoAnimalController extends Controller
         //Validação
         $validator = $this->Validator($medicacao);
         if ($validator->fails()) {
-            return redirect('medicacao/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
@@ -96,17 +97,18 @@ class HistoricoAnimalController extends Controller
             }
             else{
                 throw new \Exception('Não foi possível encontrar o medicamento no banco de dados');
-            }            
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Animais.GrupoAnimal', 'Medicamentos.TipoMedicamento', 'Funcionarios')
-                                                    ->orderBy('nome', 'asc')->get();
-
-            return view('saida.sfarmacia', ['success' => $success, 'fazendas' => $fazendas]);
+            }
+           
+            return redirect()
+                            ->back()
+                            ->with('success',$success);
         } 
         catch(\Exception $e) 
-        {                      
-            return redirect('medicacao/create')
+        {                         
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput();
+                            ->withInput(); 
         }
     } 
 
