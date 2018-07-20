@@ -18,7 +18,7 @@ class AnimalController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna os animais)
+    //Método GET (retorna os animais) : OK
     public function index()
     {
         try
@@ -27,23 +27,15 @@ class AnimalController extends Controller
             $limit = 20;
             
             $animais = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->with('GrupoAnimal', 'Fazenda')
+                ->get();/*->paginate($limit); //limite por páginas */
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
             return view('pesquisa.panimal', ['animais' => $animais]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pfazenda', ['animais' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     

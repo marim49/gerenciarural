@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Combustivel extends Model
 {
     protected $fillable = [
-        'id_fazenda', 'id_tipo_combustivel', 'quantidade',
+        'id_fazenda', 'quantidade',
     ];
     protected $table = 'combustivel';
 
-    public function TipoCombustivel()
+    public function Fazenda()
     {
-        return $this->belongsTo(TipoCombustivel::class, 'id_tipo_combustivel');
+        return $this->belongsTo(\App\Models\Fazenda\Fazenda::class, 'id_fazenda');
     }
     public function HistoricoAbastecimentos()
     {
         return $this->hasMany(HistoricoAbastecimento::class, 'id_combustivel');
     }
-    public function Compras()
+    public function HistoricosCompras()
     {
         return $this->hasMany(HistoricoCompraCombustivel::class, 'id_combustivel');
     }

@@ -18,7 +18,7 @@ class MaquinaController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna as máquinas)
+    //Método GET (retorna as máquinas) : OK
     public function index()
     {
         try
@@ -27,23 +27,15 @@ class MaquinaController extends Controller
             $limit = 20;
             
             $maquinas = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->with('Fazenda')
+                ->get();/*->paginate($limit); //limite por páginas */
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
             return view('pesquisa.pmaquina', ['maquinas' => $maquinas]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pmaquina', ['maquinas' => []])
+                            ->withErrors($this->Error('Não foi recuperar os registros.',$e));
         }
     }
     
@@ -61,7 +53,7 @@ class MaquinaController extends Controller
             return view('cadastro.cmaquina', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
-    }
+    } 
 
     // Método POST (salva o animal) : OK 
     public function store(Request $request)

@@ -8,8 +8,7 @@
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Atualizado!</strong> A fazenda foi atualizada.
 			</div>
-			@endif
-			@if ($errors->any())
+			@endif @if ($errors->any())
 			<div class="alert alert-warning alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Ops!</strong> {{$errors->first()}}.
@@ -43,12 +42,16 @@
 									@if($fazenda->localidade)
 									<td> {{$fazenda->localidade}} </td>
 									@else
-									<td> - </td>
+									<td>
+										<center>-</center>
+									</td>
 									@endif
 									<td>
-										<a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_update{{$fazenda->id}}'>
-											<span class='icon-pencil7'></span>
-										</a>
+										<center>
+											<a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_update{{$fazenda->id}}'>
+												<span class='icon-pencil7 alert-warning'></span>
+											</a>
+										</center>
 									</td>
 								</tr>
 								@endforeach
@@ -56,7 +59,6 @@
 							</tbody>
 						</table>
 					</div>
-					<a onclick="imprimir()" class="btn btn-primary pull-left">Imprimir</a>
 				</div>
 
 

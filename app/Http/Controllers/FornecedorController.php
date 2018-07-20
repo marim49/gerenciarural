@@ -10,7 +10,7 @@ class FornecedorController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'HistoricoCompraInsumos', 'HistoricoCompraMedicamentos'
+        'HistoricoCompraInsumos', 'HistoricoCompraMedicamentos', 'HistoricoCompraCombustiveis'
     ];
     
     public function __construct(\App\Fornecedor $model)
@@ -18,7 +18,7 @@ class FornecedorController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna os fornecedores)
+    //Método GET (retorna os fornecedores) : OK
     public function index()
     {
         try
@@ -27,24 +27,15 @@ class FornecedorController extends Controller
             $limit = 20;
             
             $fornecedores = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                    ->get();/*->paginate($limit); //limite por páginas */
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
             return view('pesquisa.pfornecedor', ['fornecedores' => $fornecedores]);
             
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pfornecedor', ['fornecedores' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
 

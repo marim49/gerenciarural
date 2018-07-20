@@ -10,7 +10,7 @@ class InsumoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'TipoInsumo', 'HistoricoTerras', 'HistoricoCompraInsumo', 
+        'TipoInsumo', 'HistoricoTerras', 'HistoricoCompraInsumo', 'Fazenda'
     ];
     
     public function __construct(\App\Models\Insumo\Insumo $model)
@@ -27,24 +27,16 @@ class InsumoController extends Controller
             $limit = 20;
             
             $insumos = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->with('TipoInsumo', 'Fazenda')
+                ->get();/*->paginate($limit); //limite por páginas */
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
             return view('pesquisa.pinsumo', ['insumos' => $insumos]);
         
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pinsumo', ['insumos' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     

@@ -10,7 +10,7 @@ class HistoricoCompraCombustivelController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Combustivel', 'Funcionario'
+        'Combustivel', 'Funcionario', 'Fornecedor'
     ];
     
     public function __construct(\App\Models\Maquina\HistoricoCompraCombustivel $model)
@@ -53,14 +53,15 @@ class HistoricoCompraCombustivelController extends Controller
     {
         try
         {            
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
+            $fornecedores = \App\Fornecedor::orderBy('nome', 'asc')->get();
 
-            return view('entrada.ecombustivel', ['fazendas' => $fazendas]);
+            return view('entrada.ecombustivel', ['fazendas' => $fazendas, 'fornecedores' => $fornecedores]);
         }         
         catch(\Exception $e) 
         {          
-            return view('entrada.ecombustivel', ['fazendas' => []])
+            return view('entrada.ecombustivel', ['fazendas' => [], 'fornecedores' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     }
@@ -68,44 +69,48 @@ class HistoricoCompraCombustivelController extends Controller
     //Método POST (salva uma compra de combustivel) : OK
     public function store(Request $request)
     {
-        $compra = $request->only('id_combustivel', 'id_funcionario', 'data', 'lote', 'quantidade',
-                                 'nota_fiscal', 'valor');
+        $compra = $request->only('id_fazenda', 'id_funcionario', 'data', 'lote', 'quantidade',
+                                 'nota_fiscal', 'valor', 'id_fornecedor');
         //Validação
         $validator = $this->Validator($compra);
         if ($validator->fails()) {
-            return redirect('compra-combustivel/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
         //Inserção no banco
         try 
         {          
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
+               
+            //Busca o combustivel                                                    
+            $combustivel = \App\Models\Maquina\Combustivel::where('id_fazenda',$compra['id_fazenda'])->first();
             
-            $combustivel = \App\Models\Maquina\Combustivel::find($compra['id_combustivel']);
+            //Se não achar cria o campo
+            if(!$combustivel){
+                $combustivel = \App\Models\Maquina\Combustivel::create(['id_fazenda' => $compra['id_fazenda']]);
+            }
 
-            
-            if($combustivel){
-                if($compra['quantidade'] <= 0){
-                    throw new \Exception('A quantidade não pode ser negativa ou igual a 0');                    
-                }
-                else{
-                    $combustivel->increment('quantidade', $compra['quantidade']);
-                    $success = $this->model->create($compra);
-                }
+            if($compra['quantidade'] <= 0){
+                throw new \Exception('A quantidade não pode ser negativa ou igual a 0');                    
             }
             else{
-                throw new \Exception('Não foi possível encontrar o combustível no banco de dados');
+                $combustivel->increment('quantidade', $compra['quantidade']);
+                $success = $this->model->create($compra);
             }
-
-            return view('entrada.ecombustivel', ['success' => $success, 'fazendas' => $fazendas]);
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$success);
         } 
         catch(\Exception $e) 
         {                      
-            return redirect('compra-combustivel/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput();
+                            ->withInput(); 
         }
     } 
 
@@ -197,7 +202,8 @@ class HistoricoCompraCombustivelController extends Controller
     //Método de validação : OK
     protected function Validator($requisicao){        
         $messages = array(
-            'id_combustivel.required'=>'O campo de combustível é obrigatório',
+            'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
+            'id_fazenda.required'=>'O campo de fazenda é obrigatório',
             'id_funcionario.required'=>'O campo de funcionário é obrigatório',
             'data.required'=>'O campo de data é obrigatório',
             'data.date'=>'O campo de data está em formato inválio',
@@ -208,17 +214,19 @@ class HistoricoCompraCombustivelController extends Controller
             'quantidade.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
             'nota_fiscal.required'=>'O campo de nota fiscal é obrigatório',
             'nota_fiscal.max'=>'O campo de nota fiscal só pode ter no máximo 45 caracteres',
+            'nota_fiscal.unique'=>'Já existe uma nota fiscal cadastrada com esse número',
             'valor.required'=>'O campo de valor é obrigatório',
             'valor.max'=>'O campo de valor só pode ter no máximo 45 caracteres',
             'valor.numeric'=>'O campo valor só pode ter entradas numéricas',
         );    
         $rules = array(
-            'id_combustivel'=>'required',
+            'id_fornecedor'=>'required',
+            'id_fazenda'=>'required',
             'id_funcionario'=>'required',
             'data'=>'required|date',
             'lote'=>'required|max:45',
             'quantidade'=>'required|numeric',
-            'nota_fiscal'=>'required|max:45',
+            'nota_fiscal'=>'required|max:45|unique:historico_compra_combustivel',
             'valor'=>'required|numeric',
         );
     

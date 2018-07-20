@@ -68,7 +68,7 @@ class HistoricoAbastecimentoController extends Controller
     //Método POST (salva o histórico do combustível) : OK
     public function store(Request $request)
     {
-        $abastecimento = $request->only('id_maquina', 'id_combustivel', 'id_funcionario', 'quantidade',
+        $abastecimento = $request->only('id_maquina', 'id_fazenda', 'id_funcionario', 'quantidade',
                                         'data');
         //Validação
         $validator = $this->Validator($abastecimento);

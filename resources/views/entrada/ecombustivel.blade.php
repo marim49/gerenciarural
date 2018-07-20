@@ -1,10 +1,10 @@
  @extends('layouts.layout') @section('content')
 <div class="container ">
 	<!--Cabeçalho pagina-->
-	<div class="col-md-12"> 
+	<div class="col-md-12">
 		<div class="row pad-botm">
 			<h3 class="header-line">Entrada de combustível</h3>
-			@if (isset($success))
+			@if (session()->has('success'))
 			<div class="alert alert-success alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Registrado!</strong> A entrada de combustível foi registrada no histórico.
@@ -37,17 +37,11 @@
 
 										<div class="form-group">
 											<label>Fazenda:</label>
-											<select type="hidden" id="fazendas" class="form-control" onchange="EntradaCombustivel()">
-												<option value="" selected>- Selecione Fazenda -</option>
+											<select id="fazendas" name="id_fazenda" class="form-control" onchange="EntradaCombustivel()">
+												<option value="" selected>- Selecione a Fazenda -</option>
 												@foreach($fazendas as $fazenda)
-												<option value="{{$fazenda}}">{{$fazenda->nome}}</option>
+													<option data-id="{{$fazenda}}" value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
 												@endforeach
-											</select>
-										</div>
-
-										<div class="form-group">
-											<label>Combustível:</label>
-											<select id="combustivel" class="form-control" name="id_combustivel">
 											</select>
 										</div>
 
@@ -58,28 +52,42 @@
 										</div>
 
 										<div class="form-group">
-											<label>Quantidade a abastecer:</label>
-											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" />
+											<label>Fornecedor:</label>												
+											<select name="id_fornecedor" class="form-control">									
+												<option value="" selected>- Selecione o Fornecedor -</option>
+												@foreach($fornecedores as $fornecedor)
+													@if (old('id_fornecedor') == $fornecedor->id)
+													<option value="{{$fornecedor->id}}" selected>{{$fornecedor->nome}}</option>
+													@else
+													<option value="{{$fornecedor->id}}">{{$fornecedor->nome}}</option>
+													@endif
+												@endforeach
+											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Data de Abastecimento:</label>
-											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" />
+											<label>Quantidade:</label>
+											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" value="{{ old('quantidade')}}"/>
+										</div>
+
+										<div class="form-group">
+											<label>Data da compra:</label>
+											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
 										</div>
 
 										<div class="form-group">
 											<label>Lote:</label>
-											<input class="form-control" name="lote" placeholder="Lote de compra" />
+											<input class="form-control" name="lote" placeholder="Lote de compra" maxlength="45" value="{{ old('lote')}}"/>
 										</div>
 
 										<div class="form-group">
 											<label>Nota fiscal:</label>
-											<input class="form-control" name="nota_fiscal" placeholder="Nota fiscal da compra" />
+											<input class="form-control" name="nota_fiscal" placeholder="Nota fiscal da compra" maxlength="45" value="{{ old('nota_fiscal')}}"/>
 										</div>
 
 										<div class="form-group">
 											<label>Valor:</label>
-											<input class="form-control" name="valor" type="numeric" placeholder="Valor da compra" />
+											<input class="form-control" name="valor" type="numeric" placeholder="Valor da compra" value="{{ old('valor')}}"/>
 										</div>
 
 									</div>

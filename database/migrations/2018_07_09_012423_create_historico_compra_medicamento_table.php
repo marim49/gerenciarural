@@ -17,6 +17,7 @@ class CreateHistoricoCompraMedicamentoTable extends Migration
             $table->increments('id');
             $table->integer('id_medicamento')->unsigned(); 
             $table->integer('id_funcionario')->unsigned(); 
+            $table->integer('id_fornecedor')->unsigned(); 
             $table->date('data');            
             $table->string('lote', 45);  
             $table->string('quantidade', 45); 
@@ -24,6 +25,7 @@ class CreateHistoricoCompraMedicamentoTable extends Migration
             $table->float('valor');        
             $table->foreign('id_medicamento')->references('id')->on('medicamento');
             $table->foreign('id_funcionario')->references('id')->on('funcionario');
+            $table->foreign('id_fornecedor')->references('id')->on('fornecedor');
             $table->timestamps();   
         });
     }
