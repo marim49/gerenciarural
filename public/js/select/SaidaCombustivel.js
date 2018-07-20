@@ -40,7 +40,7 @@ function SaidaCombustivel() {
     if (!$.isEmptyObject(combustiveis)) {
         for (var i in combustiveis) {
             var el = document.createElement("option");
-            el.textContent = combustiveis[i].tipo_combustivel.nome + " | Estoque: " + combustiveis[i].quantidade + " litro(s)";
+            el.textContent = "Diesel | Estoque: " + combustiveis[i].quantidade + " litro(s)";
             el.value = combustiveis[i].id;
             selectCombustivel.appendChild(el);
         }

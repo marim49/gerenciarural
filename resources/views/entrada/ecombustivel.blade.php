@@ -36,7 +36,7 @@
 									<div class="col-md-8">
 
 										<div class="form-group">
-											<label>Fazenda:</label>
+											<label>Fazenda: *</label>
 											<select id="fazendas" name="id_fazenda" class="form-control" onchange="EntradaCombustivel()">
 												<option value="" selected>- Selecione a Fazenda -</option>
 												@foreach($fazendas as $fazenda)
@@ -46,13 +46,13 @@
 										</div>
 
 										<div class="form-group">
-											<label>Funcionário:</label>
+											<label>Funcionário: *</label>
 											<select id="funcionario" class="form-control" name="id_funcionario">
 											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Fornecedor:</label>												
+											<label>Fornecedor: *</label>												
 											<select name="id_fornecedor" class="form-control">									
 												<option value="" selected>- Selecione o Fornecedor -</option>
 												@foreach($fornecedores as $fornecedor)
@@ -66,27 +66,27 @@
 										</div>
 
 										<div class="form-group">
-											<label>Quantidade:</label>
+											<label>Quantidade: *</label>
 											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" value="{{ old('quantidade')}}"/>
 										</div>
 
 										<div class="form-group">
-											<label>Data da compra:</label>
+											<label>Data da compra: *</label>
 											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
 										</div>
 
 										<div class="form-group">
-											<label>Lote:</label>
+											<label>Lote: *</label>
 											<input class="form-control" name="lote" placeholder="Lote de compra" maxlength="45" value="{{ old('lote')}}"/>
 										</div>
 
 										<div class="form-group">
-											<label>Nota fiscal:</label>
+											<label>Nota fiscal: *</label>
 											<input class="form-control" name="nota_fiscal" placeholder="Nota fiscal da compra" maxlength="45" value="{{ old('nota_fiscal')}}"/>
 										</div>
 
 										<div class="form-group">
-											<label>Valor:</label>
+											<label>Valor: *</label>
 											<input class="form-control" name="valor" type="numeric" placeholder="Valor da compra" value="{{ old('valor')}}"/>
 										</div>
 
