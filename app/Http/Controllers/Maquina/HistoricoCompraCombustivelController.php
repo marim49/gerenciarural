@@ -35,7 +35,8 @@ class HistoricoCompraCombustivelController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($historicos_compra_combustivel);
+            //return response()->json($historicos_compra_combustivel);
+            return view('relatorio.rcompra-combustivel', ['historicos_compra_combustivel' => $historicos_compra_combustivel]);
         }
         catch(\Exception $e) 
         {

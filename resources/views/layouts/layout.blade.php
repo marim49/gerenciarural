@@ -208,53 +208,33 @@
                     <ul class="collapse list-unstyled" id="relatorios">
 
                         <li>
-                            <a href="{{ url('terra')}}">Terras</a>
+                            <a href="{{ url('abastecimento')}}">Relatório de Abastecimento</a>
                         </li>
                         <li>
-                            <a href="{{ url('funcionario')}}"> Combustível</a>
+                            <a href="{{ url('medicacao')}}">Relatório de Medicação</a>
                         </li>
                         <li>
-                            <a href="{{ url('animal')}}">
-                                Animais</a>
+                            <a href="{{ url('compra-combustivel')}}">
+                                Relatório de Compra de Combustível</a>
                         </li>
 
                         <li>
-                            <a href="{{ url('insumo')}}">
-                                Insumos</a>
+                            <a href="{{ url('compra-insumo')}}">
+                                Relatório de Compra de Insumo</a>
                         </li>
                         <li>
-                            <a href="{{ url('farmacia')}}">
-                                Medicamentos</a>
+                            <a href="{{ url('compra-medicamento')}}">
+                                Relatório de Compra de Medicamento</a>
                         </li>
                         <li>
-                            <a href="{{ url('maquina')}}">
-                                Máquinas</a>
+                            <a href="{{ url('plantio')}}">
+                                Relatório de Plantio</a>
                         </li>
                     </ul>
                 </li>
 
-                <li>
-                    <a href="#configuracoes" data-toggle="collapse">
-                        <i class="icon-wrench"></i>
-                        Configurações
-                        <i class="fa fa-angle-down"></i>
-                    </a>
-                    <ul class="collapse list-unstyled" id="configuracoes">
-                        <li>
-                            <a href="{{ url('grupoanimal/create')}}">Grupo de Animais</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('tipoinsumo/create')}}"> Tipo de Insumos</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('tipomedicamento/create')}}">
-                                Tipo de Medicamentos</a>
-                        </li>
-                    </ul>
-                </li>
-
-                </li>
             </ul>
+
             </li>
             </ul>
         </nav>

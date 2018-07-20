@@ -10,7 +10,7 @@ class HistoricoTerraController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Insumo', 'Terra', 'Funcionario'
+        'Insumo.TipoInsumo', 'Terra', 'Funcionario'
     ];
     
     public function __construct(\App\Models\Insumo\HistoricoTerra $model)
@@ -26,16 +26,14 @@ class HistoricoTerraController extends Controller
             //resultados por página
             $limit = 20;
             
-            $historicos_terra = $this->model->orderBy('id', 'asc')
+            $historicos_terra = $this->model
+            //nessa parte aqui, vc mandou buscar, ele retorna as relações
                 ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->orderBy('id', 'asc')
+                ->get();
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($historicos_terra);
+            return view('relatorio.rplantio', ['historicos_terra' => $historicos_terra]);
         }
         catch(\Exception $e) 
         {

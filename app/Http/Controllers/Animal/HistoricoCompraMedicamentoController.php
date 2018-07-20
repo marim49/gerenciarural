@@ -35,7 +35,7 @@ class HistoricoCompraMedicamentoController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($historicos_compra_medicamento);
+            return view('relatorio.rcompra-medicamento', ['historicos_compra_medicamento' => $historicos_compra_medicamento]);
         }
         catch(\Exception $e) 
         {
