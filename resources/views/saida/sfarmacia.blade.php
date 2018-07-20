@@ -4,7 +4,7 @@
 	<div class="col-md-12">
 		<div class="row pad-botm">
 			<h3 class="header-line">Retirada de Medicamento</h3>
-			@if (isset($success))
+			@if (session()->has('success'))
 			<div class="alert alert-success alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Registrado!</strong> A medicação foi registrada no histórico.
@@ -67,12 +67,12 @@
 
 										<div class="form-group">
 											<label>Quantidade aplicada ( ML ):</label>
-											<input class="form-control" type="text" name="quantidade" placeholder="Em Ml" />
+											<input class="form-control" type="text" name="quantidade" placeholder="Em Ml" value="{{ old('quantidade')}}"/>
 										</div>
 
 										<div class="form-group">
 											<label>Data de aplicação:</label>
-											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" />
+											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
 										</div>
 
 									</div>

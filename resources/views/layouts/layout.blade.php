@@ -271,10 +271,10 @@
     <script src="{{ asset('js/notificacao/sweet_alert.min.js') }}"></script>
     <script src="{{ asset('js/select/EntradaCombustivel.js') }}"></script>
     <script src="{{ asset('js/select/EntradaMedicamento.js') }}"></script>
-    <script src="{{ asset('js/select/EntradaTerra.js') }}"></script>
     <script src="{{ asset('js/select/EntradaInsumo.js') }}"></script>
     <script src="{{ asset('js/select/SaidaCombustivel.js') }}"></script>
     <script src="{{ asset('js/select/SaidaMedicamento.js') }}"></script>
+    <script src="{{ asset('js/select/SaidaInsumo.js') }}"></script>
 </footer>
 
 </html>

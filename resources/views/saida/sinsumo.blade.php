@@ -3,8 +3,8 @@
 	<!--Cabeçalho pagina-->
 	<div class="col-md-12">
 		<div class="row pad-botm">
-			<h3 class="header-line">Entrada Terra</h3>
-			@if (isset($success))
+			<h3 class="header-line">Saída de Insumo</h3>
+			@if (session()->has('success'))
 			<div class="alert alert-success alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Registrado!</strong> O uso do insumo foi registrada no histórico.
@@ -25,7 +25,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Entrada
+					Saída
 				</div>
 				<div class="panel-body">
 					<div class="row">
@@ -38,7 +38,7 @@
 
 										<div class="form-group">
 											<label>Fazenda:</label>
-											<select type="hidden" id="fazendas" class="form-control" onchange="EntradaTerra()">
+											<select type="hidden" id="fazendas" class="form-control" onchange="SaidaInsumo()">
 												<option value="" selected>- Selecione Fazenda -</option>
 												@foreach($fazendas as $fazenda)
 												<option value="{{$fazenda}}">{{$fazenda->nome}}</option>
@@ -66,12 +66,12 @@
 
 										<div class="form-group">
 											<label>Data:</label>
-											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" />
+											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
 										</div>
 
 										<div class="form-group">
 											<label>Quantidade:</label>
-											<input class="form-control" name="quantidade" type="text" />
+											<input class="form-control" name="quantidade" type="text" value="{{ old('quantidade')}}"/>
 										</div>
 										
 									</div>
