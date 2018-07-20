@@ -211,7 +211,7 @@
                             <a href="{{ url('abastecimento')}}">Relatório de Abastecimento</a>
                         </li>
                         <li>
-                            <a href="{{ url('funcionario')}}">Relatório de Aplicação</a>
+                            <a href="{{ url('medicacao')}}">Relatório de Medicação</a>
                         </li>
                         <li>
                             <a href="{{ url('compra-combustivel')}}">
