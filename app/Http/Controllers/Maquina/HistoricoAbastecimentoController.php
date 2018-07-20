@@ -52,7 +52,7 @@ class HistoricoAbastecimentoController extends Controller
     {
         try
         {            
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
 
             return view('saida.scombustivel', ['fazendas' => $fazendas]);
@@ -67,12 +67,13 @@ class HistoricoAbastecimentoController extends Controller
     //Método POST (salva o histórico do combustível) : OK
     public function store(Request $request)
     {
-        $abastecimento = $request->only('id_maquina', 'id_fazenda', 'id_funcionario', 'quantidade',
+        $abastecimento = $request->only('id_maquina', 'id_combustivel', 'id_funcionario', 'quantidade',
                                         'data');
         //Validação
         $validator = $this->Validator($abastecimento);
         if ($validator->fails()) {
-            return redirect('abastecimento/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
@@ -96,16 +97,17 @@ class HistoricoAbastecimentoController extends Controller
             else{
                 throw new \Exception('Não foi possível encontrar o combustível no banco de dados');
             }             
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis.TipoCombustivel', 'Funcionarios')
-                                                    ->orderBy('nome', 'asc')->get();
-
-            return view('saida.scombustivel', ['success' => $success, 'fazendas' => $fazendas]);
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$success);
         } 
         catch(\Exception $e) 
         {                      
-            return redirect('abastecimento/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput();
+                            ->withInput(); 
         }
     } 
 
