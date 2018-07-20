@@ -15,10 +15,11 @@ class CreateInsumoTable extends Migration
     {
         Schema::create('insumo', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_celeiro')->unsigned(); 
+            $table->integer('id_fazenda')->unsigned(); 
             $table->integer('id_tipo_insumo')->unsigned(); 
+            $table->string('nome', 45); 
             $table->integer('quantidade')->default(0);    
-            $table->foreign('id_celeiro')->references('id')->on('celeiro');
+            $table->foreign('id_fazenda')->references('id')->on('fazenda');
             $table->foreign('id_tipo_insumo')->references('id')->on('tipo_insumo');
             $table->timestamps();
         });

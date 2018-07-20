@@ -75,27 +75,27 @@ class FuncionarioController extends Controller
         //Validação
         $validator = $this->Validator($funcionario);
         if ($validator->fails()) {
-            return redirect('funcionario/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
+        //Cadastro
         try 
         {
-            $grupos = \App\Models\Funcionario\EstadoCivil::orderBy('nome', 'asc')->get();
-            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
 
             $success = $this->model->create($funcionario);
 
-            //Alterar para retornar view
-            return view('cadastro.cfuncionario', ['success' => $success, 'grupos' => $grupos, 'fazendas' => $fazendas]);
-
+            return redirect()
+                            ->back()
+                            ->with('success',$success); 
         } 
         catch(\Exception $e) 
         {
-            return redirect('funcionario/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput(['grupos' => [], 'fazendas' => []]);
-
+                            ->withInput(); 
         }
     } 
 

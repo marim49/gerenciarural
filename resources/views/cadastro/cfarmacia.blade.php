@@ -4,7 +4,7 @@
 		<div class="col-md-12">
 			<div class="row pad-botm">
 				<h3 class="header-line">Cadastrar Medicamentos</h3>
-				@if (isset($success))
+				@if (session()->has('success'))
 					<div class="alert alert-success alert-dismissible">
 						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 						<strong>Cadastrado!</strong> O medicamento foi armazenado.
@@ -36,11 +36,15 @@
 									<div class="row">
 										<div class="col-md-8">
 										<div class="form-group">
-                                            <label>Fazenda:</label>
+                                            <label>Fazenda: *</label>
                                             <select class="form-control" name="id_fazenda">
-												@foreach($fazendas as $fazenda)
-													<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
-												@endforeach
+											@foreach($fazendas as $fazenda)
+												@if (old('id_fazenda') == $fazenda->id)
+												<option value="{{$fazenda->id}}" selected>{{$fazenda->nome}}</option>
+												@else
+												<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
+												@endif
+											@endforeach
                                             </select>
                                         </div>
 										</div>
@@ -49,8 +53,8 @@
 									<div class="row">
 										<div class="col-md-8">
 											<div class="form-group">
-												<label>Nome do medicamento:</label>
-												<input class="form-control" name="nome" type="text" placeholder="" />
+												<label>Nome do medicamento: *</label>
+												<input class="form-control" name="nome" type="text" placeholder="" maxlength="45" value="{{ old('nome')}}"/>
 											</div>
 										</div>
 									</div>
@@ -58,10 +62,14 @@
 									<div class="row">
 										<div class="col-md-8">
 										<div class="form-group">
-                                            <label>Tipo de medicamento:</label>
+                                            <label>Tipo de medicamento: *</label>
                                             <select class="form-control" name="id_tipo_medicamento">
-												@foreach($tipos as $tipo)
+												@foreach($tipos as $tipo)													
+													@if (old('id_tipo_medicamento') == $tipo->id)
+													<option value="{{$tipo->id}}" selected>{{$tipo->nome}}</option>
+													@else
 													<option value="{{$tipo->id}}">{{$tipo->nome}}</option>
+													@endif
 												@endforeach
                                             </select>
                                         </div>
@@ -72,7 +80,7 @@
 										<div class="col-md-8">
 											<div class="form-group">
 												<label>Observações:</label>
-												<input class="form-control" name="obs" type="text" placeholder="" />
+												<input class="form-control" name="obs" type="text" placeholder="" maxlength="140" value="{{ old('obs')}}"/>
 											</div>
 										</div>
 									</div>

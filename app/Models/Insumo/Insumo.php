@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 class Insumo extends Model
 {
     protected $fillable = [
-        'id_celeiro', 'id_tipo_insumo', 'quantidade'
+        'id_fazenda', 'id_tipo_insumo', 'quantidade', 'nome'
     ];
     protected $table = 'insumo';
 
-    public function Celeiro()
+    public function Fazenda()
     {
-        return $this->belongsTo(Celeiro::class, 'id_celeiro');
+        return $this->belongsTo(Fazenda::class, 'id_fazenda');
     }
     public function TipoInsumo()
     {

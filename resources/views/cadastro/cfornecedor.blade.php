@@ -4,11 +4,11 @@
 <div class="container">
 	<div class="col-md-12">
 		<div class="row pad-botm">
-			<h3 class="header-line">Cadastrar Fazenda</h3>
+			<h3 class="header-line">Cadastrar Fornecedor</h3>
 			@if (session()->has('success'))
 			<div class="alert alert-success alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Cadastrada!</strong> A fazenda foi armazenada.
+				<strong>Cadastrado!</strong> O fornecedor foi armazenado.
 			</div>
 			@endif
 			@if ($errors->any())
@@ -24,10 +24,10 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Insira os dados para cadastrar uma fazenda:
+					Insira os dados para cadastrar um fornecedor:
 				</div>
 
-				<form name="register-fazenda" action="{{ route('fazenda.store')}}" method="post">
+				<form name="register-fornecedor" action="{{ route('fornecedor.store')}}" method="post">
 					{{ csrf_field() }}
 					<div class="panel-body">
 						<div class="row">
@@ -35,15 +35,15 @@
 
 								<div class="col-md-8">
 									<div class="form-group">
-										<label>Nome da fazenda: *</label>
-										<input class="form-control" type="text" name="nome" placeholder="Insira aqui o nome da sua fazenda" maxlength="100" value="{{ old('nome')}}"/>
+										<label>Nome: *</label>
+										<input class="form-control" type="text" name="nome" placeholder="Insira aqui o nome do fornecedor" maxlength="45" value="{{ old('nome')}}"/>
 									</div>
 								</div>
 
-								<div class="col-md-5">
+								<div class="col-md-8">
 									<div class="form-group">
-										<label>Localidade:</label>
-										<input class="form-control" type="text" name="localidade" placeholder="Insira aqui o local da sua fazenda" maxlength="45" value="{{ old('localidade')}}"/>
+										<label>Telefone: *</label>
+										<input class="form-control" type="text" name="telefone" placeholder="(__)____-____" maxlength="45" value="{{ old('telefone')}}"/>
 									</div>
 								</div>
 

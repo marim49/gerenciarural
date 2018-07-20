@@ -1,8 +1,6 @@
-
-
 @extends('layouts.layout')
-
 @section('content')
+
 <div class="container">
 		<div class="row pad-botm">
 			<div class="col-md-12">

@@ -70,24 +70,26 @@ class TerraController extends Controller
         //Validação
         $validator = $this->Validator($terra);
         if ($validator->fails()) {
-            return redirect('terra/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
         //Inserção no banco
         try 
         {
-            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
             $success = $this->model->create($terra);
 
-            return view('cadastro.cterra', ['success' => $success, 'fazendas' => $fazendas]);
+            return redirect()
+                            ->back()
+                            ->with('success',$success);      
         } 
         catch(\Exception $e) 
-        {
-            return redirect('terra/create')
+        {   
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput(['fazendas' => []]);
-        
+                            ->withInput();        
         }
     } 
 
@@ -182,13 +184,12 @@ class TerraController extends Controller
             'id_fazenda.required'=> 'O campo de identificação da fazenda é obrigatório',
             'nome.required'=> 'O campo nome é obrigatório',
             'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
-            'area.required'=>'O campo de área é obrigatório',
             'area.max'=> 'O tamanho máximo do campo área é 45 caracteres',
         );    
         $rules = array(
             'nome'=>'required|max:45',
             'id_fazenda'=>'required',
-            'area'=> 'required|max:45',
+            'area'=> 'max:45',
         );
     
         return Validator::make($requisicao, $rules,$messages);        

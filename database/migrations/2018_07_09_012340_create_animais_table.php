@@ -17,7 +17,11 @@ class CreateAnimaisTable extends Migration
             $table->increments('id');
             $table->integer('id_grupo_animal')->unsigned();
             $table->integer('id_fazenda')->unsigned();
-            $table->string('nome', 45);
+            $table->string('nome', 45)->unique();
+            $table->string('nome_mae', 45)->unique();
+            $table->string('nome_pai', 45);
+            $table->date('entrada');
+            $table->date('nascimento');
             $table->foreign('id_grupo_animal')->references('id')->on('grupo_animal');
             $table->foreign('id_fazenda')->references('id')->on('fazenda');
             $table->timestamps();

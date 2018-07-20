@@ -6,7 +6,7 @@
 <div class="container">
 		<div class="row pad-botm">
 			<div class="col-md-12">
-				<h3 class="header-line">Pesquisar Celeiro</h3>
+				<h3 class="header-line">Pesquisar Fornecedor</h3>
 			</div>
 		</div>
 
@@ -15,7 +15,7 @@
 				<!-- Advanced Tables -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Buscar por celeiro
+						Buscar por Fornecedor
 					</div>
 					<div class="panel-body">
 
@@ -24,20 +24,17 @@
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
-                                            <th>Fazenda pertencente</th>
 											<th> </th>
 											<th> </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-									@foreach ($celeiros as $celeiro)
+									@foreach ($fornecedores as $fornecedor)
                                         <tr class='gradeA'>
-													<td> {{$celeiro->nome}} </td>
-													<td> {{$celeiro->fazenda->nome}} </td>
-													
+													<td> {{$fornecedor->nome}} </td>
 													<td><a href='#modal_theme_danger' data-toggle='modal' data-target='#modal_form_vertical$escrever[id_func]'><span class='icon-pencil7'></span> </a>
 													</td>
-													<td><a href='../../db/celeiros/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
+													<td><a href='../../db/fazendas/deletar.php?id=$escrever[id_func]'><span class='icon-trash'></span> </a> </td>
 													</tr>
 													@endforeach	
 											
@@ -50,8 +47,8 @@
 							
 							
 						</div>
-						@foreach ($celeiros as $celeiro)
-							<div id='modal_form_vertical{{$celeiro->id}}' class='modal fade'>
+						@foreach ($fazendas as $fazenda)
+							<div id='modal_form_vertical{{$fazenda->id_animal}}' class='modal fade'>
 								<div class='modal-dialog'>
 									<div class='modal-content'>
 										<div class='modal-header'>

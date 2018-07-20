@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Fazenda extends Model
 {
     protected $fillable = [
-        'nome', 'telefone', 'end_cep',
-        'end_bairro', 'end_rua', 'end_numero', 'end_complemento',
-        'end_cidade', 'end_estado', 'end_pais', 'endereco'
+        'nome', 'localidade'
     ];
     protected $table = 'fazenda';
   
@@ -25,9 +23,9 @@ class Fazenda extends Model
     {
         return $this->hasMany(\App\Models\Funcionario\Funcionario::class, 'id_fazenda');
     }
-    public function Celeiro()
+    public function Insumos()
     {
-        return $this->hasOne(\App\Models\Insumo\Celeiro::class, 'id_fazenda');
+        return $this->hasMany(\App\Models\Insumo\Insumo::class, 'id_fazenda');
     }
     public function Terras()
     {
