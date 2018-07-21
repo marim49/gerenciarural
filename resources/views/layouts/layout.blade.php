@@ -208,27 +208,27 @@
                     <ul class="collapse list-unstyled" id="relatorios">
 
                         <li>
-                            <a href="{{ url('abastecimento')}}">Relatório de Abastecimento</a>
+                            <a href="{{ url('abastecimento')}}">Abastecimento</a>
                         </li>
                         <li>
-                            <a href="{{ url('medicacao')}}">Relatório de Medicação</a>
+                            <a href="{{ url('medicacao')}}">Medicação</a>
                         </li>
                         <li>
                             <a href="{{ url('compra-combustivel')}}">
-                                Relatório de Compra de Combustível</a>
+                                Compra de Combustível</a>
                         </li>
 
                         <li>
                             <a href="{{ url('compra-insumo')}}">
-                                Relatório de Compra de Insumo</a>
+                                Compra de Insumo</a>
                         </li>
                         <li>
                             <a href="{{ url('compra-medicamento')}}">
-                                Relatório de Compra de Medicamento</a>
+                                Compra de Medicamento</a>
                         </li>
                         <li>
                             <a href="{{ url('plantio')}}">
-                                Relatório de Plantio</a>
+                                Plantio</a>
                         </li>
                     </ul>
                 </li>

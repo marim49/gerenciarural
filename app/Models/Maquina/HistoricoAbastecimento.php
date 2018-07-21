@@ -23,4 +23,9 @@ class HistoricoAbastecimento extends Model
     {
         return $this->belongsTo(\App\Models\Funcionario\Funcionario::class, 'id_funcionario');
     }
+    
+    //Atributos
+    public function getdataAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d/m/Y');
+    }
 }

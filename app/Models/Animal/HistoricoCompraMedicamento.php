@@ -24,5 +24,10 @@ class HistoricoCompraMedicamento extends Model
     {
         return $this->belongsTo(\App\Fornecedor::class, 'id_fornecedor');
     }
+    
+    //Atributos
+    public function getdataAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d/m/Y');
+    }
 }
 
