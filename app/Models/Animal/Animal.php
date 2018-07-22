@@ -25,10 +25,10 @@ class Animal extends Model
     }
 
     //Atributos    
-    public function getnascimentoAttribute($value) {
-        return \Carbon\Carbon::parse($value)->format('d/m/Y');
-    }
-    public function getentradaAttribute($value) {
-        return \Carbon\Carbon::parse($value)->format('d/m/Y');
-    }
+//    public function getnascimentoAttribute($value) {
+ //       return \Carbon\Carbon::parse($value)->format('d/m/Y');
+ //   }
+//    public function getentradaAttribute($value) {
+//        return \Carbon\Carbon::parse($value)->format('d/m/Y');
+//    }
 }

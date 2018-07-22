@@ -29,6 +29,7 @@ class FornecedorController extends Controller
             $fornecedores = $this->model->orderBy('id', 'asc')
                     ->get();/*->paginate($limit); //limite por páginas */
 
+            //return response()->json($fornecedores);
             return view('pesquisa.pfornecedor', ['fornecedores' => $fornecedores]);
             
         }

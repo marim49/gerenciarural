@@ -259,13 +259,14 @@
     <!-- FOOTER SECTION END-->
     <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
     <!-- CORE JQUERY  -->
-    <script src="{{ asset('js/jquery-1.10.2.js') }}"></script>
+    <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
     <!-- DATATABLE SCRIPTS  -->
     <script src="{{ asset('js/dataTables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('js/dataTables/dataTables.bootstrap.js') }}"></script>
     <!-- BOOTSTRAP SCRIPTS  -->
-    <script src="{{ asset('js/bootstrap.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <!-- CUSTOM SCRIPTS  -->
+    <script src="{{ asset('js/modal/editar.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
     <script src="{{ asset('js/imprimir/imprimir.js') }}"></script>
     <script src="{{ asset('js/notificacao/sweet_alert.min.js') }}"></script>

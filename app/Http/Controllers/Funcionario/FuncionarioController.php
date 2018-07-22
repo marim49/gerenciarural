@@ -29,10 +29,14 @@ class FuncionarioController extends Controller
             $limit = 20;
             
             $funcionarios = $this->model->orderBy('id', 'asc')
-                ->with('Fazenda')
+                ->with('Fazenda','EstadoCivil')
                 ->get();/*->paginate($limit); //limite por páginas */
-
-            return view('pesquisa.pfuncionario', ['funcionarios' => $funcionarios]);
+                $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+                $grupos = \App\Models\Funcionario\EstadoCivil::orderBy('nome', 'asc')->get();
+            
+               // return response()->json($funcionarios);
+            return view('pesquisa.pfuncionario', ['funcionarios' => $funcionarios,
+            'fazendas' => $fazendas, 'grupos' => $grupos]);
         }
         catch(\Exception $e) 
         {
@@ -130,6 +134,7 @@ class FuncionarioController extends Controller
     //Método PUT (atualiza um funcionário)
     public function update(Request $request, $id)
     {
+        
         //tratar entrada
         try
         {

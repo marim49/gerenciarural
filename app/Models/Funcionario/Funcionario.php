@@ -48,11 +48,11 @@ class Funcionario extends Model
         return $this->hasMany(\App\Models\Animal\HistoricoAnimal::class, 'id_funcionario');
     }
 
-    //Atributos
-    public function getnascimentoAttribute($value) {
-        return \Carbon\Carbon::parse($value)->format('d/m/Y');
-    }
-    public function getadmissaoAttribute($value) {
-        return \Carbon\Carbon::parse($value)->format('d/m/Y');
-    }
+    // //Atributos
+    // public function getnascimentoAttribute($value) {
+    //     return \Carbon\Carbon::parse($value)->format('d/m/Y');
+    // }
+    // public function getadmissaoAttribute($value) {
+    //     return \Carbon\Carbon::parse($value)->format('d/m/Y');
+    // }
 }

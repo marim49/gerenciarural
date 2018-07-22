@@ -29,8 +29,10 @@ class TerraController extends Controller
             $terras = $this->model->orderBy('id', 'asc')
                 ->with('Fazenda')
                 ->get();/*->paginate($limit); //limite por páginas */
+                $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
 
-            return view('pesquisa.pterra', ['terras' => $terras]);
+              //  return response()->json($terras);
+               return view('pesquisa.pterra', ['terras' => $terras, 'fazendas' => $fazendas]);
         }
         catch(\Exception $e) 
         {
