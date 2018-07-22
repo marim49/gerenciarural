@@ -1,4 +1,54 @@
  @extends('layouts.layout') @section('content')
+<style>
+	.table-remove {
+		color: #700;
+		cursor: pointer;
+	}
+
+	table.tableprod {
+		width: 100%;
+		max-width: 100%;
+		text-align: center;
+	}
+
+	table.tableprod thead {
+		background: #FFFFFF;
+		border-bottom: 4px solid #333333;
+	}
+
+	table.tableprod thead th {
+		color: #333333;
+		text-align: center;
+		border-left: 2px solid #333333;
+	}
+
+	table.tableprod tbody td {
+		font-size: 13px;
+	}
+
+	.table-remove:hover {
+		color: #f00;
+	}
+
+	.table-editable {
+		position: relative;
+	}
+
+	.glyphicon {
+		font-size: 20px;
+	}
+
+	.table-add:hover {
+		color: #0b0;
+	}
+
+	.table-add {
+		color: #070;
+		cursor: pointer;
+		top: 8px;
+		right: 0;
+	}
+</style>
 <script>
 	function AddRow() {
 		var tbl = document.getElementById('myTable').getElementsByTagName('tbody')[0];
@@ -72,14 +122,12 @@
 
 		//Botão de excluir 
 		var td = tr.insertCell();
-		var button = document.createElement("button");
-		var text = document.createTextNode("Excluir");
-		button.type = "button";
-		button.appendChild(text);
-		button.onclick = function deleteRow() {
+		var span = document.createElement('span');
+		span.classList.add('table-remove', 'glyphicon', 'glyphicon-remove');
+		span.onclick = function deleteRow() {
 			document.getElementById("myTable").deleteRow(tr.rowIndex);
 		}
-		td.appendChild(button);
+		td.appendChild(span);
 	}
 </script>
 <div class="container">
@@ -167,36 +215,23 @@
 
 										<div style="display: none;" class="form-group table-responsive" id="produtos">
 											<label>Produtos da nota: *</label>
-											<table class="table table-striped table-bordered table-hover" id="myTable">
+											<table class="tableprod table-striped table-bordered table-hover" id="myTable">
 												<thead>
 													<tr>
 														<th>Medicamento</th>
 														<th>Qtd</th>
-														<th>Ml</th>
-														<th>Total (Qtd * Ml)</th>
+														<th>Ml (opcional)</th>
+														<th>Total</th>
 														<th></th>
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td><select>
-															<option>teste<option>
-														</select>
-														</td>
-														<td><input></input>
-														</td>
-														<td><input></input>
-														</td>
-														<td>teste
-														</td>
-														<td><button></button>
-														</td>
-													</tr>
 												</tbody>
 											</table>
-											<button type="button" onclick="AddRow()">
-												<i class="fa fa-plus-circle"></i> Add</button>
+											<span class="table-add glyphicon glyphicon-plus" onclick="AddRow()"></span>
+
 										</div>
+
 
 									</div>
 								</div>

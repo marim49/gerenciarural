@@ -1,13 +1,8 @@
 function EntradaMedicamento() {
     fazenda = $("#fazendas").val();
 
-    // var selectMedicamento = document.getElementById("medicamento");
     var selectFuncionario = document.getElementById("funcionario");
 
-    //Limpar Selects
-    // for (var i in selectMedicamento.options) {
-    //     selectMedicamento.remove(i);
-    // }
     for (var i in selectFuncionario.options) {
         selectFuncionario.remove(i);
     }
@@ -20,7 +15,6 @@ function EntradaMedicamento() {
 
         fazenda = JSON.parse(fazenda);
         funcionarios = fazenda.funcionarios;
-        //medicamentos = fazenda.medicamentos;
 
         
         //Preencher funcionários

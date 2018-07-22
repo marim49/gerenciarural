@@ -51,7 +51,7 @@ class HistoricoCompraMedicamentoController extends Controller
     public function create()
     {
         try
-        {            
+        {           
             $fazendas = \App\Models\Fazenda\Fazenda::with('Medicamentos.TipoMedicamento', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
             $fornecedores = \App\Fornecedor::orderBy('nome')
