@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Fazenda;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class FazendaController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Produtor', 'Cidade', 'Maquinas', 'Combustiveis', 'Funcionarios', 'Celeiros',
-        'Terras', 'Medicamentos', 'GrupoAnimais'
+        'Insumos', 'Combustiveis', 'Funcionarios',
+        'Terras', 'Medicamentos', 'Animais'
     ];
     
     public function __construct(\App\Models\Fazenda\Fazenda $model)
@@ -18,61 +19,67 @@ class FazendaController extends Controller
         $this->model = $model;
     }
 
-    public function GetFazendas()
+    //Método GET (retorna as fazendas) : OK
+    public function index()
     {
         try
-        {
-            //resultados por página
-            $limit = 20;
-            
+        {    
+            //limites por página 
+            $limit = 20;       
             $fazendas = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->get();/*->paginate($limit); //limite por páginas */
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($fazendas);
+            //retornar view
+           // return response()->json($fazendas);
+           return view('pesquisa.pfazenda', ['fazendas' => $fazendas]);
+            
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pfazenda', ['fazendas' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
-    
-    public function PostFazenda(Request $request)
+
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        return view('cadastro.cfazenda');        
+    }
+    
+    // Método POST (salva a fazenda) : OK
+    public function store(Request $request)
+    {  
+        $fazenda = $request->only(
+            'nome', 'localidade');
+        //Validação
+        $validator = $this->Validator($fazenda);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Cadastro
         try 
         {
-            $fazenda = $request->all();
+            $success = $this->model->create($fazenda);
 
-            $nova_fazenda = $this->model->create($fazenda);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $nova_fazenda
-            ]);
+            return redirect()
+                            ->back()
+                            ->with('success',$success);      
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {   
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput();        
         }
     } 
 
-    public function ShowFazenda($id)
+    //Método GET (retorna uma fazenda específica)
+    public function show($id)
     {
         try
         {
@@ -92,33 +99,44 @@ class FazendaController extends Controller
         }
     }   
 
-    public function UpdateFazenda(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza uma fazenda)
+    public function update(Request $request, $id)
     {
-        //tratar entrada
+        $fazenda = $request->only(
+            'nome', 'localidade');
+        //Validação
+        $validator = $this->Validator($fazenda);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Cadastro
         try
         {
-            $update_fazenda = $this->model->findOrFail($id);            
+            $fazenda = $this->model->findOrFail($id);            
             $dados = $request->all();
 
-            $update_fazenda->update($dados);
-            
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_fazenda
-            ]);
+            $success = $fazenda->update($dados);   
+
+            return redirect('fazenda')
+                            ->with('success', $success);
         }
         catch(\Exception $e) 
         {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível atualizar o registro.',$e))
+                            ->withInput();  
         }
     }
 
-    public function DeleteFazenda($id)
+    //Método DELETE (deleta uma fazenda específica)
+    public function destroy($id)
     {
         try 
         {
@@ -141,6 +159,7 @@ class FazendaController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -148,5 +167,26 @@ class FazendaController extends Controller
         }
 
         return [];
+    }
+       
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'nome.required'=> 'O campo nome é obrigatório',
+            'nome.max'=> 'O tamanho máximo do campo nome é 100 caracteres',
+            'localidade.max'=> 'O tamanho máximo do campo localidade é 45 caracteres',
+        );    
+        $rules = array(
+            'nome'=>'required|max:100',
+            'localidade'=>'max:45',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

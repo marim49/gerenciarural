@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class HistoricoAnimal extends Model
 {
     protected $fillable = [
-        'id_animal', 'id_medicamento', 'id_funcionario', 'quantidade'
+        'id_animal', 'id_medicamento', 'id_funcionario', 'quantidade', 'data'
     ];
     protected $table = 'historico_animal';
 
@@ -21,6 +21,12 @@ class HistoricoAnimal extends Model
     }
     public function Funcionario()
     {
-        return $this->belongsTo(App\Models\Funcionario\Funcionario::class, 'id_funcionario');
+        return $this->belongsTo(\App\Models\Funcionario\Funcionario::class, 'id_funcionario');
+    }
+
+    
+    //Atributos
+    public function getdataAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d/m/Y');
     }
 }

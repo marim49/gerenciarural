@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Insumo;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller; 
+use Illuminate\Support\Facades\Validator;
 
 class HistoricoTerraController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Insumo', 'Terra', 'Funcionario'
+        'Insumo.TipoInsumo', 'Terra', 'Funcionario'
     ];
     
     public function __construct(\App\Models\Insumo\HistoricoTerra $model)
@@ -17,23 +18,22 @@ class HistoricoTerraController extends Controller
         $this->model = $model;
     }
 
-    public function GetHistoricosTerra()
+    //Método GET (retorna o histórico da terra)
+    public function index()
     {
         try
         {
             //resultados por página
             $limit = 20;
             
-            $historicos_terra = $this->model->orderBy('id', 'asc')
+            $historicos_terra = $this->model
+            //nessa parte aqui, vc mandou buscar, ele retorna as relações
                 ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->orderBy('id', 'asc')
+                ->get();
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($historicos_terra);
+            return view('relatorio.rplantio', ['historicos_terra' => $historicos_terra]);
         }
         catch(\Exception $e) 
         {
@@ -45,33 +45,72 @@ class HistoricoTerraController extends Controller
         }
     }
     
-    public function PostHistoricoTerra(Request $request)
+    //Método GET (chama a view de criação) : OK
+    public function create() 
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        try
+        {            
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Terras', 'Insumos.TipoInsumo', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();
+
+            return view('saida.sinsumo', ['fazendas' => $fazendas]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('saida.sinsumo', ['fazendas' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }    
+    
+    //Método POST (salva o histórico da terra) : OK  
+    public function store(Request $request)
+    {
+        $plantio = $request->only('id_terra', 'id_insumo', 'id_funcionario', 'quantidade',
+                                        'data');
+        //Validação
+        $validator = $this->Validator($plantio);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        } 
+        //Inserção no banco
         try 
-        {
-            $historico_terra = $request->all();
-
-            $novo_historico_terra = $this->model->create($historico_terra);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_historico_terra
-            ]);
+        {                     
+            $insumo = \App\Models\Insumo\Insumo::find($plantio['id_insumo']);
+            
+            if($insumo){
+                if($plantio['quantidade'] <= 0){
+                    throw new \Exception('A quantidade não pode ser negativa ou igual a 0');                    
+                }
+                if($insumo->quantidade >= $plantio['quantidade']){
+                    $insumo->decrement('quantidade', $plantio['quantidade']);
+                    $success = $this->model->create($plantio);
+                }
+                else{                    
+                    throw new \Exception('O estoque não possui saldo suficiente para retirada');
+                }
+            }
+            else{
+                throw new \Exception('Não foi possível encontrar o insumo no banco de dados');
+            }  
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$success);
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {                      
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(); 
         }
     } 
 
-    public function ShowHistoricoTerra($id)
+    //Método GET (retorna um histórico da terra específico)
+    public function show($id)
     {
         try
         {
@@ -91,7 +130,11 @@ class HistoricoTerraController extends Controller
         }
     }   
 
-    public function UpdateHistoricoTerra(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza um histórico da terra)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +160,8 @@ class HistoricoTerraController extends Controller
         }
     }
 
-    public function DeleteHistoricoTerra($id)
+    //Método DELETE (deleta um hitórico da terra específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +184,7 @@ class HistoricoTerraController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +192,35 @@ class HistoricoTerraController extends Controller
         }
 
         return [];
+    }    
+
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'id_terra.required'=> 'O campo de terra é obrigatório',
+            'id_insumo.required'=>'O campo de insumo é obrigatório',
+            'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+            'quantidade.required'=>'O campo de quantidade é obrigatório',
+            'quantidade.numeric'=>'A quantidade só pode ser em números',
+            'data.required'=>'O campo de data de data é obrigatório',
+            'data.date'=>'O campo de data está em formato inválido',
+        );    
+        $rules = array(
+            'id_terra'=>'required',
+            'id_insumo'=>'required',
+            'id_funcionario'=>'required',
+            'quantidade'=>'required|numeric',
+            'data'=>'required|date',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
     }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
+    }
+
 }

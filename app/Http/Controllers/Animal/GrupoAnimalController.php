@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Animal;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class GrupoAnimalController extends Controller
 {
@@ -17,7 +18,8 @@ class GrupoAnimalController extends Controller
         $this->model = $model;
     }
 
-    public function GetGruposAnimais()
+    //Método GET (retorna as fazendas)
+    public function index()
     {
         try
         {
@@ -44,34 +46,45 @@ class GrupoAnimalController extends Controller
             ]);
         }
     }
-    
-    public function PostGrupoAnimal(Request $request)
+
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        return view('cadastro.cganimal');        
+    }
+    
+    // Método POST (salva um grupo de animal) : OK    
+    public function store(Request $request)
+    {
+        $grupoanimal = $request->only('nome');
+        //Validação
+        $validator = $this->Validator($grupoanimal);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Cadastro
         try 
         {
-            $grupo_animal = $request->all();
+            $success = $this->model->create($grupoanimal);
 
-            $novo_grupo_animal = $this->model->create($grupo_animal);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_grupo_animal
-            ]);
+            return redirect()
+                            ->back()
+                            ->with('success',$success);      
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {   
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput();        
         }
     } 
 
-    public function ShowGrupoAnimal($id)
+    //Método GET (retorna uma grupo de animal específica)
+    public function show($id)
     {
         try
         {
@@ -91,7 +104,11 @@ class GrupoAnimalController extends Controller
         }
     }   
 
-    public function UpdateGrupoAnimal(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza um grupo de animal)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +134,8 @@ class GrupoAnimalController extends Controller
         }
     }
 
-    public function DeleteGrupoAnimal($id)
+    //Método DELETE (deleta uma fazenda específica)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +158,7 @@ class GrupoAnimalController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +166,25 @@ class GrupoAnimalController extends Controller
         }
 
         return [];
+    }
+       
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'nome.required'=> 'O campo nome é obrigatório',
+            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+            'localidade.required'=> 'O campo localidade é obrigatório',
+        );    
+        $rules = array(
+            'nome'=>'required|max:45',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

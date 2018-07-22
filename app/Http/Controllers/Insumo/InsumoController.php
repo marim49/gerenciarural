@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Insumo;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class InsumoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Celeiro', 'TipoInsumo', 'HistoricoTerras', 'HistoricoCompraInsumo'
+        'TipoInsumo', 'HistoricoTerras', 'HistoricoCompraInsumo', 'Fazenda'
     ];
     
     public function __construct(\App\Models\Insumo\Insumo $model)
@@ -17,7 +18,8 @@ class InsumoController extends Controller
         $this->model = $model;
     }
 
-    public function GetInsumos()
+    //Método GET (retorna os insumos)
+    public function index()
     {
         try
         {
@@ -25,53 +27,69 @@ class InsumoController extends Controller
             $limit = 20;
             
             $insumos = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
+                ->with('TipoInsumo', 'Fazenda')
+                ->get();/*->paginate($limit); //limite por páginas */
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($insumos);
+            return view('pesquisa.pinsumo', ['insumos' => $insumos]);
+        
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pinsumo', ['insumos' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     
-    public function PostInsumo(Request $request)
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        try
+        {
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();            
+            $tipos = \App\Models\Insumo\TipoInsumo::orderBy('nome', 'asc')->get();
+        
+            return view('cadastro.cinsumo', ['fazendas' => $fazendas, 'tipos' => $tipos]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('cadastro.cinsumo', ['fazendas' => [], 'tipos'=> []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }
+    
+    // Método POST (salva o insumo) : OK
+    public function store(Request $request)
+    {
+        $insumo = $request->only('id_fazenda', 'id_tipo_insumo', 'nome');
+        //Validação
+        $validator = $this->Validator($insumo);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Inserção no banco
         try 
         {
-            $insumo = $request->all();
+            $success = $this->model->create($insumo);
 
-            $novo_insumo = $this->model->create($insumo);
+            return redirect()
+                            ->back()
+                            ->with('success',$success);  
 
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_insumo
-            ]);
         } 
         catch(\Exception $e) 
         {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput();  
         }
     } 
 
-    public function ShowInsumo($id)
+    //Método GET (retorna um insumo específico)
+    public function show($id)
     {
         try
         {
@@ -90,8 +108,12 @@ class InsumoController extends Controller
             ]);
         }
     }   
+    
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
 
-    public function UpdateInsumo(Request $request, $id)
+    //Método PUT (atualiza um insumo)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +139,8 @@ class InsumoController extends Controller
         }
     }
 
-    public function DeleteInsumo($id)
+    //Método DELETE (deleta um insumo específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +163,7 @@ class InsumoController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +171,29 @@ class InsumoController extends Controller
         }
 
         return [];
+    }
+
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'id_fazenda.required'=> 'O campo de fazenda é obrigatório',
+            'id_tipo_insumo.required'=> 'O campo de tipo de insumo',
+            'nome.required' => 'O campo nome é obrigatório'           ,
+            'nome.max' => 'O tamanho máximo do campo nome é 45 caracteres'
+        );    
+        $rules = array(
+            'id_fazenda'=>'required',
+            'id_tipo_insumo'=>'required',
+            'nome'=>'required|max:45'
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

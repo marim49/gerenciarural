@@ -8,7 +8,7 @@ class HistoricoCompraInsumo extends Model
 {
     protected $fillable = [
         'id_insumo', 'id_funcionario', 'data', 'lote', 'quantidade', 'nota_fiscal',
-        'valor'
+        'valor', 'id_fornecedor'
     ];
     protected $table = 'historico_compra_insumo';
 
@@ -18,6 +18,15 @@ class HistoricoCompraInsumo extends Model
     }
     public function Funcionario()
     {
-        return $this->belongsTo(App\Models\Funcionario\Funcionario::class, 'id_funcionario');
+        return $this->belongsTo(\App\Models\Funcionario\Funcionario::class, 'id_funcionario');
+    }
+    public function Fornecedor()
+    {
+        return $this->belongsTo(\App\Fornecedor::class, 'id_fornecedor');
+    }
+    
+    //Atributos
+    public function getdataAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d/m/Y');
     }
 }

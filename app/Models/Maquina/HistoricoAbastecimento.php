@@ -1,13 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Models\Maquina;
 
 use Illuminate\Database\Eloquent\Model;
 
 class HistoricoAbastecimento extends Model
 {
     protected $fillable = [
-        'id_maquina', 'id_combustivel', 'id_funcionario', 'quantidade'
+        'id_maquina', 'id_combustivel', 'id_funcionario', 'quantidade', 'data'
     ];
     protected $table = 'historico_abastecimento';
 
@@ -21,6 +21,11 @@ class HistoricoAbastecimento extends Model
     }
     public function Funcionario()
     {
-        return $this->belongsTo(App\Models\Funcionario\Funcionario::class, 'id_funcionario');
+        return $this->belongsTo(\App\Models\Funcionario\Funcionario::class, 'id_funcionario');
+    }
+    
+    //Atributos
+    public function getdataAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d/m/Y');
     }
 }

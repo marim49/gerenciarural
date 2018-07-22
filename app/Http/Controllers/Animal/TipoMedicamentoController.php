@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Animal;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class TipoMedicamentoController extends Controller
 {
@@ -11,13 +12,14 @@ class TipoMedicamentoController extends Controller
     protected $relationships = [
         'Medicamentos'
     ];
-    
+
     public function __construct(\App\Models\Animal\TipoMedicamento $model)
     {
         $this->model = $model;
     }
 
-    public function GetTiposMedicamento()
+    //Método GET (retorna os tipos de medicamentos)
+    public function index()
     {
         try
         {
@@ -43,35 +45,41 @@ class TipoMedicamentoController extends Controller
                 'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
             ]);
         }
-    }
-    
-    public function PostTipoMedicamento(Request $request)
+    }    
+     
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        return view('cadastro.ctmedicamento');
+    }
+
+    // Método POST (salva o tipo de medicamento) : OK   
+    public function store(Request $request)
+    {
+        $tipo_medicamento = $request->only('nome');
+        //Validação
+        $validator = $this->Validator($tipo_medicamento);
+        if ($validator->fails()) {
+            return redirect('tipomedicamento/create')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
         try 
         {
-            $tipo_medicamento= $request->all();
+            $success = $this->model->create($tipo_medicamento);
 
-            $novo_tipo_tipo_medicamento = $this->model->create($tipo_medicamento);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_tipo_tipo_medicamento
-            ]);
+            return view('cadastro.ctmedicamento', ['success' => $success]);
         } 
         catch(\Exception $e) 
         {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect('tipomedicamento/create')
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput();
         }
     } 
 
-    public function ShowTipoMedicamento($id)
+    //Método GET (retorna um tipo de medicamento específico)
+    public function show($id)
     {
         try
         {
@@ -91,7 +99,11 @@ class TipoMedicamentoController extends Controller
         }
     }   
 
-    public function UpdateTipoMedicamento(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza um tipo de medicamento)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +129,8 @@ class TipoMedicamentoController extends Controller
         }
     }
 
-    public function DeleteTipoMedicamento($id)
+    //Método DELETE (deleta um tipo de medicamento específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +153,7 @@ class TipoMedicamentoController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +161,25 @@ class TipoMedicamentoController extends Controller
         }
 
         return [];
+    }   
+
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'nome.required'=> 'O campo de nome é obrigatório',
+            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+        );    
+        $rules = array(
+            'nome'=>'required|max:45',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

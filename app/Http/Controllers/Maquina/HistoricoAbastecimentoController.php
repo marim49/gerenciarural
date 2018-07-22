@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Maquina;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class HistoricoAbastecimentoController extends Controller
 {
@@ -17,7 +18,8 @@ class HistoricoAbastecimentoController extends Controller
         $this->model = $model;
     }
 
-    public function GetHistoricosAbastecimento()
+    //Método GET (retorna o histórico de combustiveis)
+    public function index()
     {
         try
         {
@@ -33,7 +35,8 @@ class HistoricoAbastecimentoController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($historicos_abastecimento);
+            //return response()->json($historicos_abastecimento);
+            return view('relatorio.rabastecimento', ['historicos_abastecimento' => $historicos_abastecimento]);
         }
         catch(\Exception $e) 
         {
@@ -43,35 +46,74 @@ class HistoricoAbastecimentoController extends Controller
                 'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
             ]);
         }
-    }
+    }       
     
-    public function PostHistoricoAbastecimento(Request $request)
+    //Método GET (chama a view de criação) : OK
+    public function create() 
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        try
+        {            
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Combustiveis', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();
+
+            return view('saida.scombustivel', ['fazendas' => $fazendas]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('saida.scombustivel', ['fazendas' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }    
+    
+    //Método POST (salva o histórico do combustível) : OK
+    public function store(Request $request)
+    {
+        $abastecimento = $request->only('id_maquina', 'id_combustivel', 'id_funcionario', 'quantidade',
+                                        'data');
+        //Validação
+        $validator = $this->Validator($abastecimento);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+        //Inserção no banco
         try 
-        {
-            $historico_abastecimento = $request->all();
-
-            $novo_historico_abastecimento = $this->model->create($historico_abastecimento);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_historico_abastecimento
-            ]);
+        {                     
+            $combustivel = \App\Models\Maquina\Combustivel::find($abastecimento['id_combustivel']);
+            
+            if($combustivel){
+                if($abastecimento['quantidade'] <= 0){
+                    throw new \Exception('A quantidade não pode ser negativa ou igual a 0');                    
+                }
+                if($combustivel->quantidade >= $abastecimento['quantidade']){
+                    $combustivel->decrement('quantidade', $abastecimento['quantidade']);
+                    $success = $this->model->create($abastecimento);
+                }
+                else{                    
+                    throw new \Exception('O estoque não possui saldo suficiente para retirada');
+                }
+            }
+            else{
+                throw new \Exception('Não foi possível encontrar o combustível no banco de dados');
+            }             
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$success);
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {                      
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(); 
         }
     } 
 
-    public function ShowHistoricoAbastecimento($id)
+    //Método GET (retorna um histórico de combustivel específico) 
+    public function show($id)
     {
         try
         {
@@ -91,7 +133,11 @@ class HistoricoAbastecimentoController extends Controller
         }
     }   
 
-    public function UpdateHistoricoAbastecimento(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza um histórico de combustivel)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +163,8 @@ class HistoricoAbastecimentoController extends Controller
         }
     }
 
-    public function DeleteHistoricoAbastecimento($id)
+    //Método DELETE (deleta um hitórico de abastecimento específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +187,7 @@ class HistoricoAbastecimentoController extends Controller
         }
     }
 
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +195,34 @@ class HistoricoAbastecimentoController extends Controller
         }
 
         return [];
+    }      
+
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'id_maquina.required'=> 'O campo de máquina é obrigatório',
+            'id_combustivel.required'=>'O campo de combustível é obrigatório',
+            'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+            'quantidade.required'=>'O campo de quantidade é obrigatório',
+            'quantidade.numeric'=>'A quantidade só pode ser em números',
+            'data.required'=>'O campo de data de abastecimento é obrigatório',
+            'data.date'=>'O campo de data está em formato inválido',
+        );    
+        $rules = array(
+            'id_maquina'=>'required',
+            'id_combustivel'=>'required',
+            'id_funcionario'=>'required',
+            'quantidade'=>'required|numeric',
+            'data'=>'required|date',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

@@ -18,7 +18,7 @@ class AnimalController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna os animais)
+    //Método GET (retorna os animais) : OK
     public function index()
     {
         try
@@ -27,63 +27,65 @@ class AnimalController extends Controller
             $limit = 20;
             
             $animais = $this->model->orderBy('id', 'asc')
-                ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
-                ->paginate($limit);
-
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($animais);
+                ->with('GrupoAnimal', 'Fazenda')
+                ->get();/*->paginate($limit); //limite por páginas */
+                $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
+                $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+             //   return response()->json($animais);
+            return view('pesquisa.panimal', ['animais' => $animais, 'grupos' => $grupos, 'fazendas' => $fazendas]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('pesquisa.pfazenda', ['animais' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     
-    //Método GET (chama a view de criação)
+    //Método GET (chama a view de criação) : OK
     public function create()
     {
-        $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
-       
-        return view('canimal', ['grupos' => $grupos]);
+        try
+        {
+            $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+        
+            return view('cadastro.canimal', ['grupos' => $grupos, 'fazendas' => $fazendas]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('cadastro.canimal', ['grupos' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
     }
 
-    /* Método POST (salva o animal) : OK
-     * (Adicionar view de retorno de erro)
-     */
+    // Método POST (salva o animal) : OK     
     public function store(Request $request)
     {
+        $animal = $request->only('nome', 'id_grupo_animal', 'id_fazenda', 'entrada', 'nascimento',
+                                 'nome_mae', 'nome_pai');
         //Validação
-        $validator = $this->Validator($request->only('nome', 'id_grupo_animal'));
+        $validator = $this->Validator($animal);
         if ($validator->fails()) {
-            return redirect('animal/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
         //Inserção no banco
         try 
         {
-            $animal = $request->all();
-
             $success = $this->model->create($animal);
-            $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
 
-            return view('canimal', ['success' => $success, 'grupos' => $grupos]);
+            return redirect()
+                            ->back()
+                            ->with('success',$success);  
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Nao foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {          
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(); 
         }
     }
 
@@ -162,7 +164,7 @@ class AnimalController extends Controller
         }
     }
 
-    //Método que retorna os relacionamentos
+    //Método que retorna os relacionamentos : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -170,19 +172,39 @@ class AnimalController extends Controller
         }
 
         return [];
-    }    
+    }   
+
     //Método de validação : OK
     protected function Validator($requisicao){        
         $messages = array(
             'nome.required'=> 'O campo de identificação do animal é obrigatório',
-            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+            'nome.max'=> 'O tamanho máximo do campo de identificação do animal é 45 caracteres',
+            'nome.unique'=> 'Já existe um animal com essa identificação cadastrado',
+            'nome_mae.max'=> 'O tamanho máximo do campo de identificação da mãe é 45 caracteres',
+            'nome_pai.max'=> 'O tamanho máximo do campo de identificação do pai é 45 caracteres',
+            'entrada.required'=> 'O campo de entrada é obrigatório',
+            'entrada.date'=> 'O campo de entrada tem que ser do tipo data',
+            'nascimento.date'=> 'O campo de nascimento não contém uma data válida',
             'id_grupo_animal.required'=>'O campo de grupo do animal é obrigatório',
+            'id_fazenda.required' => 'O campo de fazenda é obrigatório'
         );    
         $rules = array(
-            'nome'=>'required|max:45',
+            'id_fazenda' => 'required',
+            'nome'=>'required|max:45|unique:animal',
+            'nome_mae'=>'max:45',
+            'nome_pai'=>'max:45',
+            'nascimento'=>'date',
+            'entrada'=>'required|date',
             'id_grupo_animal'=>'required',
         );
     
         return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }

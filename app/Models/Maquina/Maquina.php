@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models\Maquina;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,10 +13,15 @@ class Maquina extends Model
 
     public function Fazenda()
     {
-        return $this->belongsTo(App\Models\Fazenda\Fazenda::class, 'id_fazenda');
+        return $this->belongsTo(\App\Models\Fazenda\Fazenda::class, 'id_fazenda');
     }
     public function HistoricoAbastecimentos()
     {
         return $this->hasMany(HistoricoAbastecimento::class, 'id_maquina');
     }
+
+    //Atributos    
+    //public function getdataaquisicaoAttribute($value) {
+    //    return \Carbon\Carbon::parse($value)->format('d/m/Y');
+    // }
 }

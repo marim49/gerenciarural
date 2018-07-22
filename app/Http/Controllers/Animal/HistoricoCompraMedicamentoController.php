@@ -3,21 +3,23 @@
 namespace App\Http\Controllers\Animal;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller; 
+use Illuminate\Support\Facades\Validator;
 
 class HistoricoCompraMedicamentoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Medicamento', 'Funcionario'
+        'Medicamento', 'Funcionario', 'Fornecedor'
     ];
     
-    public function __construct(\App\Models\Animal\HistoricoCompraInsumo $model)
+    public function __construct(\App\Models\Animal\HistoricoCompraMedicamento $model)
     {
         $this->model = $model;
     }
 
-    public function GetHistoricosCompraMedicamento()
+    //Método GET (retorna os historicos de medicamentos)
+    public function index()
     {
         try
         {
@@ -33,7 +35,7 @@ class HistoricoCompraMedicamentoController extends Controller
                 ->paginate($limit);
 
             //Alterar para retornar a view mas para nível de teste ele retornará um json
-            return response()->json($historicos_compra_medicamento);
+            return view('relatorio.rcompra-medicamento', ['historicos_compra_medicamento' => $historicos_compra_medicamento]);
         }
         catch(\Exception $e) 
         {
@@ -45,33 +47,76 @@ class HistoricoCompraMedicamentoController extends Controller
         }
     }
     
-    public function PostHistoricoCompraMedicamento(Request $request)
+    //Método GET (chama a view de criação) : OK
+    public function create()
     {
-        //É preciso fazer validações de dados para evitar campos que por exemplo:
-        //Chega o campo nome com 1 caracter e o banco exige no minimo 5.
+        try
+        {           
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Medicamentos.TipoMedicamento', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();
+            $fornecedores = \App\Fornecedor::orderBy('nome')
+                                                    ->get();
+
+            return view('entrada.efarmacia', ['fazendas' => $fazendas, 'fornecedores' =>$fornecedores]);
+        }         
+        catch(\Exception $e) 
+        {          
+            return view('entrada.efarmacia', ['fazendas' => []])
+                            ->withErrors($this->Error('Houve algum erro.',$e));
+        }
+    }
+    
+    //Método POST (salva uma compra de medicamento) : OK    
+    public function store(Request $request)
+    {
+        $compra = $request->only( 'id_funcionario','id_fornecedor', 'data', 'lote', 'nota_fiscal',
+                                     'valor', 'id_medicamento', 'quantidade');
+        //Validação
+        $validator = $this->Validator($compra);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }   
+        //Inserção no banco
         try 
-        {
-            $historico_compra_medicamento = $request->all();
+        {   
+            //criando notas
+            $notas = array();
+            $entrada = $request->only( 'id_funcionario','id_fornecedor', 'data', 'lote', 'nota_fiscal',
+                                         'valor');     
+            $medicamentos = $compra['id_medicamento'];
+            $quantidades = $compra['quantidade'];
 
-            $novo_historico_compra_medicamento = $this->model->create($historico_compra_medicamento);
-
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $novo_historico_compra_medicamento
-            ]);
+            //registrando
+            for($i = 0; $i < count($quantidades); $i++){                  
+                $medicamento = \App\Models\Animal\Medicamento::find($medicamentos[$i]);            
+                if($medicamento){
+                    $medicamento->increment('quantidade', $quantidades[$i]);
+                    $compra  = array_merge($entrada,['id_medicamento' => $medicamentos[$i], 'quantidade' => $quantidades[$i]]);
+                    $success = $this->model->create($compra);                    
+                }
+                else{
+                    throw new \Exception('Não foi possível encontrar o medicamento no banco de dados');
+                }
+            }
+                
+            return redirect()
+                            ->back()
+                            ->with('success',$success);
         } 
         catch(\Exception $e) 
-        {
-            //Alterar para retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível inserir o registro. Erro: '.$e->getMessage()
-            ]);
+        {                      
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput(); 
         }
     } 
 
-    public function ShowHistoricoCompraMedicamento($id)
+    //Método GET (retorna uma compra de medicamento específico)
+    public function show($id)
     {
         try
         {
@@ -91,7 +136,11 @@ class HistoricoCompraMedicamentoController extends Controller
         }
     }   
 
-    public function UpdateHistoricoCompraMedicamento(Request $request, $id)
+    //Método GET (retorna a view de edição)
+    public function edit($id){}
+
+    //Método PUT (atualiza uma compra de medicamento)
+    public function update(Request $request, $id)
     {
         //tratar entrada
         try
@@ -117,7 +166,8 @@ class HistoricoCompraMedicamentoController extends Controller
         }
     }
 
-    public function DeleteHistoricoCompraMedicamento($id)
+    //Método DELETE (deleta uma compra de medicamento específico)
+    public function destroy($id)
     {
         try 
         {
@@ -140,6 +190,7 @@ class HistoricoCompraMedicamentoController extends Controller
         }
     }
 
+    //Retorna as relações : OK
     protected function relationships()
     {
         if(isset($this->relationships)) {
@@ -147,5 +198,51 @@ class HistoricoCompraMedicamentoController extends Controller
         }
 
         return [];
+    }   
+
+    //Método de validação : OK
+    protected function Validator($requisicao){        
+        $messages = array(
+            'id_medicamento.required'=>'O campo de medicamento é obrigatório',
+            'id_medicamento.*.required'=>'É necessário selecionar um medicamento na linha da tabela',
+            'id_medicamento.*.distinct' => 'Existe medicamentos duplicados na tabela',
+            'id_funcionario.required'=>'O campo de funcionário é obrigatório, para isso selecione a fazenda',
+            'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
+            'data.required'=>'O campo de data é obrigatório',
+            'data.date'=>'O campo de data está em formato inválio',
+            'lote.required'=>'O campo de lote é obrigatório',
+            'lote.max'=>'O campo de lote só pode ter no máximo 45 caracteres',
+            'quantidade.required'=>'Os campos de quantidade são obrigatório',
+            'quantidade.*.min'=>'O campo de quantidade não pode ser menor ou igual a zero',
+            'quantidade.*.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
+            'quantidade.*.required'=>'As linhas da tabela devem ter a quantidade preenchida',
+            'nota_fiscal.required'=>'O campo de nota fiscal é obrigatório',
+            'nota_fiscal.max'=>'O campo de nota fiscal só pode ter no máximo 45 caracteres',
+            'valor.required'=>'O campo de valor é obrigatório',
+            'valor.max'=>'O campo de valor só pode ter no máximo 45 caracteres',
+            'valor.numeric'=>'O campo valor só pode ter entradas numéricas',
+        );    
+        $rules = array(
+            'id_funcionario'=>'required',
+            'id_fornecedor'=>'required',
+            'id_medicamento'=>'required',
+            "id_medicamento.*"  => "required|distinct",
+            'data'=>'required|date',
+            'lote'=>'required|max:45',
+            'quantidade'=>'required',
+            'quantidade.*'=>'required|numeric|min:1',
+            'nota_fiscal'=>'required|max:45',
+            'valor'=>'required|numeric',
+        );
+    
+        return Validator::make($requisicao, $rules,$messages);        
+    }
+
+    //Método de retorno de erro : OK
+    protected function Error($message, \Exception $e){
+        return [
+            'message' => $message.' Erro: '.$e->getMessage()
+        ];
     }
 }
+
