@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Insumo;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator; 
 
 class HistoricoCompraInsumoController extends Controller
 {
@@ -18,7 +18,6 @@ class HistoricoCompraInsumoController extends Controller
         $this->model = $model;
     }
 
-// ahm, to fazendo é historico compra insumo ok ?
     //Método GET (retorna os historicos de insumos)
     public function index()
     {
@@ -50,10 +49,11 @@ class HistoricoCompraInsumoController extends Controller
     {
         try
         {            
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Celeiro.Insumos.TipoInsumo', 'Funcionarios')
-                                                    ->orderBy('nome', 'asc')->get();
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Insumos.TipoInsumo', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();    
+            $fornecedores = \App\Fornecedor::orderBy('nome', 'asc')->get();
 
-            return view('entrada.einsumo', ['fazendas' => $fazendas]);
+            return view('entrada.einsumo', ['fazendas' => $fazendas, 'fornecedores' => $fornecedores]);
         }         
         catch(\Exception $e) 
         {          
@@ -66,44 +66,48 @@ class HistoricoCompraInsumoController extends Controller
     public function store(Request $request)
     {
         
-        $compra = $request->only('id_insumo', 'id_funcionario', 'data', 'lote', 'quantidade',
-                                 'nota_fiscal', 'valor', 'id_fornecedor');
+        $compra = $request->only('id_funcionario', 'id_fornecedor', 'nota_fiscal','lote','data', 
+                                  'valor', 'id_insumo', 'quantidade');
         //Validação
         $validator = $this->Validator($compra);
         if ($validator->fails()) {
-            return redirect('compra-insumo/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
         //Inserção no banco
         try 
-        {          
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Celeiro.Insumos.TipoInsumo', 'Funcionarios')
-                                                    ->orderBy('nome', 'asc')->get();
-            
-            $insumo = \App\Models\Insumo\Insumo::find($compra['id_insumo']);
+        {   
+            //criando notas
+            $notas = array();
+            $entrada = $request->only('id_funcionario', 'id_fornecedor', 'nota_fiscal','lote','data', 
+                                        'valor');    
+            $insumos = $compra['id_insumo'];
+            $quantidades = $compra['quantidade'];
 
-            
-            if($insumo){
-                if($compra['quantidade'] <= 0){
-                    throw new \Exception('A quantidade não pode ser negativa ou igual a 0');                    
+            for($i = 0; $i < count($quantidades); $i++){ 
+                $insumo = \App\Models\Insumo\Insumo::find($insumos[$i]); 
+                if($insumo){
+                        $insumo->increment('quantidade', $quantidades[$i]);
+                        $compra  = array_merge($entrada,['id_insumo' => $insumos[$i], 'quantidade' => $quantidades[$i]]);
+                        $success = $this->model->create($compra);                
                 }
                 else{
-                    $insumo->increment('quantidade', $compra['quantidade']);
-                    $success = $this->model->create($compra);
+                    throw new \Exception('Não foi possível encontrar o insumo no banco de dados');
                 }
             }
-            else{
-                throw new \Exception('Não foi possível encontrar o insumo no banco de dados');
-            }
-
-            return view('entrada.einsumo', ['success' => $success, 'fazendas' => $fazendas]);
+                
+            return redirect()
+                            ->back()
+                            ->with('success',$success);
         } 
         catch(\Exception $e) 
         {                      
-            return redirect('compra-insumo/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput();
+                            ->withInput(); 
         }
     } 
 
@@ -196,6 +200,8 @@ class HistoricoCompraInsumoController extends Controller
     protected function Validator($requisicao){        
         $messages = array(
             'id_insumo.required'=>'O campo de insumo é obrigatório',
+            'id_insumo.*.required'=>'É necessário selecionar um insumo na linha da tabela',
+            'id_insumo.*.distinct' => 'Existe insumos duplicados na tabela',
             'id_funcionario.required'=>'O campo de funcionário é obrigatório',
             'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
             'data.required'=>'O campo de data é obrigatório',
@@ -203,8 +209,9 @@ class HistoricoCompraInsumoController extends Controller
             'lote.required'=>'O campo de lote é obrigatório',
             'lote.max'=>'O campo de lote só pode ter no máximo 45 caracteres',
             'quantidade.required'=>'O campo de quantidade é obrigatório',
-            'quantidade.max'=>'O campo de quantidade só pode ter no máximo 45 caracteres',
-            'quantidade.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
+            'quantidade.*.min'=>'O campo de quantidade não pode ser menor ou igual a zero',
+            'quantidade.*.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
+            'quantidade.*.required'=>'As linhas da tabela devem ter a quantidade preenchida',
             'nota_fiscal.required'=>'O campo de nota fiscal é obrigatório',
             'nota_fiscal.max'=>'O campo de nota fiscal só pode ter no máximo 45 caracteres',
             'valor.required'=>'O campo de valor é obrigatório',
@@ -213,11 +220,13 @@ class HistoricoCompraInsumoController extends Controller
         );    
         $rules = array(
             'id_insumo'=>'required',
+            "id_insumo.*"  => "required|distinct",
             'id_funcionario'=>'required',
             'id_fornecedor'=>'required',
             'data'=>'required|date',
             'lote'=>'required|max:45',
-            'quantidade'=>'required|numeric',
+            'quantidade'=>'required',
+            'quantidade.*'=>'required|numeric|min:1',
             'nota_fiscal'=>'required|max:45',
             'valor'=>'required|numeric',
         );

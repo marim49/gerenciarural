@@ -51,11 +51,13 @@ class HistoricoCompraMedicamentoController extends Controller
     public function create()
     {
         try
-        {            
+        {           
             $fazendas = \App\Models\Fazenda\Fazenda::with('Medicamentos.TipoMedicamento', 'Funcionarios')
                                                     ->orderBy('nome', 'asc')->get();
+            $fornecedores = \App\Fornecedor::orderBy('nome')
+                                                    ->get();
 
-            return view('entrada.efarmacia', ['fazendas' => $fazendas]);
+            return view('entrada.efarmacia', ['fazendas' => $fazendas, 'fornecedores' =>$fornecedores]);
         }         
         catch(\Exception $e) 
         {          
@@ -67,44 +69,49 @@ class HistoricoCompraMedicamentoController extends Controller
     //Método POST (salva uma compra de medicamento) : OK    
     public function store(Request $request)
     {
-        $compra = $request->only('id_medicamento', 'id_funcionario', 'data', 'lote', 'quantidade',
-                                 'nota_fiscal', 'valor', 'id_fornecedor');
+        $compra = $request->only( 'id_funcionario','id_fornecedor', 'data', 'lote', 'nota_fiscal',
+                                     'valor', 'id_medicamento', 'quantidade');
         //Validação
         $validator = $this->Validator($compra);
         if ($validator->fails()) {
-            return redirect('compra-medicamento/create')
+            return redirect()
+                            ->back()
                             ->withErrors($validator)
                             ->withInput();
-        }
+        }   
         //Inserção no banco
         try 
-        {          
-            $fazendas = \App\Models\Fazenda\Fazenda::with('Medicamentos.TipoMedicamento', 'Funcionarios')
-                                                    ->orderBy('nome', 'asc')->get();
-            
-            $medicamento = \App\Models\Animal\Medicamento::find($compra['id_medicamento']);
+        {   
+            //criando notas
+            $notas = array();
+            $entrada = $request->only( 'id_funcionario','id_fornecedor', 'data', 'lote', 'nota_fiscal',
+                                         'valor');     
+            $medicamentos = $compra['id_medicamento'];
+            $quantidades = $compra['quantidade'];
 
-            
-            if($medicamento){
-                if($compra['quantidade'] <= 0){
-                    throw new \Exception('A quantidade não pode ser negativa ou igual a 0');                    
+            //registrando
+            for($i = 0; $i < count($quantidades); $i++){                  
+                $medicamento = \App\Models\Animal\Medicamento::find($medicamentos[$i]);            
+                if($medicamento){
+                    $medicamento->increment('quantidade', $quantidades[$i]);
+                    $compra  = array_merge($entrada,['id_medicamento' => $medicamentos[$i], 'quantidade' => $quantidades[$i]]);
+                    $success = $this->model->create($compra);                    
                 }
                 else{
-                    $medicamento->increment('quantidade', $compra['quantidade']);
-                    $success = $this->model->create($compra);
+                    throw new \Exception('Não foi possível encontrar o medicamento no banco de dados');
                 }
             }
-            else{
-                throw new \Exception('Não foi possível encontrar o medicamento no banco de dados');
-            }
-
-            return view('entrada.efarmacia', ['success' => $success, 'fazendas' => $fazendas]);
+                
+            return redirect()
+                            ->back()
+                            ->with('success',$success);
         } 
         catch(\Exception $e) 
         {                      
-            return redirect('compra-medicamento/create')
+            return redirect()
+                            ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
-                            ->withInput();
+                            ->withInput(); 
         }
     } 
 
@@ -197,15 +204,18 @@ class HistoricoCompraMedicamentoController extends Controller
     protected function Validator($requisicao){        
         $messages = array(
             'id_medicamento.required'=>'O campo de medicamento é obrigatório',
-            'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+            'id_medicamento.*.required'=>'É necessário selecionar um medicamento na linha da tabela',
+            'id_medicamento.*.distinct' => 'Existe medicamentos duplicados na tabela',
+            'id_funcionario.required'=>'O campo de funcionário é obrigatório, para isso selecione a fazenda',
             'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
             'data.required'=>'O campo de data é obrigatório',
             'data.date'=>'O campo de data está em formato inválio',
             'lote.required'=>'O campo de lote é obrigatório',
             'lote.max'=>'O campo de lote só pode ter no máximo 45 caracteres',
-            'quantidade.required'=>'O campo de quantidade é obrigatório',
-            'quantidade.max'=>'O campo de quantidade só pode ter no máximo 45 caracteres',
-            'quantidade.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
+            'quantidade.required'=>'Os campos de quantidade são obrigatório',
+            'quantidade.*.min'=>'O campo de quantidade não pode ser menor ou igual a zero',
+            'quantidade.*.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
+            'quantidade.*.required'=>'As linhas da tabela devem ter a quantidade preenchida',
             'nota_fiscal.required'=>'O campo de nota fiscal é obrigatório',
             'nota_fiscal.max'=>'O campo de nota fiscal só pode ter no máximo 45 caracteres',
             'valor.required'=>'O campo de valor é obrigatório',
@@ -213,12 +223,14 @@ class HistoricoCompraMedicamentoController extends Controller
             'valor.numeric'=>'O campo valor só pode ter entradas numéricas',
         );    
         $rules = array(
-            'id_medicamento'=>'required',
-            'id_fornecedor'=>'required',
             'id_funcionario'=>'required',
+            'id_fornecedor'=>'required',
+            'id_medicamento'=>'required',
+            "id_medicamento.*"  => "required|distinct",
             'data'=>'required|date',
             'lote'=>'required|max:45',
-            'quantidade'=>'required|numeric',
+            'quantidade'=>'required',
+            'quantidade.*'=>'required|numeric|min:1',
             'nota_fiscal'=>'required|max:45',
             'valor'=>'required|numeric',
         );
