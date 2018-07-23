@@ -28,9 +28,11 @@ class MaquinaController extends Controller
             
             $maquinas = $this->model->orderBy('id', 'asc')
                 ->with('Fazenda')
-                ->get();/*->paginate($limit); //limite por páginas */
-
-            return view('pesquisa.pmaquina', ['maquinas' => $maquinas]);
+                ->get();
+                $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+                /*->paginate($limit); //limite por páginas */
+             // return response()->json($maquinas);
+            return view('pesquisa.pmaquina', ['maquinas' => $maquinas, 'fazendas' => $fazendas]);
         }
         catch(\Exception $e) 
         {

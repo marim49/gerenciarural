@@ -21,7 +21,7 @@ class Maquina extends Model
     }
 
     //Atributos    
-    public function getdataaquisicaoAttribute($value) {
-        return \Carbon\Carbon::parse($value)->format('d/m/Y');
-    }
+    //public function getdataaquisicaoAttribute($value) {
+    //    return \Carbon\Carbon::parse($value)->format('d/m/Y');
+    // }
 }

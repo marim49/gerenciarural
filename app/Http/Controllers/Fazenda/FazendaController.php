@@ -29,7 +29,9 @@ class FazendaController extends Controller
             $fazendas = $this->model->orderBy('id', 'asc')
                 ->get();/*->paginate($limit); //limite por páginas */
 
-            return view('pesquisa.pfazenda', ['fazendas' => $fazendas]);
+            //retornar view
+           // return response()->json($fazendas);
+           return view('pesquisa.pfazenda', ['fazendas' => $fazendas]);
             
         }
         catch(\Exception $e) 

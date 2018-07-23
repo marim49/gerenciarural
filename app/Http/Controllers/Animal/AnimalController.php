@@ -29,8 +29,10 @@ class AnimalController extends Controller
             $animais = $this->model->orderBy('id', 'asc')
                 ->with('GrupoAnimal', 'Fazenda')
                 ->get();/*->paginate($limit); //limite por páginas */
-
-            return view('pesquisa.panimal', ['animais' => $animais]);
+                $grupos = \App\Models\Animal\GrupoAnimal::orderBy('nome', 'asc')->get();
+                $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+             //   return response()->json($animais);
+            return view('pesquisa.panimal', ['animais' => $animais, 'grupos' => $grupos, 'fazendas' => $fazendas]);
         }
         catch(\Exception $e) 
         {

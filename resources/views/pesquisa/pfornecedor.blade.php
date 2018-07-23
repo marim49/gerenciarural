@@ -37,9 +37,8 @@
 									<td> {{$fornecedor->telefone}} </td>
 									<td>
 										<center>
-											<a href='#modal_theme_danger' data-toggle='modal' data-target=''>
-												<span class='icon-pencil7 alert-warning'></span>
-											</a>
+											<button type="button" class="btn btn-xs btn-warning" onclick="editarFornecedor()" data-toggle="modal" data-target="#exampleModal"
+											    data-nome="{{$fornecedor->nome}}" data-id="{{$fornecedor->id}}" data-telefone="{{$fornecedor->telefone}}">Editar</button>
 										</center>
 									</td>
 								</tr>
@@ -47,9 +46,51 @@
 							</tbody>
 						</table>
 					</div>
+					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<h4 class="modal-title" id="exampleModalLabel">Curso</h4>
+								</div>
+								<div class="modal-body">
+									<form name='update-fornecedor' action="{{ route('fornecedor.update', $fornecedor->id) }}" method='POST'>
+										{{ csrf_field() }} {{ method_field('PUT') }}
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-md-12">
+
+													<div class="col-md-8">
+														<div class="form-group">
+															<label>Nome: *</label>
+															<input class="form-control" id="nome" type="text" name="nome" placeholder="Insira aqui o nome do fornecedor" maxlength="45" value="{{ old('nome')}}"
+															/>
+														</div>
+													</div>
+
+													<div class="col-md-8">
+														<div class="form-group">
+															<label>Telefone: *</label>
+															<input class="form-control" id="telefone" type="text" name="telefone" placeholder="(__)____-____" maxlength="45" value="{{ old('telefone')}}"
+															/>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+										<div class='modal-footer'>
+											<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>
+											<button type='submit' class='btn btn-primary'>Editar</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-
-
 
 			</div>
 		</div>
