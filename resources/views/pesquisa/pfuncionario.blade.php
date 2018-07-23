@@ -29,8 +29,7 @@
 									<th>Cargo</th>
 									<th>Fazenda</th>
 									<th>Celular</th>
-									<th>Editar </th>
-									<th></th>
+									<th>Editar</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -44,13 +43,6 @@
 									<td> {{$funcionario->cargo}} </td>
 									<td> {{$funcionario->Fazenda->nome}} </td>
 									<td> {{$funcionario->celular}}</td>
-									<td>
-										<center>
-											<a id="teste" class="teste" onclick="modalEditar()" data-toggle='modal' data-target='#myModal'>
-												<span class='icon-pencil7 alert-warning'></span>
-											</a>
-										</center>
-									</td>
 									<td>
 										<button type="button" class="btn btn-xs btn-warning" onclick="editarFuncionario()" data-toggle="modal" data-target="#exampleModal"
 										data-nome="{{$funcionario->nome}}" data-id="{{$funcionario->id}}" data-pis="{{$funcionario->pis}}"
