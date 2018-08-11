@@ -33,6 +33,7 @@
 								</tr>
 							</thead>
 							<tbody>
+							@if(isset($funcionarios))
 								@foreach ($funcionarios as $funcionario)
 								<tr class='gradeA'>
 									<td>
@@ -59,6 +60,7 @@
 									</td>
 								</tr>
 								@endforeach
+							@endif
 
 							</tbody>
 						</table>
@@ -74,6 +76,7 @@
 								<h4 class="modal-title" id="exampleModalLabel">Curso</h4>
 							</div>
 							<div class="modal-body">
+							@if(isset($funcionario))
 							<form name="register-funcionario" action="{{ route('funcionario.update', $funcionario->id ) }}" method="POST">
 										{{ csrf_field() }} {{ method_field('PUT') }}
 										<div class="panel-body">
@@ -237,6 +240,7 @@
 											</div>
 										</div>
 									</form>
+									@endif
 
 							</div>
 

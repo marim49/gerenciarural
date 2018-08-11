@@ -69,7 +69,7 @@ class HistoricoCompraCombustivelController extends Controller
     //Método POST (salva uma compra de combustivel) : OK
     public function store(Request $request)
     {
-        $compra = $request->only('id_fazenda', 'id_funcionario', 'data', 'lote', 'quantidade',
+        $compra = $request->only('id_fazenda', 'id_funcionario', 'data', 'lote', 'quantidade', 'horimetro',
                                  'nota_fiscal', 'valor', 'id_fornecedor');
         //Validação
         $validator = $this->Validator($compra);
@@ -210,8 +210,10 @@ class HistoricoCompraCombustivelController extends Controller
             'lote.required'=>'O campo de lote é obrigatório',
             'lote.max'=>'O campo de lote só pode ter no máximo 45 caracteres',
             'quantidade.required'=>'O campo de quantidade é obrigatório',
+            'horimetro.required'=>'O campo de horímetro é obrigatório',
             'quantidade.max'=>'O campo de quantidade só pode ter no máximo 45 caracteres',
             'quantidade.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
+            'horimetro.numeric'=>'O campo de horímetro só pode ter entradas numéricas',
             'nota_fiscal.required'=>'O campo de nota fiscal é obrigatório',
             'nota_fiscal.max'=>'O campo de nota fiscal só pode ter no máximo 45 caracteres',
             'nota_fiscal.unique'=>'Já existe uma nota fiscal cadastrada com esse número',
@@ -226,6 +228,7 @@ class HistoricoCompraCombustivelController extends Controller
             'data'=>'required|date',
             'lote'=>'required|max:45',
             'quantidade'=>'required|numeric',
+            'horimetro'=>'required|numeric',
             'nota_fiscal'=>'required|max:45|unique:historico_compra_combustivel',
             'valor'=>'required|numeric',
         );

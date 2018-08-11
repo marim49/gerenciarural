@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="{{ app()->getLocale() }}">
 
 <head>
@@ -82,7 +82,6 @@
         @else
         <div class="top-right links">
             <a href="{{ route('login') }}">Login</a>
-            <a href="{{ route('register') }}">Registro</a>
         </div>
         @endauth
     </nav>
@@ -93,12 +92,6 @@
     <div class="flex-center position-ref full-height">
 
         <div class="content">
-
-            <div class="links">
-                <a href="" icon="home">Sobre</a>
-                <a href="">Donos</a>
-                <a href="">Fornecedores</a>
-            </div>
 
             <div class="title m-b-md">
                 <img src="{{ asset('img/tec.svg') }}" style="width:70%;">

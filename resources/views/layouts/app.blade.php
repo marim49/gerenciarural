@@ -55,9 +55,6 @@
                         <li class="nav-item">
                             <a class="nav-link" style="color: black" href="{{ route('login') }}">{{ __('Login') }}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" style="color: black" href="{{ route('register') }}">{{ __('Registro') }}</a>
-                        </li>
                         @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -70,6 +67,9 @@
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
+                                </a>
+                                <a class="dropdown-item" href="{{ route('home') }}">
+                                    {{ __('Home') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

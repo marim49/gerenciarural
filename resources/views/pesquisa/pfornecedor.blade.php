@@ -31,6 +31,7 @@
 								</tr>
 							</thead>
 							<tbody>
+								@if(isset($fornecedores))
 								@foreach ($fornecedores as $fornecedor)
 								<tr class='gradeA'>
 									<td> {{$fornecedor->nome}} </td>
@@ -43,9 +44,11 @@
 									</td>
 								</tr>
 								@endforeach
+								@endif
 							</tbody>
 						</table>
 					</div>
+					
 					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -56,6 +59,8 @@
 									<h4 class="modal-title" id="exampleModalLabel">Curso</h4>
 								</div>
 								<div class="modal-body">
+								
+									@if(isset($fornecedor))
 									<form name='update-fornecedor' action="{{ route('fornecedor.update', $fornecedor->id) }}" method='POST'>
 										{{ csrf_field() }} {{ method_field('PUT') }}
 										<div class="panel-body">
@@ -85,7 +90,9 @@
 											<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>
 											<button type='submit' class='btn btn-primary'>Editar</button>
 										</div>
-									</form>
+									</form>									
+								@endif
+								
 								</div>
 							</div>
 						</div>

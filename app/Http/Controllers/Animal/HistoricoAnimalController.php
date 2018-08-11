@@ -68,7 +68,7 @@ class HistoricoAnimalController extends Controller
     public function store(Request $request)
     {
         $medicacao = $request->only('id_animal', 'id_medicamento', 'id_funcionario', 'quantidade',
-                                        'data');
+                                        'motivo', 'data');
         //Validação
         $validator = $this->Validator($medicacao);
         if ($validator->fails()) {

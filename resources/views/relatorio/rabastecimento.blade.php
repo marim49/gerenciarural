@@ -1,4 +1,4 @@
-@extends('layouts.layout') @section('content')
+﻿@extends('layouts.layout') @section('content')
 <div class="container">
 	<div class="row pad-botm">
 		<div class="col-md-12">
@@ -23,6 +23,7 @@
 									<th>Máquina abastecida</th>
 									<th>Funcionário que abasteceu</th>
 									<th>Quantidade</th>
+									<th>Horímetro</th>
 									<th>Data do abastecimento</th>
 
 
@@ -35,6 +36,7 @@
 									<td> {{$historico->maquina->nome}} </td>
 									<td> {{$historico->funcionario->nome}} </td>
 									<td> {{$historico->quantidade}} </td>
+									<td> {{$historico->horimetro}} </td>
 									<td> {{$historico->data}} </td>
 
 								</tr>

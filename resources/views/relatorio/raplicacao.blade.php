@@ -23,6 +23,7 @@
 									<th>Animal</th>
 									<th>Medicamento </th>
 									<th>Quantidade Aplicada</th>
+									<th>Motivo</th>
 									<th>Data da aplicação</th>
 
 
@@ -35,6 +36,7 @@
 									<td> {{$historico->animal->nome}} </td>
 									<td> {{$historico->medicamento->nome}} </td>
 									<td> {{$historico->quantidade}} </td>
+									<td> {{$historico->motivo}} </td>
 									<td> {{$historico->data}} </td>
 
 								</tr>

@@ -66,6 +66,12 @@
 										<div class="form-group">
 											<label>Quantidade a abastecer: *</label>
 											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" value="{{ old('quantidade')}}"/>
+										</div>										
+
+										<div class="form-group">
+											<label>Horímetro: *</label>
+											<input class="form-control" name="horimetro" placeholder="Valor atual do horímetro da máquina" maxlength="45" value="{{ old('horimetro')}}"
+											/>
 										</div>
 
 										<div class="form-group">
