@@ -16,7 +16,7 @@
 				<div class="panel-body">
 					<div class="table-responsive">
 						
-						<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+						<table class="table table-striped table-bordered table-hover" id="plantio">
 							<thead>
 								<tr>
 									<th>Terra pertencente</th>
@@ -41,6 +41,12 @@
 								@endforeach
 
 							</tbody>
+							<tfoot>
+            <tr>
+                <th>Total:</th>
+                <th colspan="4" style="text-align:center"></th>
+            </tr>
+        </tfoot>
 
 						</table>
 						<a onclick="imprimir()" class="btn btn-primary pull-left">Imprimir</a>
