@@ -170,6 +170,9 @@
                             <a href="{{ url('compra-combustivel/create') }}"> Combustível</a>
                         </li>
                         <li>
+                            <a href="{{ url('revisao/create') }}"> Revisão de Máquina</a>
+                        </li>
+                        <li>
                             <a href="{{ url('compra-medicamento/create') }}"> Farmácia</a>
                         </li>
                         <li>

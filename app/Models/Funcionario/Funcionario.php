@@ -47,6 +47,10 @@ class Funcionario extends Model
     {
         return $this->hasMany(\App\Models\Animal\HistoricoAnimal::class, 'id_funcionario');
     }
+    public function Revisoes()
+    {
+        return $this->hasMany(\App\Models\Maquina\Revisao::class, 'id_funcionario');
+    }
 
     // //Atributos
     // public function getnascimentoAttribute($value) {
