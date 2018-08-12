@@ -266,6 +266,8 @@
     <!-- DATATABLE SCRIPTS  -->
     <script src="{{ asset('js/dataTables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('js/dataTables/dataTables.bootstrap.js') }}"></script>
+    <script src="{{ asset('js/dataTables/sum.js') }}"></script>
+    <script src="{{ asset('js/dataTables/calcDataTable.js') }}"></script>
     <!-- BOOTSTRAP SCRIPTS  -->
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <!-- CUSTOM SCRIPTS  -->
