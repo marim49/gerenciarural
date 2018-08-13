@@ -16,7 +16,7 @@
 				<div class="panel-body">
 					<div class="table-responsive">
 						
-						<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+						<table class="table table-striped table-bordered table-hover" id="medicamento">
 							<thead>
 								<tr>
 									<th>Funcionário</th>
@@ -45,7 +45,14 @@
 								@endforeach
 
 							</tbody>
-
+							<tfoot>
+            <tr>
+                <th>Total Quant:</th>
+				<th colspan="2" style="text-align:center"></th>
+				<th>Total Val:</th>
+				<th colspan="3" style="text-align:center"></th>
+            </tr>
+        </tfoot>
 						</table>
 						<a onclick="imprimir()" class="btn btn-primary pull-left">Imprimir</a>
 					</div>

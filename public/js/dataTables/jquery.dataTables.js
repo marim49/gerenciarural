@@ -416,6 +416,10 @@
 	 *  @param {object} settings dataTables settings object
 	 *  @memberof DataTable#oApi
 	 */
+
+	
+
+
 	function _fnBrowserDetect( settings )
 	{
 		var browser = settings.oBrowser;

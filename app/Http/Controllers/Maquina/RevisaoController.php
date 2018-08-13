@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class MaquinaController extends Controller
+class RevisaoController extends Controller
 {
     protected $model;
     protected $relationships = [
-        'Fazenda', 'HistoricoAbastecimentos'
+        'Funcionario', 'Maquina'
     ]; 
     
-    public function __construct(\App\Models\Maquina\Maquina $model)
+    public function __construct(\App\Models\Maquina\Revisao $model)
     {
         $this->model = $model;
     }
@@ -26,18 +26,17 @@ class MaquinaController extends Controller
             //resultados por página
             $limit = 20;
             
-            $maquinas = $this->model->orderBy('id', 'asc')
-                ->with('Fazenda')
+            $revisoes = $this->model->orderBy('id', 'asc')
+                ->with($this->relationships())
                 ->get();
-                $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
                 /*->paginate($limit); //limite por páginas */
                 
-            return view('pesquisa.pmaquina', ['maquinas' => $maquinas, 'fazendas' => $fazendas]);
+            return view('pesquisa.previsao', ['revisoes' => $revisoes]);
         }
         catch(\Exception $e) 
         {
-            return view('pesquisa.pmaquina', ['maquinas' => []])
-                            ->withErrors($this->Error('Não foi recuperar os registros.',$e));
+            return view('pesquisa.previsao', ['revisoes' => []])
+                            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     
@@ -48,11 +47,11 @@ class MaquinaController extends Controller
         {
             $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
         
-            return view('cadastro.cmaquina', ['fazendas' => $fazendas]);
+            return view('cadastro.crevisao', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
-            return view('cadastro.cmaquina', ['fazendas' => []])
+            return view('cadastro.crevisao', ['fazendas' => []])
                             ->withErrors($this->Error('Houve algum erro.',$e));
         }
     } 
@@ -60,9 +59,9 @@ class MaquinaController extends Controller
     // Método POST (salva o animal) : OK 
     public function store(Request $request)
     {
-        $maquina = $request->only('id_fazenda', 'nome', 'data_aquisicao');
+        $revisao = $request->only('id_maquina', 'id_funcionario', 'item', 'nota_fiscal', 'valor', 'problema', 'data');
         //Validação
-        $validator = $this->Validator($maquina);
+        $validator = $this->Validator($revisao);
         if ($validator->fails()) {
             return redirect()
                             ->back()
@@ -72,7 +71,7 @@ class MaquinaController extends Controller
         //Cadastro       
         try 
         {
-            $success = $this->model->create($maquina);
+            $success = $this->model->create($revisao);
 
             return redirect()
                             ->back()
@@ -92,11 +91,11 @@ class MaquinaController extends Controller
     {
         try
         {
-            $maquina = $this->model->with($this->relationships())
+            $revisao = $this->model->with($this->relationships())
                                 ->findOrFail($id);       
 
             //retornar view
-            return response()->json($maquina);
+            return response()->json($revisao);
         }
         catch(\Exception $e)
         {
@@ -117,15 +116,15 @@ class MaquinaController extends Controller
         //tratar entrada
         try
         {
-            $update_maquina = $this->model->findOrFail($id);            
+            $update_revisao = $this->model->findOrFail($id);            
             $dados = $request->all();
 
-            $update_maquina->update($dados);
+            $update_revisao->update($dados);
             
             //retornar view
             return response()->json([
                 'status' => 'OK', 
-                'item' => $update_maquina
+                'item' => $update_revisao
             ]);
         }
         catch(\Exception $e) 
@@ -175,15 +174,24 @@ class MaquinaController extends Controller
     //Método de validação : OK
     protected function Validator($requisicao){        
         $messages = array(
-            'id_fazenda' => 'O campo de fazenda é obrigatório',
-            'nome.required'=> 'O campo nome é obrigatório',
-            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
-            'data_aquisicao.required'=>'O campo de data de aquisição é obrigatório',
+            'id_maquina' => 'O campo de máquina é obrigatório',
+            'id_funcionario' => 'O campo de funcionário é obrigatório',
+            'item.max'=> 'O tamanho máximo do campo item é 45 caracteres',
+            'nota_fiscal.max'=> 'O tamanho máximo do campo nota fiscal é 45 caracteres',
+            'valor.numeric'=> 'O campo de valor só pode ter entradas numéricas',
+            'problema.required'=> 'O campo de descrição do problema é obrigatório',
+            'problema.max'=> 'O tamanho máximo do campo de problema é 191 carcateres',
+            'data.required'=> 'O campo data é obrigatório',
+            'data.date'=> 'O campo de data só pode ter entradas do tipo de data',
         );    
         $rules = array(
-            'id_fazenda' => 'required',
-            'nome'=>'required|max:45',
-            'data_aquisicao'=>'required|date',
+            'id_maquina' => 'required',
+            'id_funcionario' => 'required',
+            'item'=> 'max:45',
+            'nota_fiscal'=> 'max:45',
+            'problema'=> 'required|max:191',
+            'valor'=> 'numeric',
+            'data'=>'required|date',
         );
     
         return Validator::make($requisicao, $rules,$messages);        

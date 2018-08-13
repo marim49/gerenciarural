@@ -16,7 +16,7 @@
 				<div class="panel-body">
 					<div class="table-responsive">
 						
-						<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+						<table class="table table-striped table-bordered table-hover" id="aplicacao">
 							<thead>
 								<tr>
 									<th>Funcionário</th>
@@ -31,7 +31,7 @@
 							</thead>
 							<tbody>
 								@foreach ($historicos_animais as $historico)
-								<tr class='gradeA'>
+								<tr>
 									<td> {{$historico->funcionario->nome}} </td>
 									<td> {{$historico->animal->nome}} </td>
 									<td> {{$historico->medicamento->nome}} </td>
@@ -41,6 +41,12 @@
 
 								</tr>
 								@endforeach
+								<tfoot>
+            <tr>
+                <th>Total:</th>
+                <th colspan="4" style="text-align:center"></th>
+            </tr>
+        </tfoot>
 
 							</tbody>
 
