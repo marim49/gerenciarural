@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers\Insumo;
 
@@ -206,7 +206,6 @@ class HistoricoCompraInsumoController extends Controller
             'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
             'data.required'=>'O campo de data é obrigatório',
             'data.date'=>'O campo de data está em formato inválio',
-            'lote.required'=>'O campo de lote é obrigatório',
             'lote.max'=>'O campo de lote só pode ter no máximo 45 caracteres',
             'quantidade.required'=>'O campo de quantidade é obrigatório',
             'quantidade.*.min'=>'O campo de quantidade não pode ser menor ou igual a zero',
@@ -224,7 +223,7 @@ class HistoricoCompraInsumoController extends Controller
             'id_funcionario'=>'required',
             'id_fornecedor'=>'required',
             'data'=>'required|date',
-            'lote'=>'required|max:45',
+            'lote'=>'max:45',
             'quantidade'=>'required',
             'quantidade.*'=>'required|numeric|min:1',
             'nota_fiscal'=>'required|max:45',

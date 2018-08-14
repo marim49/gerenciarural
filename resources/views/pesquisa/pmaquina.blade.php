@@ -32,6 +32,7 @@
 								</tr>
 							</thead>
 							<tbody>
+							@if(isset($maquinas))
 								@foreach ($maquinas as $maquina)
 								<tr class='gradeA'>
 									<td> {{$maquina->Fazenda->nome}} </td>
@@ -46,6 +47,7 @@
 									</td>
 								</tr>
 								@endforeach
+							@endif
 
 							</tbody>
 						</table>
@@ -60,6 +62,7 @@
 									<h4 class="modal-title" id="exampleModalLabel">Curso</h4>
 								</div>
 								<div class="modal-body">
+								@if(isset($maquina))
 									<form name='update-maquina' action="{{ route('maquina.update', $maquina->id) }}" method='POST'>
 										{{ csrf_field() }} {{ method_field('PUT') }}
 										<div class="panel-body">
@@ -104,6 +107,8 @@
 											<button type='submit' class='btn btn-primary'>Editar</button>
 										</div>
 									</form>
+								@endif
+									
 								</div>
 							</div>
 						</div>

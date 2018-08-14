@@ -34,6 +34,7 @@
 								</tr>
 							</thead>
 							<tbody>
+								@if(isset($fazendas))
 								@foreach ($animais as $animal)
 								<tr class='gradeA'>
 									<td> {{$animal->nome}} </td>
@@ -51,6 +52,7 @@
 									</td>
 								</tr>
 								@endforeach
+								@endif
 
 							</tbody>
 						</table>
@@ -64,7 +66,9 @@
 									</button>
 									<h4 class="modal-title" id="exampleModalLabel">Curso</h4>
 								</div>
-								<div class="modal-body">
+								<div class="modal-body">								
+								
+									@if(isset($animal))
 									<form name='update-animal' action="{{ route('animal.update', $animal->id) }}" method='POST'>
 										{{ csrf_field() }} {{ method_field('PUT') }}
 										<div class="panel-body">
@@ -73,11 +77,14 @@
 
 													<div class="form-group">
 														<label>Fazenda: *</label>
-														<select class="form-control" id="fazenda" name="id_fazenda" /> @foreach($fazendas as $fazenda) @if (old('id_fazenda') == $fazenda->id)
-														<option value="{{$fazenda->id}}" selected>{{$fazenda->nome}}</option>
-														@else
-														<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
-														@endif @endforeach
+														<select class="form-control" id="fazenda" name="id_fazenda" />
+															@foreach($fazendas as $fazenda)
+																@if (old('id_fazenda') == $fazenda->id)
+																<option value="{{$fazenda->id}}" selected>{{$fazenda->nome}}</option>
+																@else
+																<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
+																@endif
+															@endforeach
 														</select>
 													</div>
 
@@ -134,6 +141,8 @@
 											<button type='submit' class='btn btn-primary'>Editar</button>
 										</div>
 									</form>
+									@endif
+									
 								</div>
 							</div>
 						</div>

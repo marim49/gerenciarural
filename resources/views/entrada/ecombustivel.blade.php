@@ -40,7 +40,7 @@
 											<select id="fazendas" name="id_fazenda" class="form-control" onchange="EntradaCombustivel()">
 												<option value="" selected>- Selecione a Fazenda -</option>
 												@foreach($fazendas as $fazenda)
-													<option data-id="{{$fazenda}}" value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
+												<option data-id="{{$fazenda}}" value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
 												@endforeach
 											</select>
 										</div>
@@ -52,42 +52,41 @@
 										</div>
 
 										<div class="form-group">
-											<label>Fornecedor: *</label>												
-											<select name="id_fornecedor" class="form-control">									
+											<label>Fornecedor: *</label>
+											<select name="id_fornecedor" class="form-control">
 												<option value="" selected>- Selecione o Fornecedor -</option>
-												@foreach($fornecedores as $fornecedor)
-													@if (old('id_fornecedor') == $fornecedor->id)
-													<option value="{{$fornecedor->id}}" selected>{{$fornecedor->nome}}</option>
-													@else
-													<option value="{{$fornecedor->id}}">{{$fornecedor->nome}}</option>
-													@endif
-												@endforeach
+												@foreach($fornecedores as $fornecedor) @if (old('id_fornecedor') == $fornecedor->id)
+												<option value="{{$fornecedor->id}}" selected>{{$fornecedor->nome}}</option>
+												@else
+												<option value="{{$fornecedor->id}}">{{$fornecedor->nome}}</option>
+												@endif @endforeach
 											</select>
 										</div>
 
 										<div class="form-group">
 											<label>Quantidade: *</label>
-											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" value="{{ old('quantidade')}}"/>
+											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" value="{{ old('quantidade')}}" />
 										</div>
 
 										<div class="form-group">
 											<label>Data da compra: *</label>
-											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
+											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}" />
 										</div>
 
 										<div class="form-group">
 											<label>Lote: *</label>
-											<input class="form-control" name="lote" placeholder="Lote de compra" maxlength="45" value="{{ old('lote')}}"/>
+											<input class="form-control" name="lote" placeholder="Lote de compra" maxlength="45" value="{{ old('lote')}}" />
 										</div>
 
 										<div class="form-group">
 											<label>Nota fiscal: *</label>
-											<input class="form-control" name="nota_fiscal" placeholder="Nota fiscal da compra" maxlength="45" value="{{ old('nota_fiscal')}}"/>
+											<input class="form-control" name="nota_fiscal" placeholder="Nota fiscal da compra" maxlength="45" value="{{ old('nota_fiscal')}}"
+											/>
 										</div>
 
 										<div class="form-group">
 											<label>Valor: *</label>
-											<input class="form-control" name="valor" type="numeric" placeholder="Valor da compra" value="{{ old('valor')}}"/>
+											<input class="form-control" name="valor" type="numeric" placeholder="Valor da compra" value="{{ old('valor')}}" />
 										</div>
 
 									</div>

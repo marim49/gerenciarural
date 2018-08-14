@@ -18,7 +18,8 @@ class CreateHistoricoAbastecimentoTable extends Migration
             $table->integer('id_maquina')->unsigned();
             $table->integer('id_combustivel')->unsigned();
             $table->integer('id_funcionario')->unsigned(); 
-            $table->float('quantidade');      
+            $table->float('quantidade'); 
+            $table->integer('horimetro')->default(0);     
             $table->date('data');        
             $table->foreign('id_maquina')->references('id')->on('maquina');
             $table->foreign('id_combustivel')->references('id')->on('combustivel');

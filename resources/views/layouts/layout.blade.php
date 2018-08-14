@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -31,9 +31,6 @@
     <div class="navbar navbar-inverse set-radius-zero">
         <div class="container">
 
-
-
-
             <div class="navbar-header">
                 <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn navbar-toggle">
                     <i class="glyphicon glyphicon-align-left"></i>
@@ -49,12 +46,17 @@
             </div>
 
             <div class="right-div">
-                <a href="{{ route('logout') }}" onclick="event.preventDefault();
-            document.getElementById('logout-form').submit();" class="btn btn-primary pull-right">{{ __('Logout') }}</a>
+                <button class="dropdown btn-primary nav-item">
+                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            
+                        {{ Auth::user()->name }} | {{ __('Logout') }}
+                        </a>
 
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                </button>
             </div>
         </div>
     </div>
@@ -232,6 +234,28 @@
                         <li>
                             <a href="{{ url('plantio')}}">
                                 Plantio</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#configuracao" data-toggle="collapse">
+                        <i class="fa fa-wrench"></i>
+                        Configurações
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="collapse list-unstyled" id="configuracao">
+
+                        <li>
+                            <a href="{{ url('tipoinsumo/create')}}">Tipo de Insumo</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('tipomedicamento/create')}}">Tipo de Medicamento</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('grupoanimal/create')}}">Grupo de Insumo</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('register') }}">Novo Usuário</a>
                         </li>
                     </ul>
                 </li>

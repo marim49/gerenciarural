@@ -29,11 +29,11 @@
 									<th>Cargo</th>
 									<th>Fazenda</th>
 									<th>Celular</th>
-									<th>Editar </th>
-									<th></th>
+									<th>Editar</th>
 								</tr>
 							</thead>
 							<tbody>
+							@if(isset($funcionarios))
 								@foreach ($funcionarios as $funcionario)
 								<tr class='gradeA'>
 									<td>
@@ -44,13 +44,6 @@
 									<td> {{$funcionario->cargo}} </td>
 									<td> {{$funcionario->Fazenda->nome}} </td>
 									<td> {{$funcionario->celular}}</td>
-									<td>
-										<center>
-											<a id="teste" class="teste" onclick="modalEditar()" data-toggle='modal' data-target='#myModal'>
-												<span class='icon-pencil7 alert-warning'></span>
-											</a>
-										</center>
-									</td>
 									<td>
 										<button type="button" class="btn btn-xs btn-warning" onclick="editarFuncionario()" data-toggle="modal" data-target="#exampleModal"
 										data-nome="{{$funcionario->nome}}" data-id="{{$funcionario->id}}" data-pis="{{$funcionario->pis}}"
@@ -67,6 +60,7 @@
 									</td>
 								</tr>
 								@endforeach
+							@endif
 
 							</tbody>
 						</table>
@@ -82,6 +76,7 @@
 								<h4 class="modal-title" id="exampleModalLabel">Curso</h4>
 							</div>
 							<div class="modal-body">
+							@if(isset($funcionario))
 							<form name="register-funcionario" action="{{ route('funcionario.update', $funcionario->id ) }}" method="POST">
 										{{ csrf_field() }} {{ method_field('PUT') }}
 										<div class="panel-body">
@@ -245,6 +240,7 @@
 											</div>
 										</div>
 									</form>
+									@endif
 
 							</div>
 

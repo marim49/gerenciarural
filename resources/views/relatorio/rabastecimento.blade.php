@@ -72,6 +72,7 @@
 									<th>Máquina abastecida</th>
 									<th>Funcionário que abasteceu</th>
 									<th>Quantidade</th>
+									<th>Horímetro</th>
 									<th>Data do abastecimento</th>
 
 
@@ -89,7 +90,8 @@
 									
 									<td> {{$historico->maquina->nome}} </td>
 									<td> {{$historico->funcionario->nome}} </td>
-									<td class=""> {{$historico->quantidade}} </td>
+									<td> {{$historico->quantidade}} </td>
+									<td> {{$historico->horimetro}} </td>
 									<td> {{$historico->data}} </td>
 
 								</tr>
