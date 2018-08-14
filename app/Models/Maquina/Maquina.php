@@ -19,6 +19,10 @@ class Maquina extends Model
     {
         return $this->hasMany(HistoricoAbastecimento::class, 'id_maquina');
     }
+    public function Revisoes()
+    {
+        return $this->hasMany(Revisao::class, 'id_maquina');
+    }
 
     //Atributos    
     //public function getdataaquisicaoAttribute($value) {

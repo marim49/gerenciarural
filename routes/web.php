@@ -154,4 +154,12 @@ Route::group(['middleware' => 'auth'], function()
     * combustivel/{id}/edit => GET(edit)
     */
     Route::resource('combustivel', 'Maquina\CombustivelController')/*->middleware('auth')*/;
+    
+    /* ROTA: REVISÃO
+    * revisao => POST(store), GET(index) 
+    * revisao/create => GET(create) 
+    * revisao/{id} => GET(show), PUT(update), DELETE(destroy)
+    * revisao/{id}/edit => GET(edit)
+    */
+    Route::resource('revisao', 'Maquina\RevisaoController')/*->middleware('auth')*/;
 });
