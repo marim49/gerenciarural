@@ -1,5 +1,6 @@
-$(document).ready(function() {
-    $('#abastecimento').DataTable( {
+$(document).ready(function() {  
+
+    $('#dabastecimento').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
@@ -33,7 +34,7 @@ $(document).ready(function() {
             );
         }
     } );
-    $('#aplicacao').DataTable( {
+    $('#daplicacao').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
@@ -70,7 +71,7 @@ $(document).ready(function() {
 
     //Compra de combustível
 
-    $('#combustivel').DataTable( {
+    $('#dcombustivel').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
@@ -125,7 +126,7 @@ $(document).ready(function() {
 
     // Compra de insumo 
 
-    $('#insumo').DataTable( {
+    $('#dinsumo').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
@@ -180,7 +181,7 @@ $(document).ready(function() {
 
     // Compra medicamento
 
-    $('#medicamento').DataTable( {
+    $('#dmedicamento').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
@@ -235,7 +236,7 @@ $(document).ready(function() {
 
     //Plantio 
 
-    $('#plantio').DataTable( {
+    $('#dplantio').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
