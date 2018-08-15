@@ -45,9 +45,10 @@ class RevisaoController extends Controller
     {
         try
         {
-            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+            $fazendas = \App\Models\Fazenda\Fazenda::with('Maquinas', 'Funcionarios')
+                                                    ->orderBy('nome', 'asc')->get();
         
-            return view('cadastro.crevisao', ['fazendas' => $fazendas]);
+            return view('entrada.erevisao', ['fazendas' => $fazendas]);
         }         
         catch(\Exception $e) 
         {          
