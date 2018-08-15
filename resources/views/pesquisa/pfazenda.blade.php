@@ -36,6 +36,7 @@
 								</tr>
 							</thead>
 							<tbody>
+								@if(isset($fazendas))
 								@foreach ($fazendas as $fazenda)
 								<tr class='gradeA'>
 									<td> {{$fazenda->nome}} </td>
@@ -54,6 +55,7 @@
 									</td>
 								</tr>
 								@endforeach
+								@endif
 
 							</tbody>
 						</table>
@@ -63,6 +65,7 @@
 
 
 			</div>
+			
 			<!-- Modal de Editar Dados -->
 			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
 				<div class="modal-dialog" role="document">
@@ -74,6 +77,8 @@
 							<h4 class="modal-title" id="exampleModalLabel">Curso</h4>
 						</div>
 						<div class="modal-body">
+						
+							@if(isset($fazenda))
 							<form name='update-fazenda' action="{{ route('fazenda.update', $fazenda->id) }}" method='POST'>
 								{{ csrf_field() }} {{ method_field('PUT') }}
 								<div class='panel-body'>
@@ -96,12 +101,12 @@
 									<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>
 									<button type='submit' class='btn btn-primary'>Editar</button>
 								</div>
-							</form>
+							</form>							
+							@endif
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 
 	</div>

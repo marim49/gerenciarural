@@ -33,6 +33,7 @@
 								</tr>
 							</thead>
 							<tbody>
+							@if(isset($insumos))
 								@foreach ($insumos as $insumo)
 								<tr class='gradeA'>
 									<td> {{$insumo->Fazenda->nome}} </td>
@@ -48,6 +49,7 @@
 									</td>
 								</tr>
 								@endforeach
+							@endif
 
 							</tbody>
 						</table>

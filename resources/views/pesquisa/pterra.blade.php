@@ -32,6 +32,7 @@
 								</tr>
 							</thead>
 							<tbody>
+							@if(isset($terras))
 								@foreach ($terras as $terra)
 								<tr class='gradeA'>
 									<td> {{$terra->nome}} </td>
@@ -51,6 +52,7 @@
 									</td>
 								</tr>
 								@endforeach
+							@endif
 
 							</tbody>
 						</table>
@@ -65,6 +67,7 @@
 									<h4 class="modal-title" id="exampleModalLabel">Curso</h4>
 								</div>
 								<div class="modal-body">
+									@if(isset($terra))
 									<form name="register-terra" action="{{ route('terra.update', $terra->id) }}" method="post">
 										{{ csrf_field() }}
 										<div class="panel-body">
@@ -110,6 +113,7 @@
 
 
 									</form>
+									@endif
 								</div>
 							</div>
 						</div>

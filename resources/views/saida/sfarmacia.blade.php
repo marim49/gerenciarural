@@ -37,7 +37,7 @@
 									<div class="col-md-8">
 
 										<div class="form-group">
-											<label>Fazenda:</label>
+											<label>Fazenda: *</label>
 											<select type="hidden" id="fazendas" class="form-control" onchange="SaidaMedicamento()">
 												<option value="" selected>- Selecione Fazenda -</option>
 												@foreach($fazendas as $fazenda)
@@ -48,30 +48,35 @@
 										
 
 										<div class="form-group">
-											<label>Funcionário responsável:</label>
+											<label>Funcionário responsável: *</label>
 											<select id="funcionario" class="form-control" name="id_funcionario">
 											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Animal medicado:</label>
+											<label>Animal medicado: *</label>
 											<select id="animal" class="form-control" name="id_animal">
 											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Medicamento usado:</label>
+											<label>Motivo:</label>
+											<input class="form-control" type="text" name="motivo" placeholder="Motivo da apliacação" value="{{ old('motivo')}}" maxlength="100"/>
+										</div>
+
+										<div class="form-group">
+											<label>Medicamento usado: *</label>
 											<select id="medicamento" class="form-control" name="id_medicamento">
 											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Quantidade aplicada ( ML ):</label>
+											<label>Quantidade aplicada ( ML ): *</label>
 											<input class="form-control" type="text" name="quantidade" placeholder="Em Ml" value="{{ old('quantidade')}}"/>
 										</div>
 
 										<div class="form-group">
-											<label>Data de aplicação:</label>
+											<label>Data de aplicação: *</label>
 											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
 										</div>
 

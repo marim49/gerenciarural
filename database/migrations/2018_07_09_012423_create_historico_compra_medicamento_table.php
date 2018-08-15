@@ -19,7 +19,7 @@ class CreateHistoricoCompraMedicamentoTable extends Migration
             $table->integer('id_funcionario')->unsigned(); 
             $table->integer('id_fornecedor')->unsigned(); 
             $table->date('data');            
-            $table->string('lote', 45);  
+            $table->string('lote', 45)->nullable();  
             $table->string('quantidade', 45); 
             $table->string('nota_fiscal', 45); 
             $table->float('valor');        

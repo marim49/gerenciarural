@@ -69,7 +69,7 @@ class HistoricoAbastecimentoController extends Controller
     public function store(Request $request)
     {
         $abastecimento = $request->only('id_maquina', 'id_combustivel', 'id_funcionario', 'quantidade',
-                                        'data');
+                                        'horimetro', 'data');
         //Validação
         $validator = $this->Validator($abastecimento);
         if ($validator->fails()) {
@@ -205,6 +205,8 @@ class HistoricoAbastecimentoController extends Controller
             'id_funcionario.required'=>'O campo de funcionário é obrigatório',
             'quantidade.required'=>'O campo de quantidade é obrigatório',
             'quantidade.numeric'=>'A quantidade só pode ser em números',
+            'horimetro.required'=>'O campo de horímetro é obrigatório',
+            'horimetro.numeric'=>'O horímetro só pode ser em números',
             'data.required'=>'O campo de data de abastecimento é obrigatório',
             'data.date'=>'O campo de data está em formato inválido',
         );    
@@ -213,6 +215,7 @@ class HistoricoAbastecimentoController extends Controller
             'id_combustivel'=>'required',
             'id_funcionario'=>'required',
             'quantidade'=>'required|numeric',
+            'horimetro'=>'required|numeric',
             'data'=>'required|date',
         );
     

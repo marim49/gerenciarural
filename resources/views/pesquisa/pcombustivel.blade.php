@@ -30,12 +30,14 @@
 								</tr>
 							</thead>
 							<tbody>
+							@if(isset($combustiveis))
 								@foreach ($combustiveis as $combustivel)
 								<tr class='gradeA'>
 									<td> {{$combustivel->Fazenda->nome}} </td>
 									<td> {{$combustivel->quantidade}} </td>
 								</tr>
 								@endforeach
+							@endif
 
 							</tbody>
 						</table>
