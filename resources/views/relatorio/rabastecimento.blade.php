@@ -91,6 +91,7 @@
 									<td> {{$historico->maquina->nome}} </td>
 									<td> {{$historico->funcionario->nome}} </td>
 									<td> {{$historico->quantidade}} </td>
+									<td> {{$historico->horimetro}} </td>
 									<td> {{$historico->data}} </td>
 
 								</tr>
