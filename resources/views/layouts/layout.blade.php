@@ -305,6 +305,7 @@
     <script src="{{ asset('js/select/SaidaCombustivel.js') }}"></script>
     <script src="{{ asset('js/select/SaidaMedicamento.js') }}"></script>
     <script src="{{ asset('js/select/SaidaInsumo.js') }}"></script>
+    <script src="{{ asset('js/select/RevisaoMaquina.js') }}"></script>
 </footer>
 
 </html>

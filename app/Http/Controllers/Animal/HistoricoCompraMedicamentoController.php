@@ -1,7 +1,8 @@
-﻿<?php
+<?php
 
 namespace App\Http\Controllers\Animal;
 
+use App\Http\Controllers\Animal;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
 use Illuminate\Support\Facades\Validator;
@@ -244,4 +245,3 @@ class HistoricoCompraMedicamentoController extends Controller
         ];
     }
 }
-
