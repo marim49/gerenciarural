@@ -24,7 +24,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Revisão
+					Dados sobre a revisão
 				</div>
 				<div class="panel-body">
 					<div class="row">
@@ -36,9 +36,9 @@
 									<div class="col-md-8">
 
 										<div class="form-group">
-											<label>Fazenda: *</label>
-											<select id="fazendas" name="id_fazenda" class="form-control" onchange="Maquinas()">
-												<option value="" selected>- Selecione a Fazenda -</option>
+											<label>Fazenda:</label>
+											<select id="fazendas" name="id_fazenda" required class="form-control" onchange="Maquinas()">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>
 												@foreach($fazendas as $fazenda)
 													<option data-id="{{$fazenda}}" value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
 												@endforeach
@@ -46,25 +46,27 @@
 										</div>
 
 										<div class="form-group">
-											<label>Funcionário: *</label>
-											<select id="funcionario" class="form-control" name="id_funcionario">
+											<label>Funcionário:</label>
+											<select id="funcionario" required class="form-control" name="id_funcionario">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>
 											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Máquina: *</label>
-											<select id="maquina" class="form-control" name="id_maquina">
+											<label>Máquina:</label>
+											<select id="maquina" required class="form-control" name="id_maquina">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>
 											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Problema: *</label>
-											<input class="form-control" name="problema" maxlegth="191" placeholder="Motivo da revisão" value="{{ old('problema')}}"/>
+											<label>Problema:</label>
+											<input class="form-control" name="problema" required maxlegth="191" placeholder="Motivo da revisão" maxlenght="190" value="{{ old('problema')}}"/>
 										</div>
 
 										<div class="form-group">
-											<label>Data: *</label>
-											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
+											<label>Data:</label>
+											<input class="form-control" name="data" required type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
 										</div>
 
 										<div class="form-group">
@@ -98,7 +100,6 @@
 			</div>
 		</div>
 	</div>
-	<!--/Conteudo da pagina-->
 </div>
 </div>
 @endsection

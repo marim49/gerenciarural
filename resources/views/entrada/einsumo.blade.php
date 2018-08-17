@@ -10,8 +10,9 @@
 		//Célula de medicameto
 		var td = tr.insertCell();
 		var mdt = document.createElement("select");
+		mdt.required = true;
 		mdt.name = "id_insumo[]";
-		
+
 		if (!$.isEmptyObject(insumos)) {
 			for (var i in insumos) {
 				var el = document.createElement("option");
@@ -33,25 +34,24 @@
 		qtd.name = "quantidade[]";
 		qtd.type = "number";
 		qtd.step = "0.01";
+		qtd.required = true;
 		td.appendChild(qtd);
 
 		//Botão de excluir 
 		var td = tr.insertCell();
-		var button = document.createElement("button");
-		var text = document.createTextNode("Excluir");
-		button.type = "button";
-		button.appendChild(text);
-		button.onclick = function deleteRow() {
+		var span = document.createElement("span");
+		span.classList.add('table-remove', 'glyphicon', 'glyphicon-remove');
+		span.onclick = function deleteRow() {
 			document.getElementById("myTable").deleteRow(tr.rowIndex);
 		}
-		td.appendChild(button);
+		td.appendChild(span);
 	}
 </script>
 <div class="container">
 	<!--Cabeçalho pagina-->
 	<div class="col-md-12">
 		<div class="row pad-botm">
-			<h3 class="header-line">Entrada Insumo</h3>
+			<h3 class="header-line">Entrada de Insumo</h3>
 			@if (session()->has('success'))
 			<div class="alert alert-success alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -72,7 +72,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Celeiro
+					Informações da compra
 				</div>
 				<div class="panel-body">
 					<div class="row">
@@ -85,8 +85,8 @@
 
 										<div class="form-group">
 											<label>Fazenda:</label>
-											<select type="hidden" id="fazendas" class="form-control" onchange="EntradaInsumo()">
-												<option value="" selected>- Selecione Fazenda -</option>
+											<select type="hidden" id="fazendas" required class="form-control" onchange="EntradaInsumo()">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>
 												@foreach($fazendas as $fazenda)
 												<option value="{{$fazenda}}">{{$fazenda->nome}}</option>
 												@endforeach
@@ -95,13 +95,14 @@
 
 										<div class="form-group" style="display: none;" id="div_funcionario">
 											<label>Funcionário:</label>
-											<select id="funcionario" class="form-control" name="id_funcionario">
+											<select id="funcionario" required class="form-control" name="id_funcionario">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>
 											</select>
 										</div>
 
 										<div class="form-group">
 											<label>Fornecedor:</label>
-											<select type="hidden" name="id_fornecedor" class="form-control" onchange="EntradaMedicamento()">
+											<select type="hidden" name="id_fornecedor" required class="form-control" onchange="EntradaMedicamento()">
 												@foreach($fornecedores as $fornecedor) @if(old('id_fornecedor') == $fornecedor->id)
 												<option value="{{$fornecedor->id}}" selected>{{$fornecedor->nome}}</option>
 												@else
@@ -112,27 +113,29 @@
 
 										<div class="form-group">
 											<label>Data da Compra:</label>
-											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}" />
+											<input class="form-control" name="data" type="date" required placeholder="DD/MM/AAAA" value="{{ old('data')}}" />
 										</div>
 
 										<div class="form-group">
 											<label>Nota Fiscal:</label>
-											<input class="form-control" type="text" name="nota_fiscal" placeholder="" value="{{ old('nota_fiscal')}}" />
+											<input class="form-control" type="text" name="nota_fiscal" required placeholder="Número da nota da compra" value="{{ old('nota_fiscal')}}"
+											/>
 										</div>
 
 										<div class="form-group">
 											<label>Lote:</label>
-											<input class="form-control" type="text" name="lote" placeholder="Número do lote" value="{{ old('lote')}}" />
+											<input class="form-control" type="text" name="lote" placeholder="Número do lote (Opcional)" value="{{ old('lote')}}" />
 										</div>
 
 										<div class="form-group">
 											<label>Valor:</label>
-											<input class="form-control" type="text" name="valor" placeholder="Em R$" value="{{ old('valor')}}" />
+											<input class="form-control" required type="number" step=".01" name="valor" placeholder="Em R$" value="{{ old('valor')}}"
+											/>
 										</div>
 
 										<div style="display: none;" class="form-group table-responsive" id="produtos">
-											<label>Produtos da nota: *</label>
-											<table class="table table-striped table-bordered table-hover" id="myTable">
+											<label>Produtos da nota:</label>
+											<table class="tableprod table-striped table-bordered table-hover" id="myTable">
 												<thead>
 													<tr>
 														<th>Insumo</th>
@@ -143,10 +146,10 @@
 												<tbody>
 												</tbody>
 											</table>
-											<button type="button" onclick="AddRow()">
-												<i class="fa fa-plus-circle"></i> Add</button>
-										</div>
 
+											<span class="table-add glyphicon glyphicon-plus" onclick="AddRow()"></span>
+
+										</div>
 									</div>
 								</div>
 
@@ -157,13 +160,13 @@
 									<button type="reset" class="btn btn-info pull-right">Limpar </button>
 								</div>
 							</form>
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!--/Conteudo da pagina-->
 </div>
 </div>
 @endsection
