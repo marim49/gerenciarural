@@ -20,9 +20,13 @@ class CreateHistoricoTerraTable extends Migration
             $table->integer('id_funcionario')->unsigned(); 
             $table->integer('quantidade');        
             $table->date('data');  
+            $table->boolean('cancelado')->default(0);
+            $table->string('motivo', 100)->default(null);          
+            $table->integer('id_user_cancelou')->unsigned();
             $table->foreign('id_terra')->references('id')->on('terra');
             $table->foreign('id_insumo')->references('id')->on('insumo');
             $table->foreign('id_funcionario')->references('id')->on('funcionario');
+            $table->foreign('id_user_cancelou')->references('id')->on('users');
             $table->timestamps();
         });
     }

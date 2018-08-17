@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Maquina;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class HistoricoAbastecimentoController extends Controller
 {
@@ -18,7 +19,7 @@ class HistoricoAbastecimentoController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna o histórico de combustiveis)
+    //Método GET (retorna o histórico de combustiveis) : OK
     public function index()
     {
         try
@@ -28,23 +29,14 @@ class HistoricoAbastecimentoController extends Controller
             
             $historicos_abastecimento = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
                 ->paginate($limit);
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
-            //return response()->json($historicos_abastecimento);
             return view('relatorio.rabastecimento', ['historicos_abastecimento' => $historicos_abastecimento]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('relatorio.rabastecimento', ['historicos_abastecimento' => []])
+            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }       
     
@@ -112,78 +104,42 @@ class HistoricoAbastecimentoController extends Controller
         }
     } 
 
-    //Método GET (retorna um histórico de combustivel específico) 
-    public function show($id)
+    //Método DELETE (cancela um hitórico de abastecimento específico) : OK
+    public function destroy(Request $request, $id)
     {
+        $resposta = $request->only('motivo', 'cancelado');
+        //Validação
+        $validator = $this->Validator($resposta, true);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        } 
         try
         {
-            $historico_abastecimento = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($historico_abastecimento);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }   
-
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza um histórico de combustivel)
-    public function update(Request $request, $id)
-    {
-        //tratar entrada
-        try
-        {
-            $update_historico_abastecimento = $this->model->findOrFail($id);            
-            $dados = $request->all();
-
-            $update_historico_abastecimento->update($dados);
+            $resposta = array_merge($resposta, ['id_user_cancelou' => Auth::user()->id]);
+            $historico = $this->model->findOrFail($id);                   
+            $combustivel = \App\Models\Maquina\Combustivel::find($historico->id_combustivel);
             
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_historico_abastecimento
-            ]);
+            if($combustivel){
+                $combustivel->increment('quantidade', $historico->quantidade);
+                $historico->update($resposta);
+            }
+            else{
+                throw new \Exception('Não foi possível encontrar o combustível no banco de dados');
+            }              
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$historico);
         }
         catch(\Exception $e) 
         {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }
-
-    //Método DELETE (deleta um hitórico de abastecimento específico)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível atualizar o registro.',$e))
+                            ->withInput(); 
         }
     }
 
@@ -198,26 +154,41 @@ class HistoricoAbastecimentoController extends Controller
     }      
 
     //Método de validação : OK
-    protected function Validator($requisicao){        
-        $messages = array(
-            'id_maquina.required'=> 'O campo de máquina é obrigatório',
-            'id_combustivel.required'=>'O campo de combustível é obrigatório',
-            'id_funcionario.required'=>'O campo de funcionário é obrigatório',
-            'quantidade.required'=>'O campo de quantidade é obrigatório',
-            'quantidade.numeric'=>'A quantidade só pode ser em números',
-            'horimetro.required'=>'O campo de horímetro é obrigatório',
-            'horimetro.numeric'=>'O horímetro só pode ser em números',
-            'data.required'=>'O campo de data de abastecimento é obrigatório',
-            'data.date'=>'O campo de data está em formato inválido',
-        );    
-        $rules = array(
-            'id_maquina'=>'required',
-            'id_combustivel'=>'required',
-            'id_funcionario'=>'required',
-            'quantidade'=>'required|numeric',
-            'horimetro'=>'required|numeric',
-            'data'=>'required|date',
-        );
+    protected function Validator($requisicao, $delete = false){  
+        if($delete)
+        {
+            $messages = array(
+                'motivo.required'=> 'O campo de motivo é obrigatório',
+                'motivo.max'=>'O tamanho máximo do campo de motivo é 100 caracteres',
+                'cancelado.required'=>'A operação não funcionou',
+            );    
+            $rules = array(
+                'motivo'=>'required|max:100',
+                'cancelado'=>'required',
+            );
+        }   
+        else
+        {        
+            $messages = array(
+                'id_maquina.required'=> 'O campo de máquina é obrigatório',
+                'id_combustivel.required'=>'O campo de combustível é obrigatório',
+                'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+                'quantidade.required'=>'O campo de quantidade é obrigatório',
+                'quantidade.numeric'=>'A quantidade só pode ser em números',
+                'horimetro.required'=>'O campo de horímetro é obrigatório',
+                'horimetro.numeric'=>'O horímetro só pode ser em números',
+                'data.required'=>'O campo de data de abastecimento é obrigatório',
+                'data.date'=>'O campo de data está em formato inválido',
+            );    
+            $rules = array(
+                'id_maquina'=>'required',
+                'id_combustivel'=>'required',
+                'id_funcionario'=>'required',
+                'quantidade'=>'required|numeric',
+                'horimetro'=>'required|numeric',
+                'data'=>'required|date',
+            );
+        }
     
         return Validator::make($requisicao, $rules,$messages);        
     }

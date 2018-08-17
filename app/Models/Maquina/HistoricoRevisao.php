@@ -4,12 +4,13 @@ namespace App\Models\Maquina;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Revisao extends Model
+class HistoricoRevisao extends Model
 {
     protected $fillable = [
-        'id_maquina', 'id_funcionario', 'item', 'nota_fiscal', 'valor', 'problema', 'data'
+        'id_maquina', 'id_funcionario', 'item', 'nota_fiscal', 'valor', 'problema', 'data',
+        'cancelado', 'motivo', 'id_user_cancelou'
     ];
-    protected $table = 'revisao';
+    protected $table = 'historico_revisao';
 
     public function Maquina()
     {

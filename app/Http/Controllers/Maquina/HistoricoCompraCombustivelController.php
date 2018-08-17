@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Maquina;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class HistoricoCompraCombustivelController extends Controller
 {
@@ -18,7 +19,7 @@ class HistoricoCompraCombustivelController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna as compras de combustiveis)
+    //Método GET (retorna as compras de combustiveis) : OK
     public function index()
     {
         try
@@ -28,23 +29,14 @@ class HistoricoCompraCombustivelController extends Controller
             
             $historicos_compra_combustivel = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
                 ->paginate($limit);
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
-            //return response()->json($historicos_compra_combustivel);
             return view('relatorio.rcompra-combustivel', ['historicos_compra_combustivel' => $historicos_compra_combustivel]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('relatorio.rcompra-combustivel', ['historicos_compra_combustivel' => []])
+            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     
@@ -114,78 +106,46 @@ class HistoricoCompraCombustivelController extends Controller
         }
     } 
 
-    //Método GET (retorna uma compra de combustivel específico)
-    public function show($id)
+    //Método DELETE (cancela uma compra de combustivel específico) : OK
+    public function destroy(Request $request, $id)
     {
+        $resposta = $request->only('motivo', 'cancelado');
+        //Validação
+        $validator = $this->Validator($resposta, true);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        } 
         try
         {
-            $historico_compra_combustivel = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($historico_compra_combustivel);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }  
-
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza uma compra de combustivel)
-    public function update(Request $request, $id)
-    {
-        //tratar entrada
-        try
-        {
-            $update_historico_compra_combustivel = $this->model->findOrFail($id);            
-            $dados = $request->all();
-
-            $update_historico_compra_combustivel->update($dados);
+            $resposta = array_merge($resposta, ['id_user_cancelou' => Auth::user()->id]);
+            $historico_compra = $this->model->findOrFail($id);                   
+            $combustivel = \App\Models\Maquina\Combustivel::where('id_fazenda', $historico_compra->id_fazenda)->first();
             
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_historico_compra_combustivel
-            ]);
+            if($combustivel){
+                if($combustivel->quantidade < $historico_compra->quantidade){                    
+                    throw new \Exception('A quantidade em estoque é menor que a quantidade a ser cancelada,
+                    provavelmete existe alguma operação de saída irregular, cancele-a e tente novamente');
+                }
+                $combustivel->decrement('quantidade', $historico_compra->quantidade);
+                $historico_compra->update($resposta);
+            }
+            else{
+                throw new \Exception('Não foi possível encontrar o combustível no banco de dados');
+            }              
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$historico_compra);
         }
         catch(\Exception $e) 
         {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }
-    
-    //Método DELETE (deleta uma compra de combustivel específico)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível atualizar o registro.',$e))
+                            ->withInput(); 
         }
     }
 
@@ -200,38 +160,53 @@ class HistoricoCompraCombustivelController extends Controller
     }    
 
     //Método de validação : OK
-    protected function Validator($requisicao){        
-        $messages = array(
-            'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
-            'id_fazenda.required'=>'O campo de fazenda é obrigatório',
-            'id_funcionario.required'=>'O campo de funcionário é obrigatório',
-            'data.required'=>'O campo de data é obrigatório',
-            'data.date'=>'O campo de data está em formato inválio',
-            'lote.required'=>'O campo de lote é obrigatório',
-            'lote.max'=>'O campo de lote só pode ter no máximo 45 caracteres',
-            'quantidade.required'=>'O campo de quantidade é obrigatório',
-            'horimetro.required'=>'O campo de horímetro é obrigatório',
-            'quantidade.max'=>'O campo de quantidade só pode ter no máximo 45 caracteres',
-            'quantidade.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
-            'horimetro.numeric'=>'O campo de horímetro só pode ter entradas numéricas',
-            'nota_fiscal.required'=>'O campo de nota fiscal é obrigatório',
-            'nota_fiscal.max'=>'O campo de nota fiscal só pode ter no máximo 45 caracteres',
-            'nota_fiscal.unique'=>'Já existe uma nota fiscal cadastrada com esse número',
-            'valor.required'=>'O campo de valor é obrigatório',
-            'valor.max'=>'O campo de valor só pode ter no máximo 45 caracteres',
-            'valor.numeric'=>'O campo valor só pode ter entradas numéricas',
-        );    
-        $rules = array(
-            'id_fornecedor'=>'required',
-            'id_fazenda'=>'required',
-            'id_funcionario'=>'required',
-            'data'=>'required|date',
-            'lote'=>'required|max:45',
-            'quantidade'=>'required|numeric',
-            'horimetro'=>'required|numeric',
-            'nota_fiscal'=>'required|max:45|unique:historico_compra_combustivel',
-            'valor'=>'required|numeric',
-        );
+    protected function Validator($requisicao, $delete = false){  
+        if($delete)
+        {
+            $messages = array(
+                'motivo.required'=> 'O campo de motivo é obrigatório',
+                'motivo.max'=>'O tamanho máximo do campo de motivo é 100 caracteres',
+                'cancelado.required'=>'A operação não funcionou',
+            );    
+            $rules = array(
+                'motivo'=>'required|max:100',
+                'cancelado'=>'required',
+            );
+        }   
+        else
+        {       
+            $messages = array(
+                'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
+                'id_fazenda.required'=>'O campo de fazenda é obrigatório',
+                'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+                'data.required'=>'O campo de data é obrigatório',
+                'data.date'=>'O campo de data está em formato inválio',
+                'lote.required'=>'O campo de lote é obrigatório',
+                'lote.max'=>'O campo de lote só pode ter no máximo 45 caracteres',
+                'quantidade.required'=>'O campo de quantidade é obrigatório',
+                'horimetro.required'=>'O campo de horímetro é obrigatório',
+                'quantidade.max'=>'O campo de quantidade só pode ter no máximo 45 caracteres',
+                'quantidade.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
+                'horimetro.numeric'=>'O campo de horímetro só pode ter entradas numéricas',
+                'nota_fiscal.required'=>'O campo de nota fiscal é obrigatório',
+                'nota_fiscal.max'=>'O campo de nota fiscal só pode ter no máximo 45 caracteres',
+                'nota_fiscal.unique'=>'Já existe uma nota fiscal cadastrada com esse número',
+                'valor.required'=>'O campo de valor é obrigatório',
+                'valor.max'=>'O campo de valor só pode ter no máximo 45 caracteres',
+                'valor.numeric'=>'O campo valor só pode ter entradas numéricas',
+            );    
+            $rules = array(
+                'id_fornecedor'=>'required',
+                'id_fazenda'=>'required',
+                'id_funcionario'=>'required',
+                'data'=>'required|date',
+                'lote'=>'required|max:45',
+                'quantidade'=>'required|numeric',
+                'horimetro'=>'required|numeric',
+                'nota_fiscal'=>'required|max:45|unique:historico_compra_combustivel',
+                'valor'=>'required|numeric',
+            );
+        }
     
         return Validator::make($requisicao, $rules,$messages);        
     }

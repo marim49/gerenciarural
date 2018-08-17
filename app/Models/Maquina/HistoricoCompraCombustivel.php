@@ -8,7 +8,8 @@ class HistoricoCompraCombustivel extends Model
 {
     protected $fillable = [
         'id_fazenda', 'id_funcionario', 'data', 'lote', 'quantidade',
-        'nota_fiscal', 'valor', 'id_fornecedor', 'horimetro'
+        'nota_fiscal', 'valor', 'id_fornecedor', 'horimetro',
+        'cancelado', 'motivo', 'id_user_cancelou'
     ];
     protected $table = 'historico_compra_combustivel';
 

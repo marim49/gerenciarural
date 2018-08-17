@@ -8,7 +8,7 @@ class HistoricoCompraMedicamento extends Model
 {
     protected $fillable = [
         'id_medicamento', 'id_funcionario', 'data', 'lote', 'quantidade',
-        'nota_fiscal', 'valor', 'id_fornecedor'
+        'nota_fiscal', 'valor', 'id_fornecedor', 'cancelado', 'motivo', 'id_user_cancelou'
     ];
     protected $table = 'historico_compra_medicamento';
 

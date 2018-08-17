@@ -9,15 +9,14 @@
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Registrado!</strong> O uso do insumo foi registrada no histórico.
 			</div>
-			@endif 
-			@if ($errors->any())
+			@endif @if ($errors->any())
 			<div class="alert alert-warning alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Ops!</strong> {{$errors->first()}}.
 			</div>
 			@endif
 		</div>
-	</div> 
+	</div>
 	<!--/Cabeçalho pagina-->
 
 	<!--Conteudo da pagina-->
@@ -25,21 +24,21 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Saída
+					Informações da terra de destino do insumo
 				</div>
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12">
 
 							<form name="plantio" action="{{ route('plantio.store') }}" method="post">
-							{{ csrf_field() }}
+								{{ csrf_field() }}
 								<div class="row">
 									<div class="col-md-8">
 
 										<div class="form-group">
 											<label>Fazenda:</label>
-											<select type="hidden" id="fazendas" class="form-control" onchange="SaidaInsumo()">
-												<option value="" selected>- Selecione Fazenda -</option>
+											<select type="hidden" required id="fazendas" class="form-control" onchange="SaidaInsumo()">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>
 												@foreach($fazendas as $fazenda)
 												<option value="{{$fazenda}}">{{$fazenda->nome}}</option>
 												@endforeach
@@ -48,32 +47,36 @@
 
 										<div class="form-group">
 											<label>Terra:</label>
-											<select id="terra" class="form-control" name="id_terra">
+											<select id="terra" required class="form-control" name="id_terra">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>
 											</select>
 										</div>
 
 										<div class="form-group">
 											<label>Insumo:</label>
-											<select id="insumo" class="form-control" name="id_insumo">
+											<select id="insumo" required class="form-control" name="id_insumo">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>
 											</select>
 										</div>
 
 										<div class="form-group">
 											<label>Funcionário:</label>
-											<select id="funcionario" class="form-control" name="id_funcionario">
+											<select id="funcionario" required class="form-control" name="id_funcionario">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>
 											</select>
 										</div>
 
 										<div class="form-group">
 											<label>Data:</label>
-											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
+											<input class="form-control" required name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}" />
 										</div>
 
 										<div class="form-group">
 											<label>Quantidade:</label>
-											<input class="form-control" name="quantidade" type="text" value="{{ old('quantidade')}}"/>
+											<input class="form-control" required name="quantidade" type="number" placeholder="Ex.: 1, 3, 7 ..." value="{{ old('quantidade')}}"
+											/>
 										</div>
-										
+
 									</div>
 								</div>
 
@@ -85,13 +88,13 @@
 								</div>
 
 							</form>
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!--/Conteudo da pagina-->
 </div>
 </div>
 @endsection

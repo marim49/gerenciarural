@@ -1,8 +1,14 @@
 @extends('layouts.layout') @section('content')
+<script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
+<script src="{{ asset('js/dataTables/jquery.dataTables.js') }}"></script>
+<script src="{{ asset('js/dataTables/dataTables.bootstrap.js') }}"></script>
+<script src="{{ asset('js/dataTables/sum.js') }}"></script>
+<script>
+</script>
 <div class="container">
 	<div class="row pad-botm">
 		<div class="col-md-12">
-			<h3 class="header-line">Relatório de Compras</h3>
+			<h3 class="header-line">Relatório de Revisão</h3>
 		</div>
 	</div>
 	@if ($errors->any())
@@ -19,39 +25,44 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<!-- Advanced Tables -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Relatório de Compra de Combustivel
+					Máquinas revisionadas
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive">
 
-						<table class="table table-striped table-bordered table-hover" id="dcombustivel">
+						<table id="drevisao" class="table table-striped table-bordered table-hover" style="width:100%">
 							<thead>
 								<tr>
-									<th>Funcionário</th>
-									<th>Quantidade </th>
-									<th>Data da Compra</th>
-									<th>Valor</th>
+									<th>Máquina Revisionada</th>
+									<th>Funcionário Responsável</th>
+									<th>Item comprado</th>
 									<th>Nota Fiscal</th>
-									<th>Lote</th>
+									<th>Valor (R$)</th>
+									<th>Problema</th>
+									<th>Data</th>
 									<th>Cancelar operação</th>
 								</tr>
 							</thead>
 							<tbody>
-								@foreach ($historicos_compra_combustivel as $historico) @if($historico->cancelado == 0)
-								<tr class='gradeA'>
-									<td> {{$historico->funcionario->nome}} </td>
-									<td> {{$historico->quantidade}} </td>
-									<td> {{$historico->data}} </td>
-									<td> {{$historico->valor}} </td>
-									<td> {{$historico->nota_fiscal}} </td>
-									<td> {{$historico->lote}} </td>
+								@foreach ($revisoes as $revisao) @if($revisao->cancelado == 0)
+								<tr>
+									<td>{{$revisao->maquina->nome}}</td>
+									<td>{{$revisao->funcionario->nome}}</td>
+									<td>{{$revisao->item}}</td>
+									<td>{{$revisao->nota_fiscal}}</td>
+									@if($revisao->valor)
+									<td>{{$revisao->valor}}</td>
+									@else
+									<td>0</td>
+									@endif
+									<td>{{$revisao->problema}}</td>
+									<td>{{$revisao->data}}</td>
 									<td>
 										<center>
-											<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-id="{{$historico->id}}" onclick="cancelarOperacao()"
-											  data-route="compra-combustivel" data-target="#modal_cancelar">Cancelar</button>
+											<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal_cancelar" onclick="cancelarOperacao()"
+											    data-route="revisao" data-id="{{$revisao->id}}">Cancelar</button>
 										</center>
 									</td>
 								</tr>
@@ -59,10 +70,8 @@
 							</tbody>
 							<tfoot>
 								<tr>
-									<th>Total Quant:</th>
-									<th></th>
-									<th>Total Val:</th>
-									<th colspan="4" style="text-align:center"></th>
+									<th>Total:</th>
+									<th colspan="7" style="text-align:center"></th>
 								</tr>
 							</tfoot>
 						</table>
@@ -80,7 +89,7 @@
 										{{ csrf_field() }} {{ method_field('DELETE') }}
 										<div class="modal-body form-group">
 											<h6 class="text-semibold">Tem certeza que deseja cancelar esta operação?</h6>
-											<input hidden name="cancelado" value="1" />
+											<input hidden name="cancelado" value="1"/>
 											<input name="motivo" size="70%" placeholder="Descreva em 100 caracteres o motivo do cancelamento" required maxleght=100/>
 										</div>
 
@@ -93,6 +102,7 @@
 								</div>
 							</div>
 						</div>
+						<!-- Modal de cancelar -->
 
 						<!-- <a onclick="imprimir()" class="btn btn-primary pull-left">Imprimir</a> -->
 

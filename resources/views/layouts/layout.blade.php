@@ -213,6 +213,10 @@
                     <ul class="collapse list-unstyled" id="relatorios">
 
                         <li>
+                            <a href="{{ url('revisao')}}">
+                                Revisão</a>
+                        </li>
+                        <li>
                             <a href="{{ url('abastecimento')}}">Abastecimento</a>
                         </li>
                         <li>
@@ -222,7 +226,6 @@
                             <a href="{{ url('compra-combustivel')}}">
                                 Compra de Combustível</a>
                         </li>
-
                         <li>
                             <a href="{{ url('compra-insumo')}}">
                                 Compra de Insumo</a>
@@ -252,7 +255,7 @@
                             <a href="{{ url('tipomedicamento/create')}}">Tipo de Medicamento</a>
                         </li>
                         <li>
-                            <a href="{{ url('grupoanimal/create')}}">Grupo de Insumo</a>
+                            <a href="{{ url('grupoanimal/create')}}">Grupo de Animal</a>
                         </li>
                         <li>
                             <a href="{{ route('register') }}">Novo Usuário</a>

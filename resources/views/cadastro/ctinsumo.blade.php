@@ -27,24 +27,21 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Cadastrar Tipo de Insumo
+					Insira os dados para cadastrar um tipo de insumo:
 				</div>
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12">
+
 							<form name="register-tipoinsumo" action="{{ route('tipoinsumo.store') }}" method="post">
 								{{ csrf_field() }}
 								<div class="row">
 									<div class="col-md-8">
 										<div class="form-group">
-											<label>Nome do tipo de insumo:</label>
-											<input class="form-control" type="text" name="nome" placeholder="" />
+											<label>Nome:</label>
+											<input class="form-control" type="text" name="nome" required placeholder="Insira aqui o nome do tipo do insumo" maxlength="45" value="{{ old('nome')}}"/>
 										</div>
 									</div>
-									<div class="col-md-4">									
-
-									</div>
-
 								</div>
 
 								<div class="right-div">
@@ -54,6 +51,7 @@
 									<button type="reset" class="btn btn-info pull-right">Limpar </button>
 								</div>
 							</form>
+							
 						</div>
 					</div>
 				</div>

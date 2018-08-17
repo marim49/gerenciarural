@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth'], function()
     * terra/{id} => GET(show), PUT(update), DELETE(destroy)
     * terra/{id}/edit => GET(edit)
     */
-    Route::resource('terra', 'Insumo\TerraController')/*->middleware('auth')*/;
+    Route::resource('terra', 'Insumo\TerraController');
 
     /* ROTA: FUNCIONARIO
     * funcionario => POST(store), GET(index) 
@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth'], function()
     * tipoinsumo/{id} => GET(show), PUT(update), DELETE(destroy)
     * tipoinsumo/{id}/edit => GET(edit)
     */
-    Route::resource('tipoinsumo', 'Insumo\TipoInsumoController')/*->middleware('auth')*/;
+    Route::resource('tipoinsumo', 'Insumo\TipoInsumoController');
 
     /* ROTA: GRUPO ANIMAL
     * grupoanimal => POST(store), GET(index) 
@@ -73,7 +73,7 @@ Route::group(['middleware' => 'auth'], function()
     * grupoanimal/{id} => GET(show), PUT(update), DELETE(destroy)
     * grupoanimal/{id}/edit => GET(edit)
     */
-    Route::resource('grupoanimal', 'Animal\GrupoAnimalController')/*->middleware('auth')*/;
+    Route::resource('grupoanimal', 'Animal\GrupoAnimalController');
 
     /* ROTA: TIPO MEDICAMENTO
     * tipomedicamento => POST(store), GET(index) 
@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth'], function()
     * tipomedicamento/{id} => GET(show), PUT(update), DELETE(destroy)
     * tipomedicamento/{id}/edit => GET(edit)
     */
-    Route::resource('tipomedicamento', 'Animal\TipoMedicamentoController')/*->middleware('auth')*/;
+    Route::resource('tipomedicamento', 'Animal\TipoMedicamentoController');
 
     /* ROTA: MEDICAMENTO
     * medicamento => POST(store), GET(index) 
@@ -102,50 +102,44 @@ Route::group(['middleware' => 'auth'], function()
     /* ROTA: HISTÓRICO ABASTECIMENTO (para saída de combustível)
     * abastecimento => POST(store), GET(index) 
     * abastecimento/create => GET(create) 
-    * abastecimento/{id} => GET(show), PUT(update), DELETE(destroy)
-    * abastecimento/{id}/edit => GET(edit)
+    * abastecimento/{id} => DELETE(destroy)
     */
-    Route::resource('abastecimento', 'Maquina\HistoricoAbastecimentoController')/*->middleware('auth')*/;
+    Route::resource('abastecimento', 'Maquina\HistoricoAbastecimentoController')->except(['show', 'update', 'edit']);
 
     /* ROTA: HISTÓRICO ANIMAL (para saída de medicamento)
     * medicacao => POST(store), GET(index) 
     * medicacao/create => GET(create) 
-    * medicacao/{id} => GET(show), PUT(update), DELETE(destroy)
-    * medicacao/{id}/edit => GET(edit)
+    * medicacao/{id} => DELETE(destroy)
     */
-    Route::resource('medicacao', 'Animal\HistoricoAnimalController')/*->middleware('auth')*/;
+    Route::resource('medicacao', 'Animal\HistoricoAnimalController')->except(['show', 'update', 'edit']);
 
     /* ROTA: HISTÓRICO TERRA (para saída de insumo e uso na terra)
     * plantio => POST(store), GET(index) 
     * plantio/create => GET(create) 
-    * plantio/{id} => GET(show), PUT(update), DELETE(destroy)
-    * plantio/{id}/edit => GET(edit)
+    * plantio/{id} => DELETE(destroy)
     */
-    Route::resource('plantio', 'Insumo\HistoricoTerraController')/*->middleware('auth')*/;
+    Route::resource('plantio', 'Insumo\HistoricoTerraController')->except(['show', 'update', 'edit']);
 
     /* ROTA: HISTÓRICO COMPRA COMBUSTÍVEL
     * compra-combustivel => POST(store), GET(index) 
     * compra-combustivel/create => GET(create) 
-    * compra-combustivel/{id} => GET(show), PUT(update), DELETE(destroy)
-    * compra-combustivel/{id}/edit => GET(edit)
+    * compra-combustivel/{id} => DELETE(destroy)
     */
-    Route::resource('compra-combustivel', 'Maquina\HistoricoCompraCombustivelController')/*->middleware('auth')*/;
+    Route::resource('compra-combustivel', 'Maquina\HistoricoCompraCombustivelController')->except(['show', 'update', 'edit']);
 
     /* ROTA: HISTÓRICO COMPRA INSUMO
     * compra-insumo => POST(store), GET(index) 
     * compra-insumo/create => GET(create) 
-    * compra-insumo/{id} => GET(show), PUT(update), DELETE(destroy)
-    * compra-insumo/{id}/edit => GET(edit)
+    * compra-insumo/{id} => DELETE(destroy)
     */
-    Route::resource('compra-insumo', 'Insumo\HistoricoCompraInsumoController')/*->middleware('auth')*/;
+    Route::resource('compra-insumo', 'Insumo\HistoricoCompraInsumoController')->except(['show', 'update', 'edit']);
 
     /* ROTA: HISTÓRICO COMPRA MEDICAMENTO
     * compra-medicamento => POST(store), GET(index) 
     * compra-medicamento/create => GET(create) 
-    * compra-medicamento/{id} => GET(show), PUT(update), DELETE(destroy)
-    * compra-medicamento/{id}/edit => GET(edit)
+    * compra-medicamento/{id} => DELETE(destroy)
     */
-    Route::resource('compra-medicamento', 'Animal\HistoricoCompraMedicamentoController')/*->middleware('auth')*/;
+    Route::resource('compra-medicamento', 'Animal\HistoricoCompraMedicamentoController')->except(['show', 'update', 'edit']);
 
     /* ROTA: COMBUSTÍVEL
     * combustivel => POST(store), GET(index) 
@@ -158,8 +152,7 @@ Route::group(['middleware' => 'auth'], function()
     /* ROTA: REVISÃO
     * revisao => POST(store), GET(index) 
     * revisao/create => GET(create) 
-    * revisao/{id} => GET(show), PUT(update), DELETE(destroy)
-    * revisao/{id}/edit => GET(edit)
+    * revisao/{id} => DELETE(destroy)
     */
-    Route::resource('revisao', 'Maquina\RevisaoController')/*->middleware('auth')*/;
+    Route::resource('revisao', 'Maquina\HistoricoRevisaoController')->except(['show', 'update', 'edit']);
 });

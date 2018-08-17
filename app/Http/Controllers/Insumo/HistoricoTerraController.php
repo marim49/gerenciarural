@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Insumo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class HistoricoTerraController extends Controller
 {
@@ -18,7 +19,7 @@ class HistoricoTerraController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna o histórico da terra)
+    //Método GET (retorna o histórico da terra) : OK
     public function index()
     {
         try
@@ -27,21 +28,16 @@ class HistoricoTerraController extends Controller
             $limit = 20;
             
             $historicos_terra = $this->model
-            //nessa parte aqui, vc mandou buscar, ele retorna as relações
                 ->with($this->relationships())
                 ->orderBy('id', 'asc')
                 ->get();
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
             return view('relatorio.rplantio', ['historicos_terra' => $historicos_terra]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('relatorio.rplatio', ['historicos_terra' => []])
+            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     
@@ -107,80 +103,44 @@ class HistoricoTerraController extends Controller
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
                             ->withInput(); 
         }
-    } 
-
-    //Método GET (retorna um histórico da terra específico)
-    public function show($id)
-    {
-        try
-        {
-            $historico_terra = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($historico_terra);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
     }   
 
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza um histórico da terra)
-    public function update(Request $request, $id)
+    //Método DELETE (cancela um histórico da terra) : OK
+    public function destroy(Request $request, $id)
     {
-        //tratar entrada
+        $resposta = $request->only('motivo', 'cancelado');
+        //Validação
+        $validator = $this->Validator($resposta, true);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        } 
         try
         {
-            $update_historico_terra = $this->model->findOrFail($id);            
-            $dados = $request->all();
-
-            $update_historico_terra->update($dados);
+            $resposta = array_merge($resposta, ['id_user_cancelou' => Auth::user()->id]);
+            $historico_terra = $this->model->findOrFail($id);                   
+            $insumo = \App\Models\Insumo\Insumo::find($historico_terra->id_insumo);
             
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_historico_terra
-            ]);
+            if($insumo){
+                $insumo->increment('quantidade', $historico_terra->quantidade);
+                $historico_terra->update($resposta);
+            }
+            else{
+                throw new \Exception('Não foi possível encontrar o insumo no banco de dados');
+            }              
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$historico_terra);
         }
         catch(\Exception $e) 
         {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }
-
-    //Método DELETE (deleta um hitórico da terra específico)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível atualizar o registro.',$e))
+                            ->withInput(); 
         }
     }
 
@@ -195,23 +155,38 @@ class HistoricoTerraController extends Controller
     }    
 
     //Método de validação : OK
-    protected function Validator($requisicao){        
-        $messages = array(
-            'id_terra.required'=> 'O campo de terra é obrigatório',
-            'id_insumo.required'=>'O campo de insumo é obrigatório',
-            'id_funcionario.required'=>'O campo de funcionário é obrigatório',
-            'quantidade.required'=>'O campo de quantidade é obrigatório',
-            'quantidade.numeric'=>'A quantidade só pode ser em números',
-            'data.required'=>'O campo de data de data é obrigatório',
-            'data.date'=>'O campo de data está em formato inválido',
-        );    
-        $rules = array(
-            'id_terra'=>'required',
-            'id_insumo'=>'required',
-            'id_funcionario'=>'required',
-            'quantidade'=>'required|numeric',
-            'data'=>'required|date',
-        );
+    protected function Validator($requisicao, $delete = false){
+        if($delete)
+        {
+            $messages = array(
+                'motivo.required'=> 'O campo de motivo é obrigatório',
+                'motivo.max'=>'O tamanho máximo do campo de motivo é 100 caracteres',
+                'cancelado.required'=>'A operação não funcionou',
+            );    
+            $rules = array(
+                'motivo'=>'required|max:100',
+                'cancelado'=>'required',
+            );
+        }   
+        else
+        {   
+            $messages = array(
+                'id_terra.required'=> 'O campo de terra é obrigatório',
+                'id_insumo.required'=>'O campo de insumo é obrigatório',
+                'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+                'quantidade.required'=>'O campo de quantidade é obrigatório',
+                'quantidade.numeric'=>'A quantidade só pode ser em números',
+                'data.required'=>'O campo de data de data é obrigatório',
+                'data.date'=>'O campo de data está em formato inválido',
+            );    
+            $rules = array(
+                'id_terra'=>'required',
+                'id_insumo'=>'required',
+                'id_funcionario'=>'required',
+                'quantidade'=>'required|numeric',
+                'data'=>'required|date',
+            );
+        }
     
         return Validator::make($requisicao, $rules,$messages);        
     }

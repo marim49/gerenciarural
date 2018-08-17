@@ -72,6 +72,18 @@ function editarTerra() {
 	})
 }
 
+function cancelarOperacao() {
+	$('#modal_cancelar').on('show.bs.modal', function (event) {
+		//recupera botão que chamou o modal
+		var button = $(event.relatedTarget);
+		var id = button.data('id');
+		var route = button.data('route');
+		//seta action do form
+		var modal = $(this);		
+		modal.find('#cancelar').attr("action", route + "/" + id);
+	})
+}
+
 
 function editarFazenda() {
 	$('#exampleModal').on('show.bs.modal', function (event) {

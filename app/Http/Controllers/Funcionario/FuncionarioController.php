@@ -133,8 +133,7 @@ class FuncionarioController extends Controller
 
     //Método PUT (atualiza um funcionário)
     public function update(Request $request, $id)
-    {
-        
+    {        
         //tratar entrada
         try
         {

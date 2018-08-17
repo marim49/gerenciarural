@@ -1,5 +1,6 @@
 $(document).ready(function() {  
 
+    //Abastecimento
     $('#dabastecimento').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
@@ -34,6 +35,44 @@ $(document).ready(function() {
             );
         }
     } );
+
+    //Revisão
+    $('#drevisao').DataTable( {
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+            // Total over all pages
+            total = api
+                .column( 4 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Total over this page
+            pageTotal = api
+                .column( 4, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            $( api.column( 1 ).footer() ).html(
+                ''+pageTotal +' ( '+ total +' total)'
+            );
+        }
+    } );
+
+    //Medicação
     $('#daplicacao').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
@@ -70,7 +109,6 @@ $(document).ready(function() {
     } );
 
     //Compra de combustível
-
     $('#dcombustivel').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
@@ -125,7 +163,6 @@ $(document).ready(function() {
     } );
 
     // Compra de insumo 
-
     $('#dinsumo').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
@@ -180,7 +217,6 @@ $(document).ready(function() {
     } );
 
     // Compra medicamento
-
     $('#dmedicamento').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
@@ -235,7 +271,6 @@ $(document).ready(function() {
     } );
 
     //Plantio 
-
     $('#dplantio').DataTable( {
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
