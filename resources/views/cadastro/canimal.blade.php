@@ -34,7 +34,8 @@
 								
 								<div class="form-group">
 									<label>Fazenda: *</label>
-									<select class="form-control" name="id_fazenda" />
+									<select class="form-control" name="id_fazenda" required/>
+									<option value="" disabled selected>- Selecione uma fazenda -</option>
 									@foreach($fazendas as $fazenda)
 									    @if (old('id_fazenda') == $fazenda->id)
 										<option value="{{$fazenda->id}}" selected>{{$fazenda->nome}}</option>
@@ -47,12 +48,13 @@
 
 								<div class="form-group">
 									<label>Identificão do Animal: *</label>
-									<input class="form-control" name="nome" type="text" placeholder="" maxlength="45" value="{{ old('nome')}}"/>
+									<input class="form-control" name="nome" required type="text" placeholder="" maxlength="45" value="{{ old('nome')}}"/>
 								</div>
 								
 								<div class="form-group">
 									<label>Grupo do animal: *</label>
 									<select class="form-control" name="id_grupo_animal">
+									<option value="" disabled selected>- Selecione um grupo de animal -</option>
 									@foreach($grupos as $item)
       									<option value="{{$item->id}}">{{$item->nome}}</option>
     								@endforeach
@@ -61,22 +63,22 @@
 								
 								<div class="form-group">
 									<label>Data de entrada: *</label>
-									<input class="form-control" name="entrada" type="date" placeholder="DD/MM/AAAA" maxlength="45" value="{{ old('entrada')}}"/>
+									<input class="form-control" name="entrada" required type="date" placeholder="DD/MM/AAAA" maxlength="45" value="{{ old('entrada')}}"/>
 								</div>
 
 								<div class="form-group">
-									<label>Data de Nascimento:</label>
-									<input class="form-control" name="nascimento" type="date" placeholder="DD/MM/AAAA" maxlength="45" value="{{ old('nascimento')}}"/>
+									<label>Data de Nascimento: *</label>
+									<input class="form-control" name="nascimento" required type="date" placeholder="DD/MM/AAAA" maxlength="45" value="{{ old('nascimento')}}"/>
 								</div>
 
 								<div class="form-group">
-									<label>Identificão da mãe:</label>
-									<input class="form-control" name="nome_mae" type="text" placeholder="" maxlength="45" value="{{ old('nome_mae')}}"/>
+									<label>Identificão da mãe: *</label>
+									<input class="form-control" name="nome_mae" required type="text" placeholder="" maxlength="45" value="{{ old('nome_mae')}}"/>
 								</div>
 
 								<div class="form-group">
-									<label>Identificão do pai:</label>
-									<input class="form-control" name="nome_pai" type="text" placeholder="" maxlength="45" value="{{ old('nome_pai')}}"/>
+									<label>Identificão do pai: *</label>
+									<input class="form-control" name="nome_pai" required type="text" placeholder="" maxlength="45" value="{{ old('nome_pai')}}"/>
 								</div>
 							</div>
 

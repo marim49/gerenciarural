@@ -53,14 +53,14 @@
 									<div class="col-md-8">
 										<div class="form-group">
 											<label>Nome da terra: *</label>
-											<input class="form-control" type="text" name="nome" maxlength="45" value="{{old('nome')}}"/>
+											<input class="form-control" type="text" name="nome" required maxlength="45" value="{{old('nome')}}"/>
 										</div>
 									</div>
 
 									<div class="col-md-8">
 										<div class="form-group">
 											<label>Área:</label>
-											<input class="form-control" type="text" name="area" value="{{ old('area')}}"/>
+											<input class="form-control" type="text" required maxlength="45" name="area" value="{{ old('area')}}"/>
 										</div>
 									</div>
 								</div>
