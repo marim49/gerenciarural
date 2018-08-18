@@ -37,7 +37,8 @@
 										<div class="col-md-8">
 										<div class="form-group">
                                             <label>Fazenda: *</label>
-                                            <select class="form-control" name="id_fazenda">
+                                            <select class="form-control" name="id_fazenda" required>
+											<option value="" disabled selected>- Selecione uma fazenda -</option>
 											@foreach($fazendas as $fazenda)
 												@if (old('id_fazenda') == $fazenda->id)
 												<option value="{{$fazenda->id}}" selected>{{$fazenda->nome}}</option>
@@ -54,7 +55,7 @@
 										<div class="col-md-8">
 											<div class="form-group">
 												<label>Nome do medicamento: *</label>
-												<input class="form-control" name="nome" type="text" placeholder="" maxlength="45" value="{{ old('nome')}}"/>
+												<input class="form-control" name="nome" required type="text" placeholder="" maxlength="45" value="{{ old('nome')}}"/>
 											</div>
 										</div>
 									</div>
@@ -64,6 +65,7 @@
 										<div class="form-group">
                                             <label>Tipo de medicamento: *</label>
                                             <select class="form-control" name="id_tipo_medicamento">
+											<option value="" disabled selected>- Selecione uma tipo de medicamento -</option>
 												@foreach($tipos as $tipo)													
 													@if (old('id_tipo_medicamento') == $tipo->id)
 													<option value="{{$tipo->id}}" selected>{{$tipo->nome}}</option>

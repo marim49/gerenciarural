@@ -36,14 +36,14 @@
 								<div class="col-md-8">
 									<div class="form-group">
 										<label>Nome da fazenda: *</label>
-										<input class="form-control" type="text" name="nome" placeholder="Insira aqui o nome da sua fazenda" maxlength="100" value="{{ old('nome')}}"/>
+										<input class="form-control" type="text" name="nome" required maxlength="100" placeholder="Insira aqui o nome da sua fazenda" maxlength="100" value="{{ old('nome')}}"/>
 									</div>
 								</div>
 
 								<div class="col-md-5">
 									<div class="form-group">
 										<label>Localidade:</label>
-										<input class="form-control" type="text" name="localidade" placeholder="Insira aqui o local da sua fazenda" maxlength="45" value="{{ old('localidade')}}"/>
+										<input class="form-control" type="text" name="localidade" maxlength="45" placeholder="Insira aqui o local da sua fazenda" maxlength="45" value="{{ old('localidade')}}"/>
 									</div>
 								</div>
 

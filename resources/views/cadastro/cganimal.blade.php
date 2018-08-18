@@ -39,7 +39,7 @@
 									<div class="col-md-8">
 										<div class="form-group">
 											<label>Nome:</label>
-											<input class="form-control" type="text" name="nome" required placeholder="Insira aqui o nome do grupo" maxlength="45" value="{{ old('nome')}}"/>
+											<input class="form-control" type="text" required maxlength="45" name="nome" required placeholder="Insira aqui o nome do grupo" maxlength="45" value="{{ old('nome')}}"/>
 										</div>
 									</div>
 								</div>

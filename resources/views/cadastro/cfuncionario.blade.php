@@ -32,6 +32,7 @@
 							<label>Fazenda: *</label>
 							<div class="form-group">
 								<select class="form-control" name="id_fazenda">
+									<option value="" disabled selected>- Selecione uma fazenda -</option>
 									@foreach($fazendas as $fazenda) @if (old('id_fazenda') == $fazenda->id)
 									<option value="{{$fazenda->id}}" selected>{{$fazenda->nome}}</option>
 									@else
@@ -46,12 +47,12 @@
 
 								<div class="form-group">
 									<label>Nome do Funcionário: *</label>
-									<input class="form-control" name="nome" type="text" placeholder="Insira aqui o nome completo do funcionário" maxlength="100"
+									<input class="form-control" name="nome" required maxlength="100" type="text" placeholder="Insira aqui o nome completo do funcionário" maxlength="100"
 									    value="{{ old('nome')}}" />
 								</div>
 								<div class="form-group">
 									<label>RG: *</label>
-									<input class="form-control" name="rg" type="text" placeholder="Insira aqui o RG do funcionário" maxlength="45" value="{{ old('rg')}}"
+									<input class="form-control" name="rg" type="text" required maxlength="45" placeholder="Insira aqui o RG do funcionário" maxlength="45" value="{{ old('rg')}}"
 									/>
 								</div>
 								<div class="form-group">
@@ -66,17 +67,17 @@
 								</div>
 								<div class="form-group">
 									<label>Rua: *</label>
-									<input class="form-control" type="text" name="endereco_rua" placeholder="Insira aqui o endereço do funcionário" maxlength="45"
+									<input class="form-control" type="text" name="endereco_rua" required maxlength="45" placeholder="Insira aqui o endereço do funcionário" maxlength="45"
 									    value="{{ old('endereco_rua')}}" />
 								</div>
 								<div class="form-group">
 									<label>Bairro: *</label>
-									<input class="form-control" type="text" name="endereco_bairro" placeholder="Insira aqui o bairro do funcionário" maxlength="45"
+									<input class="form-control" type="text" name="endereco_bairro" required maxlength="45" placeholder="Insira aqui o bairro do funcionário" maxlength="45"
 									    value="{{ old('endereco_bairro')}}" />
 								</div>
 								<div class="form-group">
 									<label>País: *</label>
-									<input class="form-control" name="endereco_pais" type="text" placeholder="Insira aqui o país do funcionário" maxlength="45"
+									<input class="form-control" name="endereco_pais" type="text" required maxlength="45" placeholder="Insira aqui o país do funcionário" maxlength="45"
 									    value="{{ old('endereco_pais')}}" />
 								</div>
 
@@ -102,27 +103,27 @@
 								</div>
 								<div class="form-group">
 									<label>CPF: *</label>
-									<input class="form-control" name="cpf" type="text" placeholder="Insira aqui o CPF" maxlength="45" value="{{ old('cpf')}}"
+									<input class="form-control" name="cpf" type="text" required placeholder="Insira aqui o CPF" maxlength="45" value="{{ old('cpf')}}"
 									/>
 								</div>
 								<div class="form-group">
 									<label>Data de Nascimento: *</label>
-									<input class="form-control" name="nascimento" type="date" placeholder="DD/MM/AAAA" maxlength="45" value="{{ old('nascimento')}}"
+									<input class="form-control" name="nascimento" type="date" required placeholder="DD/MM/AAAA" maxlength="45" value="{{ old('nascimento')}}"
 									/>
 								</div>
 								<div class="form-group">
 									<label>Nº: *</label>
-									<input class="form-control" name="endereco_numero" type="text" placeholder="Insira aqui o número da casa" maxlength="45"
+									<input class="form-control" name="endereco_numero" type="text" required placeholder="Insira aqui o número da casa" maxlength="45"
 									    value="{{ old('endereco_numero')}}" />
 								</div>
 								<div class="form-group">
 									<label>Cidade: *</label>
-									<input class="form-control" name="endereco_cidade" type="text" placeholder="Insira aqui a cidade do funcionário" maxlength="45"
+									<input class="form-control" name="endereco_cidade" type="text" required placeholder="Insira aqui a cidade do funcionário" maxlength="45"
 									    value="{{ old('endereco_cidade')}}" />
 								</div>
 								<div class="form-group">
 									<label>Cargo: *</label>
-									<input class="form-control" type="text" name="cargo" placeholder="Insira aqui a função do funcionário" maxlength="45" value="{{ old('cargo')}}"
+									<input class="form-control" type="text" name="cargo" required placeholder="Insira aqui a função do funcionário" maxlength="45" value="{{ old('cargo')}}"
 									/>
 								</div>
 
@@ -132,29 +133,29 @@
 
 								<div class="form-group">
 									<label>PIS: *</label>
-									<input class="form-control" name="pis" type="text" placeholder="PIS" maxlength="45" value="{{ old('pis')}}" />
+									<input class="form-control" name="pis" required type="text" placeholder="PIS" maxlength="45" value="{{ old('pis')}}" />
 								</div>
 								<div class="form-group">
 									<label>Telefone: *</label>
-									<input class="form-control" name="tel_fixo" type="text" placeholder="(__)____-____" maxlength="45" maxlength="45" value="{{ old('tel_fixo')}}"
+									<input class="form-control" name="tel_fixo" required type="text" placeholder="(__)____-____" maxlength="45" value="{{ old('tel_fixo')}}"
 									/>
 								</div>
 								<div class="form-group">
 									<label>Celular: *</label>
-									<input class="form-control" name="celular" type="text" placeholder="(__)_____-____" maxlength="45" maxlength="45" value="{{ old('celular')}}"
+									<input class="form-control" name="celular" required type="text" placeholder="(__)_____-____" maxlength="45" value="{{ old('celular')}}"
 									/>
 								</div>
 								<div class="form-group">
 									<label>Estado: *</label>
-									<input class="form-control" name="endereco_estado" type="text" placeholder="Insira aqui o estado" maxlength="45" value="{{ old('endereco_estado')}}"/>
+									<input class="form-control" name="endereco_estado" required type="text" placeholder="Insira aqui o estado" maxlength="45" value="{{ old('endereco_estado')}}"/>
 								</div>
 								<div class="form-group">
 									<label>CEP: *</label>
-									<input class="form-control" name="cep" type="text" placeholder="CEP" maxlength="45" value="{{ old('cep')}}" />
+									<input class="form-control" name="cep" required type="text" placeholder="CEP" maxlength="45" value="{{ old('cep')}}" />
 								</div>
 								<div class="form-group">
 									<label>Data de Admissão: *</label>
-									<input class="form-control" name="admissao" type="date" placeholder="DD/MM/AAAA" maxlength="45" value="{{ old('admissao')}}"
+									<input class="form-control" name="admissao" required type="date" placeholder="DD/MM/AAAA" maxlength="45" value="{{ old('admissao')}}"
 									/>
 								</div>
 							</div>
