@@ -42,11 +42,8 @@
 										<div class="col-md-8">
 											<div class="form-group">
 												<label>Nome:</label>
-												<input class="form-control" type="text" name="nome" placeholder="" />
+												<input class="form-control" type="text" name="nome" required placeholder="Insira aqui o nome do tipo de medicamento" maxlength="45" value="{{ old('nome')}}"/>
 											</div>
-										</div>
-										<div class="col-md-4">
-
 										</div>
 									</div>
 
@@ -57,6 +54,7 @@
 										<button type="reset" class="btn btn-info pull-right">Limpar </button>
 									</div>
 								</form>
+								
 							</div>
 						</div>
 					</div>

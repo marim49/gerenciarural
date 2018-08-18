@@ -3,7 +3,7 @@
 	<!--Cabeçalho pagina-->
 	<div class="col-md-12">
 		<div class="row pad-botm">
-			<h3 class="header-line">Retirada de combustível</h3>
+			<h3 class="header-line">Saída de combustível</h3>
 			@if (session()->has('success'))
 			<div class="alert alert-success alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -24,7 +24,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Abastecer
+					Informações da máquina abastecida
 				</div>
 				<div class="panel-body">
 					<div class="row">
@@ -36,9 +36,9 @@
 									<div class="col-md-8">
 
 										<div class="form-group">
-											<label>Fazenda: *</label>
-											<select type="hidden" id="fazendas" class="form-control" onchange="SaidaCombustivel()">
-												<option value="" selected>- Selecione Fazenda -</option>
+											<label>Fazenda:</label>
+											<select type="hidden" id="fazendas" required class="form-control" onchange="SaidaCombustivel()">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>												
 												@foreach($fazendas as $fazenda)
 												<option value="{{$fazenda}}">{{$fazenda->nome}}</option>
 												@endforeach
@@ -46,37 +46,39 @@
 										</div>
 
 										<div class="form-group">
-											<label>Máquina de destino: *</label>
-											<select id="maquina" class="form-control" name="id_maquina">
+											<label>Máquina de destino:</label>
+											<select id="maquina" required class="form-control" name="id_maquina">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>		
 											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Combustível: *</label>
-											<select id="combustivel" class="form-control" name="id_combustivel">
+											<label>Combustível:</label>
+											<select id="combustivel" required class="form-control" name="id_combustivel">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>		
 											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Funcionário: *</label>
-											<select id="funcionario" class="form-control" name="id_funcionario">
+											<label>Funcionário:</label>
+											<select id="funcionario" required class="form-control" name="id_funcionario">
+												<option value="" disabled selected>- Selecione uma fazenda -</option>		
 											</select>
 										</div>
 
 										<div class="form-group">
-											<label>Quantidade a abastecer: *</label>
-											<input class="form-control" name="quantidade" type="numeric" placeholder="Em litros" value="{{ old('quantidade')}}"/>
+											<label>Quantidade do abastecimento:</label>
+											<input class="form-control" required name="quantidade" type="number" step=".01" placeholder="Em litros" value="{{ old('quantidade')}}"/>
 										</div>										
 
 										<div class="form-group">
-											<label>Horímetro: *</label>
-											<input class="form-control" name="horimetro" placeholder="Valor atual do horímetro da máquina" maxlength="45" value="{{ old('horimetro')}}"
-											/>
+											<label>Horímetro:</label>
+											<input class="form-control" required name="horimetro" type="number" placeholder="Valor atual do horímetro da máquina" value="{{ old('horimetro')}}"/>
 										</div>
 
 										<div class="form-group">
-											<label>Data de Abastecimento: *</label>
-											<input class="form-control" name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
+											<label>Data de Abastecimento:</label>
+											<input class="form-control" required name="data" type="date" placeholder="DD/MM/AAAA" value="{{ old('data')}}"/>
 										</div>
 
 									</div>
@@ -89,13 +91,14 @@
 									<button type="reset" class="btn btn-info pull-right">Limpar </button>
 								</div>
 							</form>
+
 						</div>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
-	<!--/Conteudo da pagina-->
 </div>
 </div>
 @endsection

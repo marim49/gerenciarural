@@ -90,7 +90,58 @@ border-color: rgba(155, 153, 153, 0.23);
 .navbar-toggle {
 background-color: black;
 border: 1px solid black;
-}  
+}
+/* ============================================================== 
+STYLE DE TABLE DE ADD ROW 
+=============================================================== */
+.table-remove {
+    color: #700;
+    cursor: pointer;
+}
+
+table.tableprod {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+}
+
+table.tableprod thead {
+    background: #FFFFFF;
+    border-bottom: 4px solid #333333;
+}
+
+table.tableprod thead th {
+    color: #333333;
+    text-align: center;
+    border-left: 2px solid #333333;
+}
+
+table.tableprod tbody td {
+    font-size: 13px;
+}
+
+.table-remove:hover {
+    color: #f00;
+}
+
+.table-editable {
+    position: relative;
+}
+
+.glyphicon {
+    font-size: 20px;
+}
+
+.table-add:hover {
+    color: #0b0;
+}
+
+.table-add {
+    color: #070;
+    cursor: pointer;
+    top: 8px;
+    right: 0;
+} 
   /* =============================================================
     APP STYLES
 ============================================================ */

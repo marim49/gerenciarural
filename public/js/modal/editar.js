@@ -72,6 +72,17 @@ function editarTerra() {
 	})
 }
 
+function cancelarOperacao() {
+	$('#modal_cancelar').on('show.bs.modal', function (event) {
+		//recupera botão que chamou o modal
+		var button = $(event.relatedTarget);
+		var id = button.data('id');
+		var route = button.data('route');
+		//seta action do form
+		var modal = $(this);		
+		modal.find('#cancelar').attr("action", route + "/" + id);
+	})
+}
 
 function editarFazenda() {
 	$('#exampleModal').on('show.bs.modal', function (event) {
@@ -150,15 +161,64 @@ function editarMaquina() {
 		var nome = button.data('nome');
 		var fazenda = button.data('fazenda');
 		var datacompra = button.data('datacompra');
+		var route = button.data('route');
 		// Extract info from data-* attributes
 		// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
 		// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
 		var modal = $(this);
-		modal.find('.modal-title').text('ID ' + id);
 		modal.find('#id').val(id);
 		modal.find('#nome').val(nome);
 		modal.find('#fazenda').val(fazenda);
 		modal.find('#datacompra').val(datacompra);
+		modal.find('#editar').attr("action", route + "/" + id);
+	})
+
+
+
+}
+
+function editarMedicamento() {
+	$('#exampleModal').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget); // Button that triggered the modal
+		var id = button.data('id');
+		var fazenda = button.data('fazenda');
+		var tipo = button.data('tipo');
+		var nome = button.data('nome');
+		var obs = button.data('obs');
+		var route = button.data('route');
+		// Extract info from data-* attributes
+		// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+		// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+		var modal = $(this);
+		modal.find('#id').val(id);
+		modal.find('#fazenda').val(fazenda);
+		modal.find('#tipo').val(tipo);
+		modal.find('#nome').val(nome);
+		modal.find('#obs').val(obs);
+		modal.find('#editar').attr("action", route + "/" + id);
+	})
+
+
+
+}
+
+function editarInsumo() {
+	$('#exampleModal').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget); // Button that triggered the modal
+		var id = button.data('id');
+		var fazenda = button.data('fazenda');
+		var tipo = button.data('tipo');
+		var nome = button.data('nome');
+		var route = button.data('route');
+		// Extract info from data-* attributes
+		// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+		// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+		var modal = $(this);
+		modal.find('#id').val(id);
+		modal.find('#fazenda').val(fazenda);
+		modal.find('#tipo').val(tipo);
+		modal.find('#nome').val(nome);
+		modal.find('#editar').attr("action", route + "/" + id);
 	})
 
 

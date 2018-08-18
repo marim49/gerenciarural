@@ -18,7 +18,7 @@ class InsumoController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna os insumos)
+    //Método GET (retorna os insumos) : OK
     public function index()
     {
         try
@@ -29,13 +29,16 @@ class InsumoController extends Controller
             $insumos = $this->model->orderBy('id', 'asc')
                 ->with('TipoInsumo', 'Fazenda')
                 ->get();/*->paginate($limit); //limite por páginas */
+        
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+            $tipos = \App\Models\Insumo\TipoInsumo::orderBy('nome', 'asc')->get();
 
-            return view('pesquisa.pinsumo', ['insumos' => $insumos]);
+            return view('pesquisa.pinsumo', ['insumos' => $insumos, 'fazendas' => $fazendas, 'tipos' => $tipos]);
         
         }
         catch(\Exception $e) 
         {
-            return view('pesquisa.pinsumo', ['insumos' => []])
+            return view('pesquisa.pinsumo', ['insumos' => [], 'fazendas' => [], 'tipo' => []])
                             ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
@@ -115,27 +118,37 @@ class InsumoController extends Controller
     //Método PUT (atualiza um insumo)
     public function update(Request $request, $id)
     {
+        $dados = $request->only('id_tipo_insumo', 'nome', 'id_fazenda');
+        foreach ($dados as $key => $value) {
+            if ($value == null) {
+                unset($dados[$key]);
+            }
+        }
+        //Validação
+        $validator = $this->Validator($dados, true);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
         //tratar entrada
         try
         {
-            $update_insumo = $this->model->findOrFail($id);            
-            $dados = $request->all();
+            $update = $this->model->findOrFail($id);      
 
-            $update_insumo->update($dados);
+            $update->update($dados);
             
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_insumo
-            ]);
+            return redirect()
+                            ->back()
+                            ->with('success',$update); 
         }
         catch(\Exception $e) 
         {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput();  
         }
     }
 
@@ -174,18 +187,32 @@ class InsumoController extends Controller
     }
 
     //Método de validação : OK
-    protected function Validator($requisicao){        
-        $messages = array(
-            'id_fazenda.required'=> 'O campo de fazenda é obrigatório',
-            'id_tipo_insumo.required'=> 'O campo de tipo de insumo',
-            'nome.required' => 'O campo nome é obrigatório'           ,
-            'nome.max' => 'O tamanho máximo do campo nome é 45 caracteres'
-        );    
-        $rules = array(
-            'id_fazenda'=>'required',
-            'id_tipo_insumo'=>'required',
-            'nome'=>'required|max:45'
-        );
+    protected function Validator($requisicao, $update = false){  
+        if($update)       
+        {
+            $messages = array(
+                'nome.max' => 'O tamanho máximo do campo nome é 45 caracteres',
+            );    
+            $rules = array(
+                'id_fazenda' => '',
+                'id_tipo_insumo' => '',
+                'nome' => 'max:45'
+            );
+        }
+        else
+        {      
+            $messages = array(
+                'id_fazenda.required'=> 'O campo de fazenda é obrigatório',
+                'id_tipo_insumo.required'=> 'O campo de tipo de insumo',
+                'nome.required' => 'O campo nome é obrigatório'           ,
+                'nome.max' => 'O tamanho máximo do campo nome é 45 caracteres'
+            );    
+            $rules = array(
+                'id_fazenda'=>'required',
+                'id_tipo_insumo'=>'required',
+                'nome'=>'required|max:45'
+            );
+        }
     
         return Validator::make($requisicao, $rules,$messages);        
     }

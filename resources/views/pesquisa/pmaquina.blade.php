@@ -2,26 +2,28 @@
 <div class="container">
 	<div class="row pad-botm">
 		<div class="col-md-12">
-			<h3 class="header-line">Pesquisar Máquina</h3>
+			<h3 class="header-line">Máquinas</h3>
 			@if ($errors->any())
 			<div class="alert alert-warning alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Ops!</strong> {{$errors->first()}}.
 			</div>
 			@endif
+			@if (session()->has('success'))
+				<div class="alert alert-success alert-dismissible">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Salvo!</strong> Os dados foram salvos.
+				</div>
+			@endif
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="col-md-12">
-			<!-- Advanced Tables -->
 			<div class="panel panel-default">
-				<div class="panel-heading">
-					Buscar por máquinas
-				</div>
 				<div class="panel-body">
-
 					<div class="table-responsive">
+					
 						<table class="table table-striped table-bordered table-hover" id="dataTables-example">
 							<thead>
 								<tr>
@@ -37,21 +39,22 @@
 								<tr class='gradeA'>
 									<td> {{$maquina->Fazenda->nome}} </td>
 									<td> {{$maquina->nome}} </td>
-									<td> {{$maquina->data_aquisicao}} </td>
+									<td> {{$maquina->data_aquisicao_convert}} </td>
 									<td>
 										<center>
 											<button type="button" class="btn btn-xs btn-warning" onclick="editarMaquina()" data-toggle="modal" data-target="#exampleModal"
 											    data-nome="{{$maquina->nome}}" data-id="{{$maquina->id}}" data-fazenda="{{$maquina->id_fazenda}}"
-												data-datacompra="{{$maquina->data_aquisicao}}">Editar</button>
+												data-datacompra="{{$maquina->data_aquisicao}}" data-route="maquina">Editar</button>
 										</center>
 									</td>
 								</tr>
 								@endforeach
 							@endif
-
 							</tbody>
 						</table>
+
 					</div>
+
 					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -59,23 +62,21 @@
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
 									</button>
-									<h4 class="modal-title" id="exampleModalLabel">Curso</h4>
+									<h4 class="modal-title">Editar</h4>
 								</div>
 								<div class="modal-body">
 								@if(isset($maquina))
-									<form name='update-maquina' action="{{ route('maquina.update', $maquina->id) }}" method='POST'>
+									<form id="editar" name='update-maquina' method='POST'>
 										{{ csrf_field() }} {{ method_field('PUT') }}
 										<div class="panel-body">
 											<div class="row">
 												<div class="col-md-8">
 													<div class="form-group">
-														<label>Fazenda: *</label>
-														<select class="form-control" id="fazenda" name="id_fazenda">
-															@foreach($fazendas as $fazenda) @if (old('id_fazenda') == $fazenda->id)
-															<option value="{{$fazenda->id}}" selected>{{$fazenda->nome}}</option>
-															@else
+														<label>Fazenda:</label>
+														<select class="form-control" required id="fazenda" name="id_fazenda">
+															@foreach($fazendas as $fazenda)
 															<option value="{{$fazenda->id}}">{{$fazenda->nome}}</option>
-															@endif @endforeach
+															@endforeach
 														</select>
 													</div>
 												</div>
@@ -84,9 +85,9 @@
 											<div class="row">
 												<div class="col-md-5">
 													<div class="form-group">
-														<label>Nome: *</label>
-														<input class="form-control" id="nome" name="nome" type="text" placeholder="Nome da máquina" maxlength="45" value="{{ old('nome')}}"
-														/>
+														<label>Nome:</label>
+														<input class="form-control" id="nome" required name="nome" type="text"
+														placeholder="Nome da máquina" maxlength="45"/>
 													</div>
 												</div>
 											</div>
@@ -94,9 +95,9 @@
 											<div class="row">
 												<div class="col-md-5">
 													<div class="form-group">
-														<label>Data de Compra: *</label>
-														<input class="form-control" id="datacompra" name="data_aquisicao" type="date" placeholder="DD/MM/AAAA" value="{{ old('data_aquisicao')}}"
-														/>
+														<label>Data de Compra:</label>
+														<input class="form-control" id="datacompra" required name="data_aquisicao" type="date"
+														placeholder="DD/MM/AAAA"/>
 													</div>
 												</div>
 											</div>
@@ -119,7 +120,6 @@
 
 	</div>
 </div>
-<!--End Advanced Tables -->
 </div>
 </div>
 </div>

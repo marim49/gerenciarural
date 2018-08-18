@@ -27,7 +27,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Cadastrar Grupo de Animal
+					Insira os dados para cadastrar um grupo de animal:
 				</div>
 				<div class="panel-body">
 					<div class="row">
@@ -38,8 +38,8 @@
 								<div class="row">
 									<div class="col-md-8">
 										<div class="form-group">
-											<label>Nome do grupo: *</label>
-											<input class="form-control" type="text" name="nome" placeholder="Insira aqui o nome do grupo" maxlength="45" value="{{ old('nome')}}"/>
+											<label>Nome:</label>
+											<input class="form-control" type="text" name="nome" required placeholder="Insira aqui o nome do grupo" maxlength="45" value="{{ old('nome')}}"/>
 										</div>
 									</div>
 								</div>
@@ -51,6 +51,7 @@
 									<button type="reset" class="btn btn-info pull-right">Limpar </button>
 								</div>
 							</form>
+							
 						</div>
 					</div>
 				</div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Animal;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class HistoricoAnimalController extends Controller
 {
@@ -18,7 +19,7 @@ class HistoricoAnimalController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna o histórico de animais)
+    //Método GET (retorna o histórico de animais) : OK
     public function index() 
     {
         try
@@ -28,22 +29,14 @@ class HistoricoAnimalController extends Controller
             
             $historicos_animais = $this->model->orderBy('id', 'asc')
                 ->with($this->relationships())
-                ->where(function($query){
-                    return $query
-                        ->orderBy('id', 'asc');
-                })
                 ->paginate($limit);
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
             return view('relatorio.raplicacao', ['historicos_animais' => $historicos_animais]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('relatorio.raplicacao', ['historicos_animais' => []])
+            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     
@@ -112,78 +105,42 @@ class HistoricoAnimalController extends Controller
         }
     } 
 
-    //Método GET (retorna um histórico de animal específico) 
-    public function show($id)
+    //Método DELETE (cancela um hisórico de animal específico) : OK
+    public function destroy(Request $request, $id)
     {
+        $resposta = $request->only('motivo_cancelamento', 'cancelado');
+        //Validação
+        $validator = $this->Validator($resposta, true);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
         try
         {
-            $historico_animal = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($historico_animal);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }   
-
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza um histórico de animal)
-    public function update(Request $request, $id)
-    {
-        //tratar entrada
-        try
-        {
-            $update_historico_animal = $this->model->findOrFail($id);            
-            $dados = $request->all();
-
-            $update_historico_animal->update($dados);
+            $resposta = array_merge($resposta, ['id_user_cancelou' => Auth::user()->id]);
+            $historico = $this->model->findOrFail($id);                   
+            $medicamento = \App\Models\Animal\Medicamento::find($historico->id_medicamento);
             
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_historico_animal
-            ]);
+            if($medicamento){
+                $medicamento->increment('quantidade', $historico->quantidade);
+                $historico->update($resposta);
+            }
+            else{
+                throw new \Exception('Não foi possível encontrar o insumo no banco de dados');
+            }              
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$historico);
         }
         catch(\Exception $e) 
         {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }
-
-    //Método DELETE (deleta um hisórico de animal específico)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível atualizar o registro.',$e))
+                            ->withInput(); 
         }
     }
 
@@ -198,24 +155,41 @@ class HistoricoAnimalController extends Controller
     }
 
      //Método de validação : OK
-     protected function Validator($requisicao){        
-        $messages = array(
-            'id_animal.required'=> 'O campo de animal é obrigatório',
-            'id_medicamento.required'=>'O campo de medicamento é obrigatório',
-            'id_funcionario.required'=>'O campo de funcionário é obrigatório',
-            'quantidade.required'=>'O campo de quantidade é obrigatório',
-            'quantidade.numeric'=>'A quantidade só pode ser em números',
-            'data.required'=>'O campo de data de abastecimento é obrigatório',
-            'data.date'=>'O campo de data está em formato inválido',
-        );    
-        $rules = array(
-            'id_animal'=>'required',
-            'id_medicamento'=>'required',
-            'id_funcionario'=>'required',
-            'quantidade'=>'required|numeric',
-            'data'=>'required|date',
-        );
-    
+    protected function Validator($requisicao, $delete = false)
+    {        
+        if($delete)
+        {
+            $messages = array(
+                'motivo_cancelamento.required'=> 'O campo de motivo é obrigatório',
+                'motivo_cancelamento.max'=>'O tamanho máximo do campo de motivo é 100 caracteres',
+                'cancelado.required'=>'A operação não funcionou',
+            );    
+            $rules = array(
+                'motivo_cancelamento'=>'required|max:100',
+                'cancelado'=>'required',
+            );
+        }   
+        else
+        {   
+            $messages = array(
+                'id_animal.required'=> 'O campo de animal é obrigatório',
+                'id_medicamento.required'=>'O campo de medicamento é obrigatório',
+                'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+                'quantidade.required'=>'O campo de quantidade é obrigatório',
+                'quantidade.numeric'=>'A quantidade só pode ser em números',
+                'data.required'=>'O campo de data de abastecimento é obrigatório',
+                'data.date'=>'O campo de data está em formato inválido',
+                'motivo.max' => 'O tamanho máximo do campo de motivo é 100 carcateres'
+            );    
+            $rules = array(
+                'id_animal'=>'required',
+                'id_medicamento'=>'required',
+                'id_funcionario'=>'required',
+                'quantidade'=>'required|numeric',
+                'data'=>'required|date',
+                'motivo' => 'max:100'
+            );
+        }    
         return Validator::make($requisicao, $rules,$messages);        
     }
 

@@ -29,12 +29,15 @@ class MedicamentoController extends Controller
             $medicamentos = $this->model->orderBy('id', 'asc')
                 ->with('Fazenda', 'TipoMedicamento')
                 ->get();/*->paginate($limit); //limite por páginas */
+            
+            $fazendas = \App\Models\Fazenda\Fazenda::orderBy('nome', 'asc')->get();
+            $tipos = \App\Models\Animal\TipoMedicamento::orderBy('nome', 'asc')->get();
                 
-            return view('pesquisa.pfarmacia', ['medicamentos' => $medicamentos]);
+            return view('pesquisa.pfarmacia', ['medicamentos' => $medicamentos, 'fazendas' => $fazendas, 'tipos' => $tipos]);
         }
         catch(\Exception $e) 
         {
-            return view('pesquisa.pfarmacia', ['medicamentos' => []])
+            return view('pesquisa.pfarmacia', ['medicamentos' => [], 'fazendas' => [], 'tipo' => []])
                             ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
@@ -86,78 +89,40 @@ class MedicamentoController extends Controller
         }
     } 
 
-    //Método GET (retorna um medicamento específico)
-    public function show($id)
-    {
-        try
-        {
-            $medicamento = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($medicamento);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }       
-
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza um medicamento)
+    //Método PUT (atualiza um medicamento) : OK
     public function update(Request $request, $id)
     {
+        $dados = $request->only('id_tipo_medicamento', 'nome', 'obs', 'id_fazenda');
+        foreach ($dados as $key => $value) {
+            if ($value == null) {
+                unset($dados[$key]);
+            }
+        }
+        //Validação
+        $validator = $this->Validator($dados, true);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
         //tratar entrada
         try
         {
-            $update_medicamento = $this->model->findOrFail($id);            
-            $dados = $request->all();
+            $update = $this->model->findOrFail($id);      
 
-            $update_medicamento->update($dados);
+            $update->update($dados);
             
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_medicamento
-            ]);
+            return redirect()
+                            ->back()
+                            ->with('success',$update); 
         }
         catch(\Exception $e) 
         {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }
-
-    //Método DELETE (deleta um medicamento específico)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput();  
         }
     }
 
@@ -172,20 +137,36 @@ class MedicamentoController extends Controller
     }    
 
     //Método de validação
-    protected function Validator($requisicao){        
-        $messages = array(
-            'id_fazenda.required' => 'Informar a fazenda é obrigatório',
-            'id_tipo_medicamento.required' => 'Informar o tipo de medicamento é obrigatório',
-            'nome.required'=> 'O campo nome é obrigatório',
-            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
-            'obs.max'=>'O campo de observação pode ter no máximo 140 caracteres',
-        );    
-        $rules = array(
-            'id_fazenda' => 'required',
-            'id_tipo_medicamento' => 'required',
-            'nome'=>'required|max:45',
-            'obs'=>'max:140',
-        );
+    protected function Validator($requisicao, $update = false){
+        if($update)       
+        {
+            $messages = array(
+                'nome.max' => 'O tamanho máximo do campo nome é 45 caracteres',
+                'obs.max' => 'O tamanho máximo do campo de observações é 140 caracteres',
+            );    
+            $rules = array(
+                'id_fazenda' => '',
+                'id_tipo_medicamento' => '',
+                'nome' => 'max:45',
+                'obs' => 'max:140'
+            );
+        }
+        else
+        {        
+            $messages = array(
+                'id_fazenda.required' => 'Informar a fazenda é obrigatório',
+                'id_tipo_medicamento.required' => 'Informar o tipo de medicamento é obrigatório',
+                'nome.required'=> 'O campo nome é obrigatório',
+                'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+                'obs.max'=>'O campo de observação pode ter no máximo 140 caracteres',
+            );    
+            $rules = array(
+                'id_fazenda' => 'required',
+                'id_tipo_medicamento' => 'required',
+                'nome'=>'required|max:45',
+                'obs'=>'max:140',
+            );
+        }
     
         return Validator::make($requisicao, $rules,$messages);        
     }

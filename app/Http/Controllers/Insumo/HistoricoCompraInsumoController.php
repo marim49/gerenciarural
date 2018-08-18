@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Insumo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
 use Illuminate\Support\Facades\Validator; 
+use Illuminate\Support\Facades\Auth;
 
 class HistoricoCompraInsumoController extends Controller
 {
@@ -18,7 +19,7 @@ class HistoricoCompraInsumoController extends Controller
         $this->model = $model;
     }
 
-    //Método GET (retorna os historicos de insumos)
+    //Método GET (retorna os historicos de insumos) : OK
     public function index()
     {
         try
@@ -30,17 +31,12 @@ class HistoricoCompraInsumoController extends Controller
                 ->with($this->relationships())
                 ->paginate($limit);
 
-            //Alterar para retornar a view mas para nível de teste ele retornará um json
-            //return response()->json($historicos_compra_insumo);
             return view('relatorio.rcompra-insumo', ['historicos_compra_insumo' => $historicos_compra_insumo]);
         }
         catch(\Exception $e) 
         {
-            //Alterar para retornar view de erro
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível recuperar os registro. Erro: '.$e->getMessage()
-            ]);
+            return view('relatorio.rcompra-insumo', ['historicos_compra_insumo' => []])
+            ->withErrors($this->Error('Não foi possível recuperar os registros.',$e));
         }
     }
     
@@ -109,80 +105,48 @@ class HistoricoCompraInsumoController extends Controller
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
                             ->withInput(); 
         }
-    } 
+    }  
 
-    //Método GET (retorna uma compra de insumo específico)
-    public function show($id)
+    //Método DELETE (cancela uma compra de insumo específica) : OK
+    public function destroy(Request $request, $id)
     {
+        $resposta = $request->only('motivo', 'cancelado');
+        //Validação
+        $validator = $this->Validator($resposta, true);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        } 
         try
         {
-            $historico_compra_insumo = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($historico_compra_insumo);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }   
-
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza uma compra de insumo)
-    public function update(Request $request, $id)
-    {
-        //tratar entrada
-        try
-        {
-            $update_historico_compra_insumo = $this->model->findOrFail($id);            
-            $dados = $request->all();
-
-            $update_historico_compra_insumo->update($dados);
+            $resposta = array_merge($resposta, ['id_user_cancelou' => Auth::user()->id]);
+            $historico_compra = $this->model->findOrFail($id);                   
+            $insumo = \App\Models\Insumo\Insumo::find($historico_compra->id_insumo);
             
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_historico_compra_insumo
-            ]);
+            if($insumo){
+                if($insumo->quantidade < $historico_compra->quantidade){                    
+                    throw new \Exception('A quantidade em estoque é menor que a quantidade a ser cancelada,
+                    provavelmete existe alguma operação de saída irregular, cancele-a e tente novamente');
+                }
+                $insumo->decrement('quantidade', $historico_compra->quantidade);
+                $historico_compra->update($resposta);
+            }
+            else{
+                throw new \Exception('Não foi possível encontrar o insumo no banco de dados');
+            }              
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$historico_compra);
         }
         catch(\Exception $e) 
         {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }
-
-    //Método DELETE (deleta uma compra de insumo específica)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível atualizar o registro.',$e))
+                            ->withInput(); 
         }
     }
 
@@ -197,38 +161,53 @@ class HistoricoCompraInsumoController extends Controller
     }     
 
     //Método de validação : OK
-    protected function Validator($requisicao){        
-        $messages = array(
-            'id_insumo.required'=>'O campo de insumo é obrigatório',
-            'id_insumo.*.required'=>'É necessário selecionar um insumo na linha da tabela',
-            'id_insumo.*.distinct' => 'Existe insumos duplicados na tabela',
-            'id_funcionario.required'=>'O campo de funcionário é obrigatório',
-            'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
-            'data.required'=>'O campo de data é obrigatório',
-            'data.date'=>'O campo de data está em formato inválio',
-            'lote.max'=>'O campo de lote só pode ter no máximo 45 caracteres',
-            'quantidade.required'=>'O campo de quantidade é obrigatório',
-            'quantidade.*.min'=>'O campo de quantidade não pode ser menor ou igual a zero',
-            'quantidade.*.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
-            'quantidade.*.required'=>'As linhas da tabela devem ter a quantidade preenchida',
-            'nota_fiscal.required'=>'O campo de nota fiscal é obrigatório',
-            'nota_fiscal.max'=>'O campo de nota fiscal só pode ter no máximo 45 caracteres',
-            'valor.required'=>'O campo de valor é obrigatório',
-            'valor.max'=>'O campo de valor só pode ter no máximo 45 caracteres',
-            'valor.numeric'=>'O campo valor só pode ter entradas numéricas',
-        );    
-        $rules = array(
-            'id_insumo'=>'required',
-            "id_insumo.*"  => "required|distinct",
-            'id_funcionario'=>'required',
-            'id_fornecedor'=>'required',
-            'data'=>'required|date',
-            'lote'=>'max:45',
-            'quantidade'=>'required',
-            'quantidade.*'=>'required|numeric|min:1',
-            'nota_fiscal'=>'required|max:45',
-            'valor'=>'required|numeric',
-        );
+    protected function Validator($requisicao, $delete = false){           
+        if($delete)
+        {
+            $messages = array(
+                'motivo.required'=> 'O campo de motivo é obrigatório',
+                'motivo.max'=>'O tamanho máximo do campo de motivo é 100 caracteres',
+                'cancelado.required'=>'A operação não funcionou',
+            );    
+            $rules = array(
+                'motivo'=>'required|max:100',
+                'cancelado'=>'required',
+            );
+        }
+        else
+        {     
+            $messages = array(
+                'id_insumo.required'=>'O campo de insumo é obrigatório',
+                'id_insumo.*.required'=>'É necessário selecionar um insumo na linha da tabela',
+                'id_insumo.*.distinct' => 'Existe insumos duplicados na tabela',
+                'id_funcionario.required'=>'O campo de funcionário é obrigatório',
+                'id_fornecedor.required'=>'O campo de fornecedor é obrigatório',
+                'data.required'=>'O campo de data é obrigatório',
+                'data.date'=>'O campo de data está em formato inválio',
+                'lote.max'=>'O campo de lote só pode ter no máximo 45 caracteres',
+                'quantidade.required'=>'O campo de quantidade é obrigatório',
+                'quantidade.*.min'=>'O campo de quantidade não pode ser menor ou igual a zero',
+                'quantidade.*.numeric'=>'O campo de quantidade só pode ter entradas numéricas',
+                'quantidade.*.required'=>'As linhas da tabela devem ter a quantidade preenchida',
+                'nota_fiscal.required'=>'O campo de nota fiscal é obrigatório',
+                'nota_fiscal.max'=>'O campo de nota fiscal só pode ter no máximo 45 caracteres',
+                'valor.required'=>'O campo de valor é obrigatório',
+                'valor.max'=>'O campo de valor só pode ter no máximo 45 caracteres',
+                'valor.numeric'=>'O campo valor só pode ter entradas numéricas',
+            );    
+            $rules = array(
+                'id_insumo'=>'required',
+                "id_insumo.*"  => "required|distinct",
+                'id_funcionario'=>'required',
+                'id_fornecedor'=>'required',
+                'data'=>'required|date',
+                'lote'=>'max:45',
+                'quantidade'=>'required',
+                'quantidade.*'=>'required|numeric|min:1',
+                'nota_fiscal'=>'required|max:45',
+                'valor'=>'required|numeric',
+            );
+        }
     
         return Validator::make($requisicao, $rules,$messages);        
     }
