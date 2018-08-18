@@ -2,11 +2,16 @@
 <div class="container">
 	<div class="row pad-botm">
 		<div class="col-md-12">
-			<h3 class="header-line">Pesquisar Combustível</h3>
+			<h3 class="header-line">Combustível</h3>
 			@if ($errors->any())
 			<div class="alert alert-warning alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Ops!</strong> {{$errors->first()}}.
+			</div>
+			@endif @if (session()->has('success'))
+			<div class="alert alert-success alert-dismissible">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Salvo!</strong> Os dados foram salvos.
 			</div>
 			@endif
 		</div>
@@ -14,11 +19,7 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<!-- Advanced Tables -->
 			<div class="panel panel-default">
-				<div class="panel-heading">
-					Buscar por Combustível
-				</div>
 				<div class="panel-body">
 
 					<div class="table-responsive">
@@ -30,25 +31,21 @@
 								</tr>
 							</thead>
 							<tbody>
-							@if(isset($combustiveis))
-								@foreach ($combustiveis as $combustivel)
+								@if(isset($combustiveis)) @foreach ($combustiveis as $combustivel)
 								<tr class='gradeA'>
 									<td> {{$combustivel->Fazenda->nome}} </td>
 									<td> {{$combustivel->quantidade}} </td>
 								</tr>
-								@endforeach
-							@endif
-
+								@endforeach @endif
 							</tbody>
 						</table>
 					</div>
+
 				</div>
 			</div>
 		</div>
-
 	</div>
 </div>
-<!--End Advanced Tables -->
 </div>
 </div>
 </div>

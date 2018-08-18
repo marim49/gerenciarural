@@ -45,9 +45,6 @@
 												<input class="form-control" type="text" name="nome" required placeholder="Insira aqui o nome do tipo de medicamento" maxlength="45" value="{{ old('nome')}}"/>
 											</div>
 										</div>
-										<div class="col-md-4">
-
-										</div>
 									</div>
 
 									<div class="right-div">

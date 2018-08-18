@@ -41,8 +41,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach ($historicos_compra_insumo as $historico)
-								@if($historico->cancelado == 0)
+								@foreach ($historicos_compra_insumo as $historico) @if($historico->cancelado == 0)
 								<tr class='gradeA'>
 									<td> {{$historico->funcionario->nome}} </td>
 									<td> {{$historico->insumo->TipoInsumo->nome}} | {{$historico->insumo->nome}}</td>
@@ -54,7 +53,7 @@
 									<td>
 										<center>
 											<button type="button" class="btn btn-xs btn-danger" onclick="cancelarOperacao()" data-route="compra-insumo" data-id="{{$historico->id}}"
-											  data-toggle="modal" data-target="#modal_cancelar">Cancelar</button>
+											    data-toggle="modal" data-target="#modal_cancelar">Cancelar</button>
 										</center>
 									</td>
 								</tr>
@@ -86,7 +85,8 @@
 										<div class="modal-body">
 											<h6 class="text-semibold">Tem certeza que deseja cancelar esta operação?</h6>
 											<input hidden name="cancelado" value="1" />
-											<input name="motivo" size="70%" placeholder="Descreva em 100 caracteres o motivo do cancelamento" required maxleght=100/>
+											<textarea name="motivo" cols="60" placeholder="Descreva em 100 caracteres o motivo do cancelamento" required maxlength=100
+											    style="resize: vertical"></textarea>
 										</div>
 
 										<div class="modal-footer">

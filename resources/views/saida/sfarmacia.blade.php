@@ -62,7 +62,8 @@
 
 										<div class="form-group">
 											<label>Motivo:</label>
-											<input class="form-control" type="text" name="motivo" placeholder="Motivo da aplicacação (Opcional)" maxlenght="1" value="{{ old('motivo')}}" maxlength="100"/>
+											<textarea class="form-control" type="text" name="motivo" placeholder="Motivo da aplicacação (Opcional)"
+											maxlength="140" value="{{ old('motivo')}}" style="resize: vertical"></textarea>
 										</div>
 
 										<div class="form-group">
@@ -74,7 +75,8 @@
 
 										<div class="form-group">
 											<label>Quantidade ( ML ):</label>
-											<input class="form-control" type="number" step=".01" required name="quantidade" placeholder="Quantidade aplicada em Ml" value="{{ old('quantidade')}}"/>
+											<input class="form-control" type="number" step=".01" required name="quantidade"
+											placeholder="Quantidade aplicada em Ml" value="{{ old('quantidade')}}"/>
 										</div>
 
 										<div class="form-group">

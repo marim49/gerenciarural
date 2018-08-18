@@ -90,7 +90,8 @@
 										<div class="modal-body form-group">
 											<h6 class="text-semibold">Tem certeza que deseja cancelar esta operação?</h6>
 											<input hidden name="cancelado" value="1"/>
-											<input name="motivo" size="70%" placeholder="Descreva em 100 caracteres o motivo do cancelamento" required maxleght=100/>
+											<textarea name="motivo" cols="60" placeholder="Descreva em 100 caracteres o motivo do cancelamento"
+											required maxlength=100 style="resize: vertical"></textarea>
 										</div>
 
 										<div class="modal-footer">

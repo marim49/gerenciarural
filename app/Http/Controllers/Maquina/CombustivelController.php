@@ -39,7 +39,7 @@ class CombustivelController extends Controller
         }
     }    
     
-    //Método GET (chama a view de criação) 
+    //Método GET (chama a view de criação) : OK
     public function create()
     {
         try
@@ -56,7 +56,7 @@ class CombustivelController extends Controller
         }
     }
     
-    //Método POST (salva o combustivel) 
+    //Método POST (salva o combustivel) : OK
     public function store(Request $request)
     {        
         $combustivel = $request->only('id_fazenda', 'id_tipo_combustivel');
@@ -83,81 +83,6 @@ class CombustivelController extends Controller
                             ->withInput(['fazendas' => [], 'tipos' => []]);
         }
     } 
-
-    //Método GET (retorna um combustivel específico)
-    public function show($id)
-    {
-        try
-        {
-            $combustivel = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($combustivel);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }   
-
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza um combustivel)
-    public function update(Request $request, $id)
-    {
-        //tratar entrada
-        try
-        {
-            $update_combustivel = $this->model->findOrFail($id);            
-            $dados = $request->all();
-
-            $update_combustivel->update($dados);
-            
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_combustivel
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }
-
-    //Método DELETE (deleta um combustivel específico)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }
 
     //Método que retorna os relacionamentos : OK
     protected function relationships()

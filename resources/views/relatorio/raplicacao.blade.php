@@ -51,7 +51,7 @@
 									<td>
 										<center>
 											<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal_cancelar" onclick="cancelarOperacao()"
-											  data-route="medicacao" data-id="{{$historico->id}}">Cancelar</button>
+											    data-route="medicacao" data-id="{{$historico->id}}">Cancelar</button>
 										</center>
 									</td>
 								</tr>
@@ -79,7 +79,8 @@
 										<div class="modal-body form-group">
 											<h6 class="text-semibold">Tem certeza que deseja cancelar esta operação?</h6>
 											<input hidden name="cancelado" value="1" />
-											<input name="motivo_cancelamento" size="70%" placeholder="Descreva em 100 caracteres o motivo do cancelamento" required maxleght=100/>
+											<textarea name="motivo" cols="60" placeholder="Descreva em 100 caracteres o motivo do cancelamento" required maxlength=100
+											    style="resize: vertical"></textarea>
 										</div>
 
 										<div class="modal-footer">

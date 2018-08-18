@@ -61,7 +61,8 @@
 
 										<div class="form-group">
 											<label>Problema:</label>
-											<input class="form-control" name="problema" required maxlegth="191" placeholder="Motivo da revisão" maxlenght="190" value="{{ old('problema')}}"/>
+											<textarea class="form-control" name="problema" required maxlength="190" style="resize: vertical"
+											placeholder="Motivo da revisão" value="{{ old('problema')}}"></textarea>
 										</div>
 
 										<div class="form-group">

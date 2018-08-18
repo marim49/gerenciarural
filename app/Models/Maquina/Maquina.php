@@ -10,6 +10,7 @@ class Maquina extends Model
         'nome', 'data_aquisicao', 'id_fazenda'
     ];
     protected $table = 'maquina';
+    protected $append = ['data_aquisicao_convert'];
 
     public function Fazenda()
     {
@@ -25,7 +26,7 @@ class Maquina extends Model
     }
 
     //Atributos    
-    //public function getdataaquisicaoAttribute($value) {
-    //    return \Carbon\Carbon::parse($value)->format('d/m/Y');
-    // }
+    public function getdataaquisicaoconvertAttribute() {
+       return \Carbon\Carbon::parse($this->data_aquisicao)->format('d/m/Y');
+    }
 }

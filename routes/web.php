@@ -54,10 +54,9 @@ Route::group(['middleware' => 'auth'], function()
     /* ROTA: INSUMO
     * insumo => POST(store), GET(index) 
     * insumo/create => GET(create) 
-    * insumo/{id} => GET(show), PUT(update), DELETE(destroy)
-    * insumo/{id}/edit => GET(edit)
+    * insumo/{id} => PUT(update)
     */
-    Route::resource('insumo', 'Insumo\InsumoController')/*->middleware('auth')*/;
+    Route::resource('insumo', 'Insumo\InsumoController')->except(['edit', 'show', 'destroy']);
 
     /* ROTA: TIPO INSUMO
     * tipoinsumo => POST(store), GET(index) 
@@ -86,18 +85,16 @@ Route::group(['middleware' => 'auth'], function()
     /* ROTA: MEDICAMENTO
     * medicamento => POST(store), GET(index) 
     * medicamento/create => GET(create) 
-    * medicamento/{id} => GET(show), PUT(update), DELETE(destroy)
-    * medicamento/{id}/edit => GET(edit)
+    * medicamento/{id} => PUT(update)
     */
-    Route::resource('medicamento', 'Animal\MedicamentoController')/*->middleware('auth')*/;
+    Route::resource('medicamento', 'Animal\MedicamentoController')->except(['edit', 'show', 'destroy']);
 
     /* ROTA: MÁQUINA
     * maquina => POST(store), GET(index) 
     * maquina/create => GET(create) 
-    * maquina/{id} => GET(show), PUT(update), DELETE(destroy)
-    * maquina/{id}/edit => GET(edit)
+    * maquina/{id} => PUT(update)
     */
-    Route::resource('maquina', 'Maquina\MaquinaController')/*->middleware('auth')*/;
+    Route::resource('maquina', 'Maquina\MaquinaController')->except(['edit', 'show', 'destroy']);
 
     /* ROTA: HISTÓRICO ABASTECIMENTO (para saída de combustível)
     * abastecimento => POST(store), GET(index) 
@@ -144,10 +141,9 @@ Route::group(['middleware' => 'auth'], function()
     /* ROTA: COMBUSTÍVEL
     * combustivel => POST(store), GET(index) 
     * combustivel/create => GET(create) 
-    * combustivel/{id} => GET(show), PUT(update), DELETE(destroy)
-    * combustivel/{id}/edit => GET(edit)
+    * combustivel/{id} => DELETE(destroy)
     */
-    Route::resource('combustivel', 'Maquina\CombustivelController')/*->middleware('auth')*/;
+    Route::resource('combustivel', 'Maquina\CombustivelController')->except(['show', 'update', 'destroy', 'edit']);
     
     /* ROTA: REVISÃO
     * revisao => POST(store), GET(index) 

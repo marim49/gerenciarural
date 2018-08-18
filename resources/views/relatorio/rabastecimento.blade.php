@@ -14,8 +14,7 @@
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 		<strong>Ops!</strong> {{$errors->first()}}.
 	</div>
-	@endif
-	@if (session()->has('success'))
+	@endif @if (session()->has('success'))
 	<div class="alert alert-success alert-dismissible">
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 		<strong>Cancelado!</strong> A operação do histórico foi cancelada.
@@ -42,8 +41,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach ($historicos_abastecimento as $historico)
-								@if($historico->cancelado == 0)
+								@foreach ($historicos_abastecimento as $historico) @if($historico->cancelado == 0)
 								<tr>
 									<td>{{$historico->combustivel->fazenda->nome}} | {{$historico->maquina->nome}}</td>
 									<td>{{$historico->funcionario->nome}}</td>
@@ -51,14 +49,13 @@
 									<td>{{$historico->data}}</td>
 									<td>
 										<center>
-											<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal_cancelar"
-											onclick="cancelarOperacao()" data-route="abastecimento" data-id="{{$historico->id}}">Cancelar</button>
+											<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal_cancelar" onclick="cancelarOperacao()"
+											    data-route="abastecimento" data-id="{{$historico->id}}">Cancelar</button>
 										</center>
 									</td>
 
 								</tr>
-								@endif
-								@endforeach
+								@endif @endforeach
 							</tbody>
 							<tfoot>
 								<tr>
@@ -75,14 +72,15 @@
 									<div class="modal-header bg-danger">
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
 										<h6 class="modal-title">AVISO!</h6>
-									</div>									
+									</div>
 
 									<form id="cancelar" method="POST">
 										{{ csrf_field() }} {{ method_field('DELETE') }}
 										<div class="modal-body form-group">
 											<h6 class="text-semibold">Tem certeza que deseja cancelar esta operação?</h6>
-											<input hidden name="cancelado" value="1"/>
-											<input name="motivo" size="70%" placeholder="Descreva em 100 caracteres o motivo do cancelamento" required maxleght=100/>
+											<input hidden name="cancelado" value="1" />
+											<textarea name="motivo" cols="60" placeholder="Descreva em 100 caracteres o motivo do cancelamento" required maxlength=100
+											    style="resize: vertical"></textarea>
 										</div>
 
 										<div class="modal-footer">
