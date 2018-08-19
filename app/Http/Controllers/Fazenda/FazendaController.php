@@ -29,8 +29,6 @@ class FazendaController extends Controller
             $fazendas = $this->model->orderBy('id', 'asc')
                 ->get();/*->paginate($limit); //limite por páginas */
 
-            //retornar view
-           // return response()->json($fazendas);
            return view('pesquisa.pfazenda', ['fazendas' => $fazendas]);
             
         }
@@ -77,85 +75,41 @@ class FazendaController extends Controller
                             ->withInput();        
         }
     } 
-
-    //Método GET (retorna uma fazenda específica)
-    public function show($id)
-    {
-        try
-        {
-            $fazenda = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($fazenda);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }   
-
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza uma fazenda)
+    
+    //Método PUT (atualiza uma fazenda) : OK
     public function update(Request $request, $id)
     {
-        $fazenda = $request->only(
-            'nome', 'localidade');
+        $dados = $request->only('nome', 'localidade');
+        foreach ($dados as $key => $value) {
+            if ($value == null) {
+                unset($dados[$key]);
+            }
+        }
         //Validação
-        $validator = $this->Validator($fazenda);
+        $validator = $this->Validator($dados, true);
         if ($validator->fails()) {
             return redirect()
                             ->back()
                             ->withErrors($validator)
                             ->withInput();
         }
-        //Cadastro
+        //tratar entrada
         try
         {
-            $fazenda = $this->model->findOrFail($id);            
-            $dados = $request->all();
+            $update = $this->model->findOrFail($id);      
 
-            $success = $fazenda->update($dados);   
-
-            return redirect('fazenda')
-                            ->with('success', $success);
+            $update->update($dados);
+            
+            return redirect()
+                            ->back()
+                            ->with('success',$update); 
         }
         catch(\Exception $e) 
         {
             return redirect()
                             ->back()
-                            ->withErrors($this->Error('Não foi possível atualizar o registro.',$e))
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
                             ->withInput();  
-        }
-    }
-
-    //Método DELETE (deleta uma fazenda específica)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
         }
     }
 
@@ -170,19 +124,34 @@ class FazendaController extends Controller
     }
        
     //Método de validação : OK
-    protected function Validator($requisicao){        
-        $messages = array(
-            'nome.required'=> 'O campo nome é obrigatório',
-            'nome.max'=> 'O tamanho máximo do campo nome é 100 caracteres',
-            'localidade.max'=> 'O tamanho máximo do campo localidade é 45 caracteres',
-        );    
-        $rules = array(
-            'nome'=>'required|max:100',
-            'localidade'=>'max:45',
-        );
+    protected function Validator($requisicao, $update = false){
+        if($update)       
+        {
+            $messages = array(
+                'nome.max' => 'O tamanho máximo do campo nome é 100 caracteres',
+                'localidade.max' => 'O tamanho máximo do campo nome é 45 caracteres',
+            );    
+            $rules = array(
+                'localidade.max' => 'max:45',
+                'nome' => 'max:100'
+            );
+        } 
+        else
+        {    
+            $messages = array(
+                'nome.required'=> 'O campo nome é obrigatório',
+                'nome.max'=> 'O tamanho máximo do campo nome é 100 caracteres',
+                'localidade.max'=> 'O tamanho máximo do campo localidade é 45 caracteres',
+            );    
+            $rules = array(
+                'nome'=>'required|max:100',
+                'localidade'=>'max:45',
+            );
+        }
     
         return Validator::make($requisicao, $rules,$messages);        
     }
+
     //Método de retorno de erro : OK
     protected function Error($message, \Exception $e){
         return [

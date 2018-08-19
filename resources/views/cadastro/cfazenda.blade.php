@@ -35,7 +35,7 @@
 
 								<div class="col-md-8">
 									<div class="form-group">
-										<label>Nome da fazenda: *</label>
+										<label>Nome da fazenda:</label>
 										<input class="form-control" type="text" name="nome" required maxlength="100" placeholder="Insira aqui o nome da sua fazenda" maxlength="100" value="{{ old('nome')}}"/>
 									</div>
 								</div>

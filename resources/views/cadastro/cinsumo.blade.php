@@ -9,7 +9,8 @@
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Cadastrado!</strong> O insumo foi armazenado com sucesso.
 			</div>
-			@endif @if ($errors->any()) @foreach ($errors->all() as $error)
+			@endif
+			@if ($errors->any()) @foreach ($errors->all() as $error)
 			<div class="alert alert-warning alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Ops!</strong> {{$error}}.
@@ -24,6 +25,7 @@
 				<div class="panel-heading">
 					Cadastre o insumo inserindo-o nos campos abaixo:
 				</div>
+
 				<form name="register-insumos" action="{{ route('insumo.store') }}" method="post">
 					{{ csrf_field() }}
 					<div class="panel-body">
@@ -33,7 +35,7 @@
 								<div class="row">
 									<div class="col-md-8">
 										<div class="form-group">
-											<label>Fazenda: *</label>
+											<label>Fazenda:</label>
 											<select class="form-control" name="id_fazenda" required>
 											<option value="" disabled selected>- Selecione uma fazenda -</option>
 												@foreach($fazendas as $fazenda) @if (old('id_fazenda') == $fazenda->id)
@@ -49,9 +51,9 @@
 								<div class="row">
 									<div class="col-md-8">
 										<div class="form-group">
-											<label>Tipo de insumo: *</label>
+											<label>Tipo de insumo:</label>
 											<select class="form-control" name="id_tipo_insumo" required>
-											<option value="" disabled selected>- Selecione uma tipo de insumo -</option>
+											<option value="" disabled selected>- Selecione um tipo de insumo -</option>
 												@foreach($tipos as $tipo) @if (old('id_tipo_insumo') == $tipo->id)
 												<option value="{{$tipo->id}}" selected>{{$tipo->nome}}</option>
 												@else
@@ -65,8 +67,8 @@
 								<div class="row">
 									<div class="col-md-8">
 										<div class="form-group">
-											<label>Nome: *</label>
-											<input class="form-control" name="nome" type="text" required placeholder="" maxlength="45" value="{{ old('nome')}}" />
+											<label>Nome:</label>
+											<input class="form-control" name="nome" type="text" required placeholder="Nome do insumo" maxlength="45" value="{{ old('nome')}}" />
 										</div>
 									</div>
 								</div>
