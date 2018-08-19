@@ -91,31 +91,7 @@ class InsumoController extends Controller
         }
     } 
 
-    //Método GET (retorna um insumo específico)
-    public function show($id)
-    {
-        try
-        {
-            $insumo = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($insumo);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }   
-    
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza um insumo)
+    //Método PUT (atualiza um insumo) : OK
     public function update(Request $request, $id)
     {
         $dados = $request->only('id_tipo_insumo', 'nome', 'id_fazenda');
@@ -149,30 +125,6 @@ class InsumoController extends Controller
                             ->back()
                             ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
                             ->withInput();  
-        }
-    }
-
-    //Método DELETE (deleta um insumo específico)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
         }
     }
 

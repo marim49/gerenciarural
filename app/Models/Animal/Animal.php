@@ -10,6 +10,7 @@ class Animal extends Model
         'id_grupo_animal', 'nome', 'id_fazenda', 'entrada', 'nascimento', 'nome_mae', 'nome_pai'
     ];
     protected $table = 'animal';
+    protected $append = ['entrada_convert', 'nascimento_convert'];
 
     public function Fazenda()
     {
@@ -25,10 +26,13 @@ class Animal extends Model
     }
 
     //Atributos    
-//    public function getnascimentoAttribute($value) {
- //       return \Carbon\Carbon::parse($value)->format('d/m/Y');
- //   }
-//    public function getentradaAttribute($value) {
-//        return \Carbon\Carbon::parse($value)->format('d/m/Y');
-//    }
+    public function getentradaconvertAttribute() {
+       return \Carbon\Carbon::parse($this->entrada)->format('d/m/Y');
+    }
+    public function getnascimentoconvertAttribute() {
+        if($this->nascimento)
+            return \Carbon\Carbon::parse($this->nascimento)->format('d/m/Y');
+        else
+            return null;
+    }
 }

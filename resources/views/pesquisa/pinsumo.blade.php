@@ -8,7 +8,8 @@
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Ops!</strong> {{$errors->first()}}.
 			</div>
-			@endif @if (session()->has('success'))
+			@endif
+			@if (session()->has('success'))
 			<div class="alert alert-success alert-dismissible">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Salvo!</strong> Os dados foram salvos.

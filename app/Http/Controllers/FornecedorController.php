@@ -29,7 +29,6 @@ class FornecedorController extends Controller
             $fornecedores = $this->model->orderBy('id', 'asc')
                     ->get();/*->paginate($limit); //limite por páginas */
 
-            //return response()->json($fornecedores);
             return view('pesquisa.pfornecedor', ['fornecedores' => $fornecedores]);
             
         }
@@ -77,78 +76,40 @@ class FornecedorController extends Controller
         }
     } 
 
-    //Método GET (retorna um fornecedor específica)
-    public function show($id)
-    {
-        try
-        {
-            $fornecedor = $this->model->with($this->relationships())
-                                ->findOrFail($id);       
-
-            //retornar view
-            return response()->json($fornecedor);
-        }
-        catch(\Exception $e)
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível retornar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }   
-
-    //Método GET (retorna a view de edição)
-    public function edit($id){}
-
-    //Método PUT (atualiza um fornecedor)
+    //Método PUT (atualiza um fornecedor) : OK
     public function update(Request $request, $id)
     {
+        $dados = $request->only('nome', 'telefone');
+        foreach ($dados as $key => $value) {
+            if ($value == null) {
+                unset($dados[$key]);
+            }
+        }
+        //Validação
+        $validator = $this->Validator($dados, true);
+        if ($validator->fails()) {
+            return redirect()
+                            ->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
         //tratar entrada
         try
         {
-            $update_fornecedor = $this->model->findOrFail($id);            
-            $dados = $request->all();
+            $update = $this->model->findOrFail($id);      
 
-            $update_fornecedor->update($dados);
+            $update->update($dados);
             
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $update_fornecedor
-            ]);
+            return redirect()
+                            ->back()
+                            ->with('success',$update); 
         }
         catch(\Exception $e) 
         {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível atualizar o registro. Erro: '.$e->getMessage()
-            ]);
-        }
-    }
-
-    //Método DELETE (deleta uma fornecedor específica)
-    public function destroy($id)
-    {
-        try 
-        {
-            $excluido = $this->model->findOrFail($id);
-            $excluido->delete();
-
-            //retornar view
-            return response()->json([
-                'status' => 'OK', 
-                'item' => $excluido
-            ]);
-        }
-        catch(\Exception $e) 
-        {
-            //retornar view
-            return response()->json([
-                'status' => 'ERROR', 
-                'item' => 'Não foi possível remover o registro. Erro: '.$e->getMessage()
-            ]);
+            return redirect()
+                            ->back()
+                            ->withErrors($this->Error('Não foi possível inserir o registro.',$e))
+                            ->withInput();  
         }
     }
 
@@ -163,20 +124,35 @@ class FornecedorController extends Controller
     }
        
     //Método de validação : OK
-    protected function Validator($requisicao){        
-        $messages = array(
-            'nome.required'=> 'O campo nome é obrigatório',
-            'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
-            'telefone.required'=> 'O campo telefone é obrigatório',
-            'telefone.max'=> 'O tamanho máximo do campo telefone é 45 caracteres',
-        );    
-        $rules = array(
-            'nome'=>'required|max:100',
-            'telefone'=>'required|max:45',
-        );
+    protected function Validator($requisicao, $update = false){  
+        if($update)       
+        {
+            $messages = array(
+                'nome.max' => 'O tamanho máximo do campo nome é 100 caracteres',
+                'telefone.max' => 'O tamanho máximo do campo de observações é 45 caracteres',
+            );    
+            $rules = array(
+                'nome' => 'max:100',
+                'telefone' => 'max:45'
+            );
+        }
+        else
+        {      
+            $messages = array(
+                'nome.required'=> 'O campo nome é obrigatório',
+                'nome.max'=> 'O tamanho máximo do campo nome é 45 caracteres',
+                'telefone.required'=> 'O campo telefone é obrigatório',
+                'telefone.max'=> 'O tamanho máximo do campo telefone é 45 caracteres',
+            );    
+            $rules = array(
+                'nome'=>'required|max:100',
+                'telefone'=>'required|max:45',
+            );
+        }
     
         return Validator::make($requisicao, $rules,$messages);        
     }
+    
     //Método de retorno de erro : OK
     protected function Error($message, \Exception $e){
         return [

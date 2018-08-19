@@ -14,25 +14,22 @@ Route::group(['middleware' => 'auth'], function()
     /* ROTA: ANIMAIS
     * animais => POST(store), GET(index) 
     * animais/create => GET(create) 
-    * animais/{id} => GET(show), PUT(update), DELETE(destroy)
-    * animais/{id}/edit => GET(edit)
+    * animais/{id} => PUT(update)
     */
-    Route::resource('animal', 'Animal\AnimalController');
+    Route::resource('animal', 'Animal\AnimalController')->except(['show', 'edit', 'destroy']);
     /* ROTA: FAZENDAS
     * fazendas => POST(store), GET(index) 
     * fazendas/create => GET(create) 
-    * fazendas/{id} => GET(show), PUT(update), DELETE(destroy)
-    * fazendas/{id}/edit => GET(edit)
+    * fazendas/{id} => DELETE(destroy)
     */ 
-    Route::resource('fazenda', 'Fazenda\FazendaController')/*->middleware('auth')*/;
+    Route::resource('fazenda', 'Fazenda\FazendaController')->except(['edit', 'show', 'destroy']);
 
     /* ROTA: TERRA
     * terra => POST(store), GET(index) 
     * terra/create => GET(create) 
-    * terra/{id} => GET(show), PUT(update), DELETE(destroy)
-    * terra/{id}/edit => GET(edit)
+    * terra/{id} => PUT(update)
     */
-    Route::resource('terra', 'Insumo\TerraController');
+    Route::resource('terra', 'Insumo\TerraController')->except(['edit', 'show', 'destroy']);
 
     /* ROTA: FUNCIONARIO
     * funcionario => POST(store), GET(index) 
@@ -40,16 +37,15 @@ Route::group(['middleware' => 'auth'], function()
     * funcionario/{id} => GET(show), PUT(update), DELETE(destroy)
     * funcionario/{id}/edit => GET(edit)
     */
-    Route::resource('funcionario', 'Funcionario\FuncionarioController')/*->middleware('auth')*/;
+    Route::resource('funcionario', 'Funcionario\FuncionarioController')->except(['edit', 'destroy', 'show']);
 
  
     /* ROTA: FUNCIONARIO
     * funcionario => POST(store), GET(index) 
     * funcionario/create => GET(create) 
-    * funcionario/{id} => GET(show), PUT(update), DELETE(destroy)
-    * funcionario/{id}/edit => GET(edit)
+    * funcionario/{id} => PUT(update)
     */
-    Route::resource('fornecedor', 'FornecedorController')/*->middleware('auth')*/;
+    Route::resource('fornecedor', 'FornecedorController')->except(['edit', 'destroy', 'show']);
    
     /* ROTA: INSUMO
     * insumo => POST(store), GET(index) 
