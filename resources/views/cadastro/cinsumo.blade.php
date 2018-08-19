@@ -34,7 +34,8 @@
 									<div class="col-md-8">
 										<div class="form-group">
 											<label>Fazenda: *</label>
-											<select class="form-control" name="id_fazenda">
+											<select class="form-control" name="id_fazenda" required>
+											<option value="" disabled selected>- Selecione uma fazenda -</option>
 												@foreach($fazendas as $fazenda) @if (old('id_fazenda') == $fazenda->id)
 												<option value="{{$fazenda->id}}" selected>{{$fazenda->nome}}</option>
 												@else
@@ -49,7 +50,8 @@
 									<div class="col-md-8">
 										<div class="form-group">
 											<label>Tipo de insumo: *</label>
-											<select class="form-control" name="id_tipo_insumo">
+											<select class="form-control" name="id_tipo_insumo" required>
+											<option value="" disabled selected>- Selecione uma tipo de insumo -</option>
 												@foreach($tipos as $tipo) @if (old('id_tipo_insumo') == $tipo->id)
 												<option value="{{$tipo->id}}" selected>{{$tipo->nome}}</option>
 												@else
@@ -64,7 +66,7 @@
 									<div class="col-md-8">
 										<div class="form-group">
 											<label>Nome: *</label>
-											<input class="form-control" name="nome" type="text" placeholder="" maxlength="45" value="{{ old('nome')}}" />
+											<input class="form-control" name="nome" type="text" required placeholder="" maxlength="45" value="{{ old('nome')}}" />
 										</div>
 									</div>
 								</div>

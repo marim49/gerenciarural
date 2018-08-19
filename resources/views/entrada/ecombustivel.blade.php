@@ -87,7 +87,7 @@
 
 										<div class="form-group">
 											<label>Valor:</label>
-											<input class="form-control" name="valor" type="number" step=".01" placeholder="Valor da compra" value="{{ old('valor')}}" />
+											<input class="form-control" name="valor" required type="number" step=".01" placeholder="Valor da compra" value="{{ old('valor')}}" />
 										</div>
 
 									</div>

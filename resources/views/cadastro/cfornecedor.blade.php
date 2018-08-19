@@ -36,14 +36,14 @@
 								<div class="col-md-8">
 									<div class="form-group">
 										<label>Nome: *</label>
-										<input class="form-control" type="text" name="nome" placeholder="Insira aqui o nome do fornecedor" maxlength="45" value="{{ old('nome')}}"/>
+										<input class="form-control" type="text" required maxlength="45" name="nome" placeholder="Insira aqui o nome do fornecedor" maxlength="45" value="{{ old('nome')}}"/>
 									</div>
 								</div>
 
 								<div class="col-md-8">
 									<div class="form-group">
 										<label>Telefone: *</label>
-										<input class="form-control" type="text" name="telefone" placeholder="(__)____-____" maxlength="45" value="{{ old('telefone')}}"/>
+										<input class="form-control" type="text" required name="telefone" placeholder="(__)____-____" maxlength="45" value="{{ old('telefone')}}"/>
 									</div>
 								</div>
 
