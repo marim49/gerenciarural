@@ -22,8 +22,8 @@ class CreateHistoricoAnimalTable extends Migration
             $table->string('motivo', 100)->nullable();  
             $table->date('data');   
             $table->boolean('cancelado')->default(0);
-            $table->string('motivo', 100)->default(null);              
-            $table->integer('id_user_cancelou')->unsigned();
+            $table->string('motivo_cancelamento', 100)->nullable();              
+            $table->integer('id_user_cancelou')->unsigned()->nullable();
             $table->foreign('id_animal')->references('id')->on('animal');
             $table->foreign('id_medicamento')->references('id')->on('medicamento');
             $table->foreign('id_funcionario')->references('id')->on('funcionario');

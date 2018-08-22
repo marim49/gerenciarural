@@ -24,8 +24,8 @@ class CreateHistoricoCompraMedicamentoTable extends Migration
             $table->string('nota_fiscal', 45); 
             $table->float('valor');    
             $table->boolean('cancelado')->default(0);
-            $table->string('motivo', 100)->default(null);              
-            $table->integer('id_user_cancelou')->unsigned();
+            $table->string('motivo', 100)->nullable();              
+            $table->integer('id_user_cancelou')->unsigned()->nullable();
             $table->foreign('id_medicamento')->references('id')->on('medicamento');
             $table->foreign('id_funcionario')->references('id')->on('funcionario');
             $table->foreign('id_fornecedor')->references('id')->on('fornecedor');

@@ -23,8 +23,8 @@ class CreateHistoricoRevisaoTable extends Migration
             $table->string('nota_fiscal', 45)->nullable();      
             $table->double('valor')->nulable();  
             $table->boolean('cancelado')->nullable()->default(0);
-            $table->string('motivo', 100)->nullable()->default('');           
-            $table->integer('id_user_cancelou')->nullable()->unsigned();  
+            $table->string('motivo', 100)->nullable()->nullable();           
+            $table->integer('id_user_cancelou')->unsigned()->nullable();  
             $table->foreign('id_maquina')->references('id')->on('maquina');
             $table->foreign('id_funcionario')->references('id')->on('funcionario');
             $table->foreign('id_user_cancelou')->references('id')->on('users');

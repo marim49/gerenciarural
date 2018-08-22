@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth'], function()
     * tipoinsumo/{id} => GET(show), PUT(update), DELETE(destroy)
     * tipoinsumo/{id}/edit => GET(edit)
     */
-    Route::resource('tipoinsumo', 'Insumo\TipoInsumoController');
+    Route::resource('tipoinsumo', 'Insumo\TipoInsumoController')->except(['show', 'update', 'edit', 'destroy', 'index']);
 
     /* ROTA: GRUPO ANIMAL
     * grupoanimal => POST(store), GET(index) 
@@ -68,7 +68,7 @@ Route::group(['middleware' => 'auth'], function()
     * grupoanimal/{id} => GET(show), PUT(update), DELETE(destroy)
     * grupoanimal/{id}/edit => GET(edit)
     */
-    Route::resource('grupoanimal', 'Animal\GrupoAnimalController');
+    Route::resource('grupoanimal', 'Animal\GrupoAnimalController')->except(['show', 'update', 'edit', 'destroy', 'index']);
 
     /* ROTA: TIPO MEDICAMENTO
     * tipomedicamento => POST(store), GET(index) 
@@ -76,7 +76,7 @@ Route::group(['middleware' => 'auth'], function()
     * tipomedicamento/{id} => GET(show), PUT(update), DELETE(destroy)
     * tipomedicamento/{id}/edit => GET(edit)
     */
-    Route::resource('tipomedicamento', 'Animal\TipoMedicamentoController');
+    Route::resource('tipomedicamento', 'Animal\TipoMedicamentoController')->except(['show', 'update', 'edit', 'destroy', 'index']);
 
     /* ROTA: MEDICAMENTO
     * medicamento => POST(store), GET(index) 
